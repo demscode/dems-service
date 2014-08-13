@@ -1,0 +1,23 @@
+{
+  "name": "dems-service",
+  "version": "0.0.0",
+  "homepage": "https://github.com/knotsoftware/dems-service",
+  "authors": [
+    "Lochlan Bunn <loklaan@gmail.com>"
+  ],
+  "description": "Dementia Smartwatch, DemS, is a system that provides assistance to people with Dementia.",
+  "license": "undecided",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.2.21",
+    "bootstrap": "~3.2.0",
+    "jquery": "~2.1.1"
+  }
+}

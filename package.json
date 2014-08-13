@@ -1,0 +1,31 @@
+{
+  "name": "dems-service",
+  "version": "0.0.0",
+  "description": "Dementia Smartwatch, DemS, is a system that provides assistance to people with Dementia.",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/knotsoftware/dems-service.git"
+  },
+  "author": "Lochlan Bunn <loklaan@gmail.com>",
+  "license": "undecided",
+  "bugs": {
+    "url": "https://github.com/knotsoftware/dems-service/issues"
+  },
+  "homepage": "https://github.com/knotsoftware/dems-service",
+  "dependencies": {
+    "bower": "~1.3.9",
+    "errorhandler": "~1.1.1",
+    "express": "~4.8.3",
+    "morgan": "~1.2.2"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-cli": "~0.1.13",
+    "grunt-contrib-jshint": "~0.10.0",
+    "grunt-wiredep": "~1.8.0"
+  }
+}
