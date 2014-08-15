@@ -4,6 +4,7 @@
   "description": "Dementia Smartwatch, DemS, is a system that provides assistance to people with Dementia.",
   "scripts": {
     "start": "node server.js",
+    "postinstall": "node node_modules/bower/bin/bower install && node node_modules/grunt-cli/bin/grunt setup",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
