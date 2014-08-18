@@ -1,9 +1,11 @@
-/*
-* GET routes coming off home page.
-*/
+/**
+ * GET routes coming off home page.
+ */
 var path = require('path');
 
 var public = path.join(__dirname, '../public/views/');
+
+exports.api = require('./api.js'); // all api methods
 
 exports.index = function(req, res){
   res.sendFile(public + 'index.html');
