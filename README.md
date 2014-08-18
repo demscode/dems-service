@@ -18,6 +18,22 @@ Start a local server using `npm`:
 $ npm start
 ```
 
+## Development
+Inject `bower` dependencies into declared files with `grunt`:
+
+```shell
+$ grunt setup
+```
+
+Run unit and e2e tests with `npm`:
+
+```shell
+$ npm test
+$ npm test-e2e
+```
+
+Tests are written with BDD Jasmine framework. `jasmine-node` runs server side unit tests, `karma` runs client side unit tests on available browsers and `protractor` runs end to end tests with WebDriver.
+
 ## License
 
 *Undecided*
