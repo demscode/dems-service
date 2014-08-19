@@ -2,6 +2,7 @@
  * ALL HTTP-method routes for DemS RESTful API, serving json.
  */
 
+var models = require("../models")
 // Example api endpoint
 exports.carerThing = function(req, res){
   switch(req.params.thing) { // given the params are X
