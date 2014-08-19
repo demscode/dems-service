@@ -2,8 +2,7 @@
  * Module Dependencies
  */
 var express = require('express'),
-    routesWebapp = require('./routes/webapp.js'), // TODO: import whole folder
-    routesApi = require('./routes/api.js'),
+    routes = require('./routes'),
     morgan = require('morgan'),
     errorHandler = require('errorhandler'),
     http = require('http'),
@@ -14,7 +13,7 @@ var app = express();
 /**
  * Configuration
  */
-app.use(express.static(path.join(__dirname + 'public')));
+app.use(express.static(path.join(__dirname + '/public')));
 app.use(morgan('dev'));
 app.set('port', process.env.PORT || 3000);
 
@@ -30,22 +29,24 @@ if (env === 'production') {
   // TODO
 }
 
-// ROUTES
-// 
+/**
+ * Routes
+ */
 
 // Web App
-app.get('/', routesWebapp.index);
-app.get('/partials/:name', routesWebapp.partials);
-
-// RESTful API
-app.get('/api/carer/:thing', routesApi.carerThing);
+app.get('/', routes.index);
+app.get('/partials/:name', routes.partials);
 
 // serve catch-all to web app index
-app.get('*', routesWebapp.index);
+// FIX: breaks serving static assets
+// app.get('*', routes.index);
+
+// RESTful API
+app.get('/api/carer/:thing', routes.api.carerThing);
 
 /**
  * Server Start
  */
 http.createServer(app).listen(app.get('port'), function () {
-  console.log('Agorophinstify EXPRESS server listening on port ' + app.get('port') + '...');
+  console.log('DemS Service EXPRESS server listening on port ' + app.get('port') + '...');
 });
