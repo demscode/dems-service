@@ -7,14 +7,29 @@ var express = require('express'),
     errorHandler = require('errorhandler'),
     http = require('http'),
     path = require('path');
+    passport = require('passport');
+    cookieParser = require('cookie-parser');
+    bodyParser = require('body-parser');
+    methodOverride = require('method-override');
+    session = require('express-session');
 
 var app = express();
 
 /**
  * Configuration
  */
+require('./config/passport.js')(passport);
+
 app.use(express.static(path.join(__dirname + '/public')));
 app.use(morgan('dev'));
+
+//passport requirements
+app.use(cookieParser());
+app.use(bodyParser());
+app.use(methodOverride());
+app.use(session({ secret: 'dems-service' }));
+app.use(passport.initialize());
+app.use(passport.session());
 app.set('port', process.env.PORT || 3000);
 
 var env = process.env.NODE_ENV || 'development';
@@ -29,9 +44,11 @@ if (env === 'production') {
   // TODO
 }
 
-/**
+/*
  * Routes
  */
+
+require('./routes/auth.js')(app,passport);
 
 // Web App
 app.get('/', routes.index);

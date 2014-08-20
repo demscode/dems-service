@@ -1,7 +1,9 @@
-// var Schema = require('jugglingdb').Schema;
+var Schema = require('jugglingdb').Schema;
+var schema = new Schema('mongodb');
 
-// var Carer = schema.define('Carer', {
-//   firstName: String,
-//   lastName: String, 
-//   email: String,
-// });
+module.exports = schema.define('Carer', {
+    id : Number,
+    token : String,
+    email : String,
+    name: String,
+});
