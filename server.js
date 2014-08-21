@@ -48,5 +48,5 @@ app.get('/api/carer/:thing', routes.api.carerThing);
  * Server Start
  */
 http.createServer(app).listen(app.get('port'), function () {
-  console.log('Agorophinstify EXPRESS server listening on port ' + app.get('port') + '...');
+  console.log('DemS Service EXPRESS server listening on port ' + app.get('port') + '...');
 });
