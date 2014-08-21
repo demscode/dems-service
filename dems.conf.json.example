@@ -1,0 +1,12 @@
+{
+  "settings": {
+    "auth": {
+      "google": {
+        "clientID": "YYYYYYYYYY",
+        "clientSecret": "XXXXXXXXXX",
+        "callbackURL": "http://localhost:3000/auth/google/callback",
+        "realm": "http://localhost:3000/"
+      }
+    }
+  }
+}

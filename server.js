@@ -28,7 +28,7 @@ app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(bodyParser());
 app.use(methodOverride());
-app.use(session({ secret: 'dems-service' }));
+app.use(session({ secret: 'cat-im-a-kitty-cat' }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.set('port', process.env.PORT || 3000);
@@ -57,22 +57,19 @@ app.get('/partials/:name', routes.partials);
 // FIX: breaks serving static assets
 // app.get('*', routes.index);
 
-// RESTful API
-app.get('/api/carer/:thing', routes.api.carerThing);
-
-// GOOGLE AUTHENTICATION ROUTES 
-
+// Authentication
 app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }), function(req, res){
 });
-
 app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/error'}), function(req, res) {
     res.redirect('/');
 });
-
 app.get('/logout', function(req, res) {
     req.logout();
     res.redirect('/');
 });
+
+// RESTful API
+app.get('/api/carer/:thing', routes.api.carerThing);
 
 /**
  * Server Start

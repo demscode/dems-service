@@ -1,3 +1,6 @@
-// Require stuff
+/**
+ * Models Hub
+ * Recommended `require` for busy controllers.
+ */
 
-var carer = require('./carer');
+exports.carer = require('./carer');
