@@ -18,7 +18,7 @@ var app = express();
 /**
  * Configuration
  */
-var passportConfig = require('./config/passport.js');
+var passportConfig = require('./controllers/passport.js');
 passportConfig(passport);
 
 app.use(express.static(path.join(__dirname + '/public')));

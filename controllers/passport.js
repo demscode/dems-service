@@ -20,7 +20,7 @@ module.exports = function(passport) {
     });
   });
 
-  passport.use(new GoogleStrategy(Keys.googleKeys, function (accessToken, refreshToken, profile, done) {
+  passport.use(new GoogleStrategy(Keys, function (accessToken, refreshToken, profile, done) {
     //wait for Google to respond
     process.nextTick(function() {
       //find user based on google id
