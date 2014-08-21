@@ -18,6 +18,9 @@ Start a local server using `npm`:
 $ npm start
 ```
 
+### Configuration
+Copy `dems.conf.json.example` to `dems.conf.json` and provide valid fields.
+
 ## Development
 Inject `bower` dependencies into declared files with `grunt`:
 
