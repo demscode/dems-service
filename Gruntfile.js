@@ -46,9 +46,15 @@ module.exports = function(grunt) {
       }
     },
     jshint: {
-      files: ['Gruntfile.js', 'server.js', 'routes/*', 'public/js/*', 'tests/**/*.js'],
+      files: [
+        'Gruntfile.js',
+        'server.js',
+        'controllers/*',
+        'routes/*',
+        'public/js/*',
+        'tests/**/*.js'],
       options: {
-        // None
+        indent: 2
       }
     },
     jasmine_node: {
