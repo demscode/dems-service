@@ -6,11 +6,11 @@ var express = require('express'),
     morgan = require('morgan'),
     errorHandler = require('errorhandler'),
     http = require('http'),
-    path = require('path');
-    passport = require('passport');
-    cookieParser = require('cookie-parser');
-    bodyParser = require('body-parser');
-    methodOverride = require('method-override');
+    path = require('path'),
+    passport = require('passport'),
+    cookieParser = require('cookie-parser'),
+    bodyParser = require('body-parser'),
+    methodOverride = require('method-override'),
     session = require('express-session');
 
 var app = express();
@@ -18,7 +18,8 @@ var app = express();
 /**
  * Configuration
  */
-require('./config/passport.js')(passport);
+var passportConfig = require('./config/passport.js');
+passportConfig(passport);
 
 app.use(express.static(path.join(__dirname + '/public')));
 app.use(morgan('dev'));
@@ -48,8 +49,6 @@ if (env === 'production') {
  * Routes
  */
 
-require('./routes/auth.js')(app,passport);
-
 // Web App
 app.get('/', routes.index);
 app.get('/partials/:name', routes.partials);
@@ -60,6 +59,20 @@ app.get('/partials/:name', routes.partials);
 
 // RESTful API
 app.get('/api/carer/:thing', routes.api.carerThing);
+
+// GOOGLE AUTHENTICATION ROUTES 
+
+app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }), function(req, res){
+});
+
+app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/error'}), function(req, res) {
+    res.redirect('/');
+});
+
+app.get('/logout', function(req, res) {
+    req.logout();
+    res.redirect('/');
+});
 
 /**
  * Server Start

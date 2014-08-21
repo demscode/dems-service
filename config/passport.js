@@ -1,56 +1,51 @@
-var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-    Carer = require('../models/carer');
-    
-
-var googleKeys = 
-    {
-        'clientID'    : '155424153501-c8cops3ulln3irkq6lb77k2gcvgvuhlr.apps.googleusercontent.com',
-        'clientSecret': 've_ALQ4Ex5wGiXHYwxSkpAh8',
-        'callbackURL' : 'http://localhost:3000/auth/google/callback'
-    };
+var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
+    Carer = require('../models/carer'),
+    Keys = require('./keys');
 
 module.exports = function(passport) {
     //serialise user for the session
     passport.serializeUser(function(user, done) {
-        done(null, user.id);
+        done(null, user);
     });
 
     //deserialise user
     passport.deserializeUser(function(id, done) {
-        Carer.findById(id, function(err, user) {    
-            done(err, user);
+        Carer.all([ {where : { gid : id }} ], function(err, user) {    
+            done(err, user[0]);
         });
     });
 
-    passport.use(new GoogleStrategy(googleKeys), function (accessToken, refreshToken, profile, done) {
+    passport.use(new GoogleStrategy(Keys.googleKeys, function (accessToken, refreshToken, profile, done) {
         //wait for Google to respond
         process.nextTick(function() {
             //find user based on google id
-            Carer.findOne({ 'id' : profile.id }, function(err, user) {
+            Carer.all([ {where : { 'gid' : profile.id }}], function(err, user) {
                 if (err) {
                     return done(err);
                 }   
 
-                if (user) {
+                if (user[0]) {
                     //login user if found
-                    return done(null, user);
+                    return done(null, user[0]);
                 } else {
                     //create a new user
-                    var newCarer = new Carer();
-                    newCarer.id = profile.id;
-                    newCarer.token = accessToken;
-                    newCarer.name = profile.displayName;
-                    newCarer.email = profile.emails[0].value;
+                    var newCarer = {
+                        gid : profile.id,
+                        token : accessToken,
+                        name : profile.displayName,
+                        email : profile.emails[0].value
+                    };
 
-                    newCarer.save(function(err) {
+                    Carer.create(newCarer, function(err, user) {
                         if (err) {
                             throw err;
                         }
-                        return done(null, newCarer);
+                        return done(null, user);
                     });
                 }      
             });
         });
-    });
+     })
+    );
 };
 
