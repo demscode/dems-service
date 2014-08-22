@@ -26,9 +26,9 @@ app.use(morgan('dev'));
 
 //passport requirements
 app.use(cookieParser());
-app.use(bodyParser());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride());
-app.use(session({ secret: 'cat-im-a-kitty-cat' }));
+app.use(session({ secret: 'cat-im-a-kitty-cat', saveUninitialized: true, resave: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.set('port', process.env.PORT || 3000);
