@@ -5,7 +5,9 @@
 
 var Schema = require('jugglingdb').Schema;
 
-var schemaMongo = new Schema('mongodb');
+var schemaMongo = new Schema('mongodb', {
+	url: 'mongodb://localhost/dems'
+});
 
 module.exports = schemaMongo.define('Carer', {
   id : { type: Number, index: true },
