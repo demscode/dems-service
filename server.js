@@ -32,17 +32,7 @@ if (env === 'production') {
 /**
  * Routes
  */
-
-// Web App
-app.get('/', routes.index);
-app.get('/partials/:name', routes.partials);
-
-// serve catch-all to web app index
-// FIX: breaks serving static assets
-// app.get('*', routes.index);
-
-// RESTful API
-app.get('/api/carer/:thing', routes.api.carerThing);
+routes.init(app);
 
 /**
  * Server Start
