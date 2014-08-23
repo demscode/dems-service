@@ -24,7 +24,7 @@ passportConfig(passport);
 app.use(express.static(path.join(__dirname + '/public')));
 app.use(morgan('dev'));
 
-//passport requirements
+// passport requirements
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride());
@@ -48,28 +48,7 @@ if (env === 'production') {
 /*
  * Routes
  */
-
-// Web App
-app.get('/', routes.index);
-app.get('/partials/:name', routes.partials);
-
-// serve catch-all to web app index
-// FIX: breaks serving static assets
-// app.get('*', routes.index);
-
-// Authentication
-app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }), function(req, res){
-});
-app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/error'}), function(req, res) {
-    res.redirect('/');
-});
-app.get('/logout', function(req, res) {
-    req.logout();
-    res.redirect('/');
-});
-
-// RESTful API
-app.get('/api/carer/:thing', routes.api.carerThing);
+routes.init(app, passport);
 
 /**
  * Server Start
