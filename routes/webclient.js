@@ -22,7 +22,7 @@
         res.sendFile(templates + 'home-page.html');
       } else {
         res.sendFile(templates + 'index.html');
-      };
+      }
     });
 
     /**

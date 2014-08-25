@@ -1,6 +1,6 @@
 /**
  * DemS
- * 
+ *
  */
 (function() {
 	var app = angular.module('DemS', []);
@@ -32,7 +32,7 @@
 	    templateUrl: "partials/patients"
 	  };
 	});
-	
+
 	app.directive("logs", function() {
 	  return {
 	    restrict: 'E',
@@ -60,7 +60,7 @@
 
     	this.value = function(){
     		return this.tab;
-    	}
+    	};
   	});
 
 })();
