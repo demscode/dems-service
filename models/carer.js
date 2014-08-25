@@ -3,15 +3,25 @@
  * Functionality for the Carer persistence.
  */
 
-var Schema = require('jugglingdb').Schema;
+(function (exports) {
+  'use strict';
 
-var schemaMongo = new Schema('mongodb', {
-	url: 'mongodb://localhost/dems'
-});
+  /**
+   * Initialises model with given db settings.
+   * @param  {object} settings  MongoDB adapter settings
+   * @return {object}           JugglingDB model object
+   */
+  exports.init = function(settings) {
+    var Schema = require('jugglingdb').Schema;
 
-module.exports = schemaMongo.define('Carer', {
-  id : { type: Number, index: true },
-  token : { type: String },
-  email : { type: String, limit: 150 },
-  name: { type: String, limit: 50 }
-});
+    var schemaMongo = new Schema('mongodb', settings);
+
+    return schemaMongo.define('Carer', {
+      id : { type: Number, index: true },
+      token : { type: String },
+      email : { type: String, limit: 150 },
+      name: { type: String, limit: 50 }
+    });
+  };
+
+})(exports);

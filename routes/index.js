@@ -16,7 +16,7 @@
 
     routesApi.init(app);
     routesWebClient.init(app);
-    routesroutesAuth.init(app, passport);
+    routesAuth.init(app, passport);
 
   }; // end init
 

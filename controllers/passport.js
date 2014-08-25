@@ -5,7 +5,7 @@
 
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
     Carer = require('../models/carer'),
-    Keys = require('../dems.conf.json').settings.auth.google;
+    Keys = require('../dems.conf.json').auth.google;
 
 module.exports = function(passport) {
   //serialise user for the session

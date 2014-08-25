@@ -3,4 +3,7 @@
  * Recommended `require` for busy controllers.
  */
 
-exports.carer = require('./carer');
+var settings = require('../dems.conf.json');
+var mongo = settings.db.mongo;
+
+exports.carer = require('./carer').init(mongo);

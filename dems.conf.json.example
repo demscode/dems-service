@@ -1,5 +1,10 @@
 {
   "settings": {
+    "db": {
+      "mongo": {
+        "url": "mongodb://localhost/dems"
+      }
+    },
     "auth": {
       "google": {
         "clientID": "YYYYYYYYYY",

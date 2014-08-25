@@ -8,6 +8,8 @@ before_script:
 after_success:
   - bash scripts/output_coverage.sh | ./node_modules/codeclimate-test-reporter/bin/codeclimate.js
   - bash scripts/output_coverage.sh | ./node_modules/coveralls/bin/coveralls.js
+services:
+  - mongodb
 addons:
   code_climate:
     repo_token: 92531c4b8fb81bc39f5429fbbf263186553abef4c0720a94f0bbc3fe195d9986
