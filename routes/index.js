@@ -8,7 +8,12 @@ var public = path.join(__dirname, '../public/views/');
 exports.api = require('./api.js'); // all api methods
 
 exports.index = function(req, res){
-  res.sendFile(public + 'index.html');
+	if(req.isAuthenticated()){
+		res.sendFile(public + 'home-page.html');
+	} else {
+		res.sendFile(public + 'index.html');
+	};
+  
 };
 
 exports.partials = function (req, res) {
