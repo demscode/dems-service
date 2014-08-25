@@ -1,22 +1,23 @@
 /**
- * GET routes coming off home page.
+ * Routes module, configuring route files for Express.
  */
-var path = require('path');
 
-var public = path.join(__dirname, '../public/views/');
+(function(exports) {
+  "use strict";
 
-exports.api = require('./api.js'); // all api methods
+  /**
+   * Aggregation of declared routes used by Express.
+   */
+  exports.init = function(app, passport) {
 
-exports.index = function(req, res){
-	if(req.isAuthenticated()){
-		res.sendFile(public + 'home-page.html');
-	} else {
-		res.sendFile(public + 'index.html');
-	};
-  
-};
+    var routesApi = require('./api.js');
+    var routesWebClient = require('./webclient.js');
+    var routesAuth = require('./auth.js');
+    
+    routesApi.init(app);
+    routesWebClient.init(app);
+    routesAuth.init(app, passport);
 
-exports.partials = function (req, res) {
-  var name = req.params.name;
-  res.sendFile(public + 'partials/' + name + '.html');
-};
+  }; // end init
+
+})(exports);
