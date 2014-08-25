@@ -1,16 +1,17 @@
 {
-  "settings": {
-    "db": {
-      "mongo": {
-        "url": "mongodb://localhost/dems"
-      }
+  "db": {
+    "mongo": {
+      "url": "mongodb://localhost/dems"
     },
-    "auth": {
-      "google": {
-        "clientID": "YYYYYYYYYY",
-        "clientSecret": "XXXXXXXXXX",
-        "callbackURL": "http://localhost:3000/auth/google/callback"
-      }
+    "mongoTest": {
+      "url": "mongodb://localhost/demsTest"
+    }
+  },
+  "auth": {
+    "google": {
+      "clientID": "YYYYYYYYYY",
+      "clientSecret": "XXXXXXXXXX",
+      "callbackURL": "http://localhost:3000/auth/google/callback"
     }
   }
 }
