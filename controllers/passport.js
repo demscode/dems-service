@@ -2,6 +2,7 @@
  * Google Account Strategy
  * Integrates passport strategy with user models.
  */
+
 (function (exports) {
   'use strict';
 
@@ -10,8 +11,7 @@
       Keys = require('../dems.conf.json').auth.google;
 
   exports.init = function(passport) {
-
-  //serialise user for the session
+    //serialise user for the session
     passport.serializeUser(function(user, done) {
       done(null, user);
     });

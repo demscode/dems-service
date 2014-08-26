@@ -1,6 +1,6 @@
-describe('DemS API /patient', function() {
+xdescribe('DemS API /patient', function() {
 
-  it('should be true', function () {
+  xit('should be true', function () {
     expect(true).toBe(true);
   });
 
