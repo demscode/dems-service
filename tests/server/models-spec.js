@@ -85,20 +85,20 @@ describe('DemS models', function() {
         expect(err).toBe(null);
         expect(patient.id).toBe(11);
         expect(patient.name).toBe('James');
-      });
-      
-      patientModel.afterUpdate = function() {
+
+        patientModel.afterUpdate = function() {
+          patientModel.find(newPatient.id,function(err, patient) {
+            expect(err).toBe(null);
+            expect(patient.id).toBe(11);
+            expect(patient.name).toBe('Martin');
+            done();
+          });
+        };
+        
         patientModel.find(newPatient.id,function(err, patient) {
-          expect(err).toBe(null);
-          expect(patient.id).toBe(11);
-          expect(patient.name).toBe('Martin');
-          done();
+          patient.updateAttributes({name:'Martin'});
         });
-      };
-      
-      patientModel.find(newPatient.id,function(err, patient) {
-        patient.updateAttributes({name:'Martin'});
-      });
+      });      
     });
     
     it('should destroy patient', function(done) {
@@ -110,23 +110,24 @@ describe('DemS models', function() {
       patientModel.create(newPatient, function(err, patient) {
         expect(err).toBe(null);
         expect(patient.id).toBe(11);
-      });
-      
-      patientModel.count(function(err, count) {
-        expect(count).toBe(1);
-      });
-      
-      patientModel.afterDestroy = function() {
+        
         patientModel.count(function(err, count) {
-          expect(count).toBe(0);
-          done();
+          expect(count).toBe(1);
         });
-      };
-      patientModel.find(newPatient.id,function(err, patient) {
-        patient.destroy(function(err) {
-          expect(err).toBe(null);
+        
+        patientModel.afterDestroy = function() {
+          patientModel.count(function(err, count) {
+            expect(count).toBe(0);
+            done();
+          });
+        };
+        patientModel.find(newPatient.id,function(err, patient) {
+          patient.destroy(function(err) {
+            expect(err).toBe(null);
+          });
         });
       });
+      
     });
   });
 });
