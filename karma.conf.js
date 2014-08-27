@@ -6,6 +6,10 @@ module.exports = function(config) {
     ],
     files: [
       // bower#dev:js
+      'public/libs/jquery/dist/jquery.js',
+      'public/libs/angular/angular.js',
+      'public/libs/bootstrap/dist/js/bootstrap.js',
+      'public/libs/angular-mocks/angular-mocks.js',
       // endbower#dev
       'public/js/*.js',
       'tests/client/*.js'
