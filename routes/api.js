@@ -36,6 +36,21 @@
       }
     });
 
+    app.get('/api/currentuser', function(req, res) {
+      res.json(req.user)
+    });
+
+    app.post('/api/currentuser/update', function(req, res) {
+      var Carer = require('../models').carer;
+      var carer = new Carer(req.user);
+      carer.address = req.body.carer.address
+      carer.contact_number = req.body.carer.contact_number;
+      
+      carer.save(function(err, carer) {
+        res.redirect("/")
+      });
+    });
+
   }; // end init
 
 })(exports);

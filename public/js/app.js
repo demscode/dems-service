@@ -63,4 +63,23 @@
     	};
   	});
 
+	app.controller("CarerDetailsController", ['$http', function($http){
+		var ctrl = this;
+		$http.get("/api/currentuser").success(function(data) {
+			ctrl.carer = data;
+		})
+    ctrl.form = $("form[name='carerForm']")[0];
+		
+		this.pre_validate = function () {
+			$.each($(ctrl.form).find("input[type='text'].ng-pristine"), function (i, elem) {
+				$(elem).addClass("ng-dirty").removeClass("ng-pristine");
+			});
+			return true;
+		};
+
+    this.submit = function(){
+    	console.log("doing the post")
+      $(ctrl.form).submit();
+    };
+  } ] );
 })();

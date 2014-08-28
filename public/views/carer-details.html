@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html ng-app="DemS">
+  <head>
+    <meta charset="utf-8">
+    <title>DemS - Web Client</title>
+
+    <!-- CSS -->
+      <!-- bower:css -->
+        <link rel="stylesheet" type="text/css" href="../libs/bootstrap/dist/css/bootstrap.css" />
+      <!-- endbower -->
+      <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <!-- CSS End -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- JS -->
+      <!-- bower:js -->
+        <script type="text/javascript" src="../libs/jquery/dist/jquery.js"></script>
+        <script type="text/javascript" src="../libs/angular/angular.js"></script>
+        <script type="text/javascript" src="../libs/bootstrap/dist/js/bootstrap.js"></script>
+      <!-- endbower -->
+      <script type="text/javascript" src="../js/app.js"></script>
+    <!-- JS End -->
+  </head>
+
+  <body>
+    <h3>My Profile</h3>
+
+    <form name="carerForm" ng-controller="CarerDetailsController as carerCtrl" action="/api/currentuser/update" method="POST" novalidate>
+      <!--  Live Preview -->
+      <blockquote >
+        <div class="row">
+          <div class="col-sm-2">
+            <strong>Name:</strong>
+          </div>
+          <div class="col-sm-10">
+            {{carerCtrl.carer.name}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-2">
+            <strong>Email:</strong>
+          </div>
+          <div class="col-sm-10">
+            {{carerCtrl.carer.email}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-2">
+            <strong>Address:</strong>
+          </div>
+          <div class="col-sm-10">
+            {{carerCtrl.carer.address}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-2">
+            <strong>Contact Number:</strong>
+          </div>
+          <div class="col-sm-10">
+            {{carerCtrl.carer.contact_number}}
+          </div>
+        </div>
+      </blockquote>
+
+      <!--  Form -->
+      <h4>Edit Your Details</h4>
+      <div class="form-group row">
+        <div class="col-sm-2">
+          Name
+        </div>
+        <div class="col-sm-10">
+          <input ng-model="carerCtrl.carer.name" type="text" class="form-control" placeholder="Your Name" title="Name" name="carer[name]" required></input>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-2">
+          Email
+        </div>
+        <div class="col-sm-10">
+          <input ng-model="carerCtrl.carer.email" ng-disabled="true" type="text" class="form-control" title="Email" name="carer[email]"></input>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-2">
+          Address
+        </div>
+        <div class="col-sm-10">
+          <input ng-model="carerCtrl.carer.address" type="text" class="form-control" placeholder="Your Address" title="Address" name="carer[address]" required></input>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-2">
+          Contact Number
+        </div>
+        <div class="col-sm-10">
+          <input ng-model="carerCtrl.carer.contact_number" type="text" class="form-control" placeholder="Prefered contact number" title="Contact Number" name="carer[contact_number]" required/>
+        </div>
+        
+      </div>
+      <div class="form-group pull-right">
+        <input class="btn btn-primary" value="Submit Details" ng-click="carerCtrl.pre_validate() && carerForm.$valid && carerCtrl.submit()" />
+      </div>
+    </form>
+  </body>
+</html>
