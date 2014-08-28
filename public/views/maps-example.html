@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html ng-app="DemS.maps">
+  <head>
+    <meta charset="utf-8">
+    <title>DemS - Maps Example</title>
+
+    <!-- CSS -->
+      <!-- bower:css -->
+      <!-- endbower -->
+      <link rel="stylesheet" type="text/css" href="../css/style.css" />
+      <link rel="stylesheet" type="text/css" href="../css/maps.css" />
+
+    <!-- CSS End -->
+
+    <!-- JS -->
+      <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+      <!-- bower:js -->
+      <!-- endbower -->
+      <script type="text/javascript" src="../js/maps.js"></script>
+    <!-- JS End -->
+  </head>
+
+  <body>
+  <div ng-controller="MapsController">
+    <google-map center="map.center" zoom="map.zoom">
+      <marker idkey="marker.id" coords="marker.coords" options="marker.options">
+        <marker-label content="marker.title" anchor="2 0"></marker-label>
+      </marker>
+    </google-map>
+  </div>
+
+  <a href="https://angular-ui.github.io/angular-google-maps/#!/api">Angular Google Maps API </a>
+  </body>
+</html>

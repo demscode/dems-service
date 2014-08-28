@@ -24,7 +24,9 @@ module.exports = function(grunt) {
     wiredep: {
       target: {
         src: [
-          'public/views/index.html'
+          'public/views/index.html',
+          'public/views/home-page.html',
+          'public/views/maps-example.html'
         ]
       },
       testenv: {
