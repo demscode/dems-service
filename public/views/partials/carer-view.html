@@ -1,0 +1,20 @@
+<!-- The Carer View - loaded upon login via a carer. -->
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1" ng-controller="TabController as tab">
+			<section class="col-md-2 btn-group-vertical">
+  				<button type="button" class="btn btn-default" ng-click="tab.setTab(1)">Patients</button>
+  				<button type="button" class="btn btn-default" ng-click="tab.setTab(2)">Logs</button>
+  				<button type="button" class="btn btn-default" ng-click="tab.setTab(3)">Account Details</button>
+  				<a class="btn btn-default" href="/logout">Sign Out</a>
+			</section>
+
+			<section class="col-md-8 well">				
+				<patients ng-show="tab.isSet(1)"></patients>
+				<logs ng-show="tab.isSet(2)"></logs>
+				<account-details ng-show="tab.isSet(3)"></account-details>
+			</section>
+		</div>
+	</div>
+</div>

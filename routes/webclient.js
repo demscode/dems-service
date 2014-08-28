@@ -18,7 +18,11 @@
      * Main index template.
      */
     app.get('/', function(req, res){
-      res.sendFile(templates + 'index.html');
+      if(req.isAuthenticated()){
+        res.sendFile(templates + 'home-page.html');
+      } else {
+        res.sendFile(templates + 'index.html');
+      }
     });
 
     /**
