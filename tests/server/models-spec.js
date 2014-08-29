@@ -59,8 +59,11 @@ describe('DemS models', function() {
         token : 'fat',
         name : 'James',
         email : 'james@email.com',
-        lat : '-27.481781',
-        long : '153.046300'
+        pos_latitude : -27.481781,
+        pos_longitude : 153.046300,
+        fence_latitude : -27.481781,
+        fence_longitude : 153.046300,
+        fence_radius : 50
       };
 
       patientModel.create(newPatient, function(err, patient) {
@@ -68,8 +71,11 @@ describe('DemS models', function() {
         expect(patient.id).toBe(11);
         expect(patient.name).toBe('James');
         expect(patient.email).toBe('james@email.com');
-        expect(patient.lat).toBe('-27.481781');
-        expect(patient.long).toBe('153.046300');
+        expect(patient.pos_latitude).toBe(-27.481781);
+        expect(patient.pos_longitude).toBe(153.046300);
+        expect(patient.fence_latitude).toBe(-27.481781);
+        expect(patient.fence_longitude).toBe(153.046300);
+        expect(patient.fence_radius).toBe(50);
         done();
       });
     });

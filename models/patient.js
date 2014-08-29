@@ -21,8 +21,11 @@
       token : { type: String },
       email : { type: String, limit: 150 },
       name: { type: String, limit: 50 },
-      lat: { type: String, limit: 20 },
-      long: { type: String, limit: 20 }
+      pos_latitude: { type: Number},
+      pos_longitude: { type: Number},
+      fence_latitude: { type: Number},
+      fence_longitude: { type: Number},
+      fence_radius: { type: Number},
     });
   };
 
