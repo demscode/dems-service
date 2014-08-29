@@ -10,5 +10,6 @@
   var mongo = settings.db.mongo;
 
   exports.carer = require('./carer').init(mongo);
+  exports.patient = require('./patient.js').init(mongo);
 
 })(exports);

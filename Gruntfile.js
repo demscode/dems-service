@@ -50,11 +50,13 @@ module.exports = function(grunt) {
         'Gruntfile.js',
         'server.js',
         'controllers/*',
+        'models/*',
         'routes/*',
         'public/js/*',
         'tests/**/*.js'],
       options: {
-        indent: 2
+        indent: 2,
+        trailing: true
       }
     },
     jasmine_node: {
