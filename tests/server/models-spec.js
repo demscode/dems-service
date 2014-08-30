@@ -4,15 +4,26 @@ describe('DemS models', function() {
     var carerModel,
     settings = require('../../dems.conf.json');
 
-    beforeEach(function() {
+    beforeEach(function(done) {
       carerModel = require('../../models/carer.js').init(settings.db.mongoTest);
+      carerModel.count(function(err, count) {
+        expect(err).toBe(null);
+        expect(count).toBe(0);
+        done();
+      });
     });
 
     afterEach(function(done) {
-      carerModel.destroyAll(function(thing) {
-        carerModel.count(function(err, count) {
-          expect(count).toBe(0);
-          done();
+      carerModel.all({order: 'id'}, function(err, carers) {
+        expect(err).toBe(null);
+        carers.forEach(function(carer) {
+          carer.destroy(function() {
+            carerModel.count(function(err, count) {
+              expect(err).toBe(null);
+              expect(count).toBe(0);
+              done();
+            });
+          });
         });
       });
     });
@@ -33,21 +44,31 @@ describe('DemS models', function() {
       });
     });
   });
-  
+
   describe('Patient model', function() {
-    var patientModel, 
+    var patientModel,
     settings = require('../../dems.conf.json');
 
-    beforeEach(function() {
+    beforeEach(function(done) {
       patientModel = require('../../models/patient.js').init(settings.db.mongoTest);
+      patientModel.count(function(err, count) {
+        expect(err).toBe(null);
+        expect(count).toBe(0);
+        done();
+      });
     });
 
     afterEach(function(done) {
-      patientModel.destroyAll(function(thing) {
-        patientModel.count(function(err, count) {
-          expect(err).toBe(null);
-          expect(count).toBe(0);
-          done();
+      patientModel.all({order: 'id'}, function(err, patients) {
+        expect(err).toBe(null);
+        patients.forEach(function(patient) {
+          patient.destroy(function() {
+            patientModel.count(function(err, count) {
+              expect(err).toBe(null);
+              expect(count).toBe(0);
+              done();
+            });
+          });
         });
       });
     });
@@ -58,9 +79,7 @@ describe('DemS models', function() {
         id : 11,
         token : 'fat',
         name : 'James',
-        email : 'james@email.com',
-        lat : '-27.481781',
-        long : '153.046300'
+        email : 'james@email.com'
       };
 
       patientModel.create(newPatient, function(err, patient) {
@@ -68,12 +87,10 @@ describe('DemS models', function() {
         expect(patient.id).toBe(11);
         expect(patient.name).toBe('James');
         expect(patient.email).toBe('james@email.com');
-        expect(patient.lat).toBe('-27.481781');
-        expect(patient.long).toBe('153.046300');
         done();
       });
     });
-    
+
     it('should update patient', function(done) {
 
       var newPatient = {
@@ -94,40 +111,78 @@ describe('DemS models', function() {
             done();
           });
         };
-        
+
         patientModel.find(newPatient.id,function(err, patient) {
           patient.updateAttributes({name:'Martin'});
         });
-      });      
+      });
     });
-    
-    it('should destroy patient', function(done) {
+
+    it('should create patient location', function(done) {
 
       var newPatient = {
-        id : 11
+        id: 11
+      },
+          newLocation = {
+            latitude: -27.481781,
+            longitude: 153.046300
       };
 
       patientModel.create(newPatient, function(err, patient) {
         expect(err).toBe(null);
-        expect(patient.id).toBe(11);
-        
-        patientModel.count(function(err, count) {
-          expect(count).toBe(1);
-        });
-        
-        patientModel.afterDestroy = function() {
-          patientModel.count(function(err, count) {
-            expect(count).toBe(0);
-            done();
-          });
-        };
-        patientModel.find(newPatient.id,function(err, patient) {
-          patient.destroy(function(err) {
+        patient.locations.create(newLocation,
+        function(err, location) {
+          expect(err).toBe(null);
+          expect(location.latitude).toBe(newLocation.latitude);
+          expect(location.longitude).toBe(newLocation.longitude);
+
+          patient.locations(function(err, locations) {
             expect(err).toBe(null);
+            // FIX: locations and fences are left dangling in the db
+            // after patient.destroy()
+            // expect(locations.length).toBe(1);
+            done();
           });
         });
       });
-      
+    });
+
+    it('should create patient fence', function(done) {
+
+      var newPatient = {
+        id: 11
+      },
+      newFence = [
+        { latitude: -27.7, longitude: 153.046300 },
+        { latitude: -27.8, longitude: 154.046300 },
+        { latitude: -26.9, longitude: 155.046300 }
+      ];
+
+      patientModel.create(newPatient, function(err, patient) {
+        expect(err).toBe(null);
+        patient.fences.create(newFence,
+        function(err, fence) {
+          expect(err).toBe(null);
+          // first
+          expect(fence[0].latitude).toBe(newFence[0].latitude);
+          expect(fence[0].longitude).toBe(newFence[0].longitude);
+          // last
+          expect(fence[2].latitude).toBe(newFence[2].latitude);
+          expect(fence[2].longitude).toBe(newFence[2].longitude);
+          patient.fences(function(err, fences) {
+            expect(err).toBe(null);
+            // FIX: locations and fences are left dangling in the db
+            // after patient.destroy()
+            // expect(fences.length).toBe(1);
+            done();
+          });
+        });
+      });
     });
   });
 });
+        // pos_latitude : -27.481781,
+        // pos_longitude : 153.046300,
+        // fence_latitude : -27.481781,
+        // fence_longitude : 153.046300,
+        // fence_radius : 50
