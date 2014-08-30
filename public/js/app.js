@@ -13,9 +13,7 @@
 	});
 
 	app.controller('MainController', ['$http', '$location', function($http, $location){
-  	this.setRoute = function(route){
-    		$location.path(route);
-  	};
+
 	}]);
 
 	app.controller("AccountDetailsController", ['$http', function($http){
