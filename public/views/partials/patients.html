@@ -14,12 +14,12 @@
 	</thread>
 	<tbody>
 		<!-- Use a ng-repeat to display -->
-		<tr>
-			<td>#420</td>
-			<td>Oliver</td>
-			<td>Giess</td>
-			<td>0431 812 901</td>
-			<td>Bedroom</td>
+		<tr ng-repeat="patient in patientsCtrl.patients">
+			<td>{{patient.id}}</td>
+			<td>{{patient.first_name}}</td>
+			<td>{{patient.last_name}}</td>
+			<td>{{patient.contact_number}}</td>
+			<td>{{patient.last_location}}</td>
 		</tr>
 	</tbody>
 </table>
