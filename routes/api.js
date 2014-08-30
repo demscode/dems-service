@@ -53,6 +53,21 @@
 
     });
 
+    //Patient DELETE API
+    app.delete('/api/patient/:id', function(req, res) {
+      var patientModel = require('../models').patient;
+
+      patientModel.find(Number(req.params.id.substring(1)), function(err, data) {
+        if (data) {
+          data.destroy();
+          res.status(200).end();
+        } else {
+          res.status(404).end();
+        }
+      });
+
+    });
+
     // Example api endpoint
     app.get('/api/carer/:thing', function(req, res) {
       switch(req.params.thing) { // given the params are X
