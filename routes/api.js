@@ -18,7 +18,7 @@
     app.get('/api/patient/:id', function(req, res) {
       var patientModel = require('../models').patient;
 
-      patientModel.find(Number(req.params.id.substring(1)), function(err, data) {
+      patientModel.find(Number(req.params.id), function(err, data) {
         if (data) {
           res.status(200).send(data);
         } else {
@@ -32,7 +32,7 @@
     app.put('/api/patient/:id', function(req, res) {
       var patientModel = require('../models').patient;
 
-      patientModel.find(Number(req.params.id.substring(1)), function(err, data) {
+      patientModel.find(Number(req.params.id), function(err, data) {
         if (data) {
           data.updateAttributes(req.body, function(err, data) {
             res.status(200).send(data);
@@ -43,7 +43,7 @@
       });
     });
 
-    //Patient CREATE API
+    // Patient CREATE API
     app.post('/api/patient', function(req, res) {
       var patientModel = require('../models').patient;
 
@@ -54,7 +54,20 @@
           res.status(400).end();
         }
       });
+    });
 
+    // Patient DELETE API
+    app.delete('/api/patient/:id', function(req, res) {
+      var patientModel = require('../models').patient;
+
+      patientModel.find(Number(req.params.id), function(err, data) {
+        if (data) {
+          data.destroy();
+          res.status(200).end();
+        } else {
+          res.status(404).end();
+        }
+      });
     });
 
     /******************************/
@@ -72,7 +85,6 @@
           res.status(404).end();
         }
       });
-
     });
 
     // Carer UPDATE API
@@ -83,14 +95,14 @@
         if (data) {
           data.updateAttributes(req.body, function(err, data) {
             res.status(200).send(data);
-          });
+            });
         } else {
           res.status(404).end();
         }
       });
     });
 
-    //Carer CREATE API
+    // Carer CREATE API
     app.post('/api/carer', function(req, res) {
       var carerModel = require('../models').carer;
 
@@ -101,11 +113,58 @@
           res.status(400).end();
         }
       });
-
     });
 
+    // Carer DELETE API
+    app.delete('/api/carer/:id', function(req, res) {
+      var carerModel = require('../models').carer;
+
+      carerModel.find(Number(req.params.id), function(err, data) {
+        if (data) {
+          data.destroy();
+          res.status(200).end();
+        } else {
+          res.status(404).end();
+        }
+      });
+    });
+
+    // Carer GET CURRENT API
     app.get('/api/currentCarer', function(req, res) {
       res.json(req.user)
+    });
+
+    /******************************/
+    /* PATIENT LOCATIONS          */
+    /******************************/
+    // Location GET API
+    app.get('/api/patient/:id/locations', function(req, res) {
+      var patientModel = require('../models').patient;
+
+      patientModel.find(Number(req.params.id), function(err, data) {
+        if (data) {
+          data.locations(function(err, locations) {
+            res.status(200).send(locations);
+          });
+        } else {
+          res.status(404).end();
+        }
+      });
+    });
+
+    // Location CREATE API
+    app.post('/api/patient/:id/locations', function(req, res) {
+      var patientModel = require('../models').patient;
+
+      patientModel.find(Number(req.params.id), function(err, data) {
+        if (data) {
+          data.locations.create(req.body, function(err, locations) {
+            res.status(200).send(locations);
+          });
+        } else {
+          res.status(404).end();
+        }
+      });
     });
 
     /******************************/
