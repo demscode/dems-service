@@ -21,6 +21,17 @@ div.header {
 	height: 50px;
 }
 
+div.footer {
+	text-align:center;
+	width:100%;
+	display:
+	inline-block;
+	padding-top: 30px;
+}
+
+.hand-pointer {
+	cursor: pointer;
+}
 
 .ng-invalid.ng-dirty {
  border-color:red
