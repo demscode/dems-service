@@ -7,6 +7,14 @@ module.exports = function(config) {
     files: [
       'https://maps.google.com/maps/api/js?sensor=false',
       // bower#dev:js
+      'public/libs/jquery/dist/jquery.js',
+      'public/libs/angular/angular.js',
+      'public/libs/bootstrap/dist/js/bootstrap.js',
+      'public/libs/lodash/dist/lodash.compat.js',
+      'public/libs/angular-google-maps/dist/angular-google-maps.js',
+      'public/libs/angular-route/angular-route.js',
+      'public/libs/angular-resource/angular-resource.js',
+      'public/libs/angular-mocks/angular-mocks.js',
       // endbower#dev
       'public/js/*.js',
       'tests/client/*.js'
