@@ -15,6 +15,7 @@
       <!-- bower:js -->
         <script type="text/javascript" src="../libs/jquery/dist/jquery.js"></script>
         <script type="text/javascript" src="../libs/angular/angular.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>
         <script type="text/javascript" src="../libs/bootstrap/dist/js/bootstrap.js"></script>
       <!-- endbower -->
       <script type="text/javascript" src="../js/app.js"></script>
@@ -22,6 +23,17 @@
   </head>
 
   <body >
-    <carer-view></carer-view>
+    <div class="row" ng-controller="MainController as mainCtrl">
+      <div class="col-sm-2 btn-group-vertical">
+          <button type="button" class="btn btn-default" ng-click="mainCtrl.setRoute('/patients')">Patients</button>
+          <button type="button" class="btn btn-default" ng-click="mainCtrl.setRoute('/logs')">Logs</button>
+          <button type="button" class="btn btn-default" ng-click="mainCtrl.setRoute('/account_details')">Account Details</button>
+          <a class="btn btn-default" href="/logout">Sign Out</a>
+      </div>
+
+      <div class="col-sm-10">
+        <div ng-view></div>
+      </div>
+    </div>
   </body>
 </html>

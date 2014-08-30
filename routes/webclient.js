@@ -19,19 +19,7 @@
      */
     app.get('/', function(req, res){
       if(req.isAuthenticated()){
-        if(req.user.contact_number == null || req.user.address == null) {
-          res.sendFile(templates + 'carer-details.html');
-        } else {
-          res.sendFile(templates + 'home-page.html');
-        }
-      } else {
-        res.sendFile(templates + 'index.html');
-      }
-    });
-
-    app.get('/myprofile', function(req, res){
-      if(req.isAuthenticated()){
-        res.sendFile(templates + 'carer-details.html');
+        res.sendFile(templates + 'home-page.html');
       } else {
         res.sendFile(templates + 'index.html');
       }

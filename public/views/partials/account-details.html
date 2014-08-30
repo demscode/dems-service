@@ -1,3 +1,82 @@
-<!-- This will list the current carers account details. - loaded in the carer-view. -->
+<form name="carerForm" ng-controller="CarerDetailsController as carerCtrl" action="/api/currentuser/update" method="POST" novalidate>
+  <div class="row">
 
-<p>Currently un-implemented, come back later!</p>
+    <div class="col-sm-6">
+      <!--  Form -->
+      <div class="form-group row">
+        <div class="col-sm-2">
+          Name
+        </div>
+        <div class="col-sm-10">
+          <input ng-model="carerCtrl.carer.name" type="text" class="form-control" placeholder="Your Name" title="Name" name="carer[name]" required></input>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-2">
+          Email
+        </div>
+        <div class="col-sm-10">
+          <input ng-model="carerCtrl.carer.email" ng-disabled="true" type="text" class="form-control" title="Email" name="carer[email]"></input>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-2">
+          Address
+        </div>
+        <div class="col-sm-10">
+          <input ng-model="carerCtrl.carer.address" type="text" class="form-control" placeholder="Your Address" title="Address" name="carer[address]" required></input>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-2">
+          Number
+        </div>
+        <div class="col-sm-10">
+          <input ng-model="carerCtrl.carer.contact_number" type="text" class="form-control" placeholder="Prefered contact number" title="Contact Number" name="carer[contact_number]" required/>
+        </div>
+
+      </div>
+
+    </div>
+    <div class="col-sm-6">
+      <!--  Live Preview -->
+      <blockquote>
+        <div class="row">
+          <div class="col-sm-2">
+            <strong>Name:</strong>
+          </div>
+          <div class="col-sm-10">
+            {{carerCtrl.carer.name}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-2">
+            <strong>Email:</strong>
+          </div>
+          <div class="col-sm-10">
+            {{carerCtrl.carer.email}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-2">
+            <strong>Address:</strong>
+          </div>
+          <div class="col-sm-10">
+            {{carerCtrl.carer.address}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-2">
+            <strong>Number:</strong>
+          </div>
+          <div class="col-sm-10">
+            {{carerCtrl.carer.contact_number}}
+          </div>
+        </div>
+      </blockquote>
+    </div>
+  </div>
+  <div class="form-group pull-right">
+    <input class="btn btn-primary" value="Submit Details" ng-click="carerCtrl.pre_validate() && carerForm.$valid && carerCtrl.submit()" />
+  </div>
+</form>
