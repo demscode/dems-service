@@ -87,14 +87,14 @@ describe('DemS API /patient', function() {
       done();
     });
 
-    /*afterEach(function(done) {
+    afterEach(function(done) {
       model.destroyAll(function(data) {
         model.count(function(err, count) {
           expect(count).toBe(0);
           done();
         });
       });
-    });*/
+    });
 
     it('GET a valid patient locations', function(done) {
       request.get('/api/patient/22/locations').expect(200, [location1p22, location2p22]);
