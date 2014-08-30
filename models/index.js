@@ -3,7 +3,13 @@
  * Recommended `require` for busy controllers.
  */
 
-var settings = require('../dems.conf.json');
-var mongo = settings.db.mongo;
+(function (exports) {
+  'use strict';
 
-exports.carer = require('./carer').init(mongo);
+  var settings = require('../dems.conf.json');
+  var mongo = settings.db.mongo;
+
+  exports.carer = require('./carer').init(mongo);
+  exports.patient = require('./patient').init(mongo);
+
+})(exports);

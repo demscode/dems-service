@@ -25,6 +25,10 @@
       }
     });
 
+    app.get('/maps-example', function(req, res) {
+      res.sendFile(templates + 'maps-example.html');
+    });
+
     /**
      * Partial templates used by directives.
      */

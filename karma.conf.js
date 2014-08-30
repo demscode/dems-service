@@ -5,6 +5,7 @@ module.exports = function(config) {
       'jasmine'
     ],
     files: [
+      'https://maps.google.com/maps/api/js?sensor=false',
       // bower#dev:js
       // endbower#dev
       'public/js/*.js',
