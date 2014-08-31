@@ -3,7 +3,7 @@
  *
  */
 (function() {
-	var app = angular.module('DemS.maps', ['google-maps']);
+  var app = angular.module('DemS.maps', ['google-maps']);
 
   app.controller('MapsController', function($scope) {
     $scope.map = {
