@@ -21,14 +21,9 @@
   </head>
 
   <body>
-  <div ng-controller="MapsController">
-    <google-map center="map.center" zoom="map.zoom">
-      <marker idkey="marker.id" coords="marker.coords" options="marker.options">
-        <marker-label content="marker.title" anchor="2 0"></marker-label>
-      </marker>
-    </google-map>
-  </div>
-
-  <a href="https://angular-ui.github.io/angular-google-maps/#!/api">Angular Google Maps API </a>
+    <div ng-controller="MapsController as mapsCtrl" ng-init="mapsCtrl.CreateMap(mapsCtrl.mapSettings)">
+      <div id="map"></div>
+    </div>
+    <a href="http://hpneo.github.io/gmaps">gmaps.js Example & Documentation</a>
   </body>
 </html>
