@@ -90,8 +90,87 @@
 
       patientModel.find(Number(req.params.id), function(err, data) {
         if (data) {
+          req.body.patient_id = Number(req.params.id);
           data.locations.create(req.body, function(err, locations) {
             res.status(200).send(locations);
+          });
+        } else {
+          res.status(404).end();
+        }
+      });
+
+    });
+
+    // Fence GET API
+    app.get('/api/patient/:id/fence', function(req, res) {
+      var patientModel = require('../models').patient;
+
+      patientModel.find(Number(req.params.id), function(err, data) {
+        if (data) {
+          data.fences(function(err, fences) {
+            res.status(200).send(fences);
+          });
+        } else {
+          res.status(404).end();
+        }
+      });
+
+    });
+
+    //Fence CREATE API
+    app.post('/api/patient/:id/fence', function(req, res) {
+      var patientModel = require('../models').patient;
+
+      patientModel.find(Number(req.params.id), function(err, data) {
+        if (data) {
+          req.body.polygon = JSON.parse(req.body.polygon);
+          req.body.patient_id = Number(req.params.id);
+          data.fences.create(req.body, function(err, fences) {
+            res.status(200).send(fences);
+          });
+        } else {
+          res.status(404).end();
+        }
+      });
+
+    });
+
+
+    //Fence UPDATE API
+    app.put('/api/patient/:id/fence', function(req, res) {
+      var patientModel = require('../models').patient;
+
+      patientModel.find(Number(req.params.id), function(err, data) {
+        if (data) {
+          data.fences.all(function(err, fences) {
+            if(fences) {
+              req.body.polygon = JSON.parse(req.body.polygon);
+              fences[0].updateAttributes(req.body);
+              res.status(200).send(fences[0]);
+            } else {
+              res.status(404).end();
+            }
+          });
+        } else {
+          res.status(404).end();
+        }
+      });
+
+    });
+
+    //Fence DELETE API
+    app.delete('/api/patient/:id/fence', function(req, res) {
+      var patientModel = require('../models').patient;
+
+      patientModel.find(Number(req.params.id), function(err, data) {
+        if (data) {
+          data.fences.all(function(err, fences) {
+            if(fences) {
+              fences[0].destroy();
+              res.status(200).end();
+            } else {
+              res.status(404).end();
+            }
           });
         } else {
           res.status(404).end();
