@@ -1,25 +1,33 @@
-<!-- This will list the patients linked to a carer. - loaded in the carer-view. -->
+<div class="col-xs-2 btn-group-vertical">
+  <a ng-repeat="patient in patients" ng-click="setPatient(patient.id)" class="btn btn-default">{{patient.first_name + " " + patient.last_name}}</a>
+</div>
 
-<p>Currently under construction, come back later!</p>
+<div class="col-xs-10">
+	<div ng-show="patient == null">
+		Select a patient to view the details
+	</div>
 
-<table class="table">
-	<thread>
-		<tr>
-			<th>Patient ID</th>
-			<th>First Name</th>
-			<th>Last Name</th>
-			<th>Contact No.</th>
-			<th>Last Location</th>
-		</tr>
-	</thread>
-	<tbody>
-		<!-- Use a ng-repeat to display -->
-		<tr ng-repeat="patient in patients">
-			<td>{{patient.id}}</td>
-			<td>{{patient.first_name}}</td>
-			<td>{{patient.last_name}}</td>
-			<td>{{patient.contact_number}}</td>
-			<td>{{patient.last_location}}</td>
-		</tr>
-	</tbody>
-</table>
+	<div ng-hide="patient == null">
+		<table class="table">
+			<thread>
+				<tr>
+					<th>Patient ID</th>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>Contact No.</th>
+					<th>Last Location</th>
+				</tr>
+			</thread>
+			<tbody>
+				<tr>
+					<td>{{patient.id}}</td>
+					<td>{{patient.first_name}}</td>
+					<td>{{patient.last_name}}</td>
+					<td>{{patient.contact_number}}</td>
+					<td>{{patient.last_location}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+</div>

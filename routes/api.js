@@ -131,7 +131,7 @@
 
     // Carer GET CURRENT API
     app.get('/api/currentCarer', function(req, res) {
-      res.json(req.user)
+      res.json(req.user);
     });
 
     /******************************/

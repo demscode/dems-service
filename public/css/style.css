@@ -21,6 +21,10 @@ div.header {
 	height: 50px;
 }
 
+div.content {
+	min-height: 500px;
+}
+
 div.footer {
 	text-align:center;
 	width:100%;
