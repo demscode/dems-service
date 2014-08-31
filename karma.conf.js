@@ -16,6 +16,8 @@ module.exports = function(config) {
       'public/libs/angular-resource/angular-resource.js',
       'public/libs/angular-mocks/angular-mocks.js',
       // endbower#dev
+      //need to load app.js before any other js as most depend on it
+      'public/js/app.js',
       'public/js/*.js',
       'tests/client/*.js'
     ],

@@ -6,93 +6,27 @@
 
     <!-- CSS -->
       <!-- bower:css -->
+      <link rel="stylesheet" href="../libs/bootstrap/dist/css/bootstrap.css" />
       <!-- endbower -->
       <link rel="stylesheet" type="text/css" href="../css/style.css" />
     <!-- CSS End -->
 
     <!-- JS -->
       <script src="https://maps.google.com/maps/api/js?sensor=false"></script>
-
       <!-- bower:js -->
+      <script src="../libs/jquery/dist/jquery.js"></script>
+      <script src="../libs/angular/angular.js"></script>
+      <script src="../libs/bootstrap/dist/js/bootstrap.js"></script>
+      <script src="../libs/lodash/dist/lodash.compat.js"></script>
+      <script src="../libs/angular-google-maps/dist/angular-google-maps.js"></script>
+      <script src="../libs/angular-route/angular-route.js"></script>
+      <script src="../libs/angular-resource/angular-resource.js"></script>
       <!-- endbower -->
-      <script type="text/javascript" src="../js/services.js"></script>
       <script type="text/javascript" src="../js/app.js"></script>
     <!-- JS End -->
   </head>
 
-  <body ng-controller="CarerController as carerCtrl">
-
-    <!-- HEADER -->
-    <div class="header">
-      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
-        <!-- PROJECT NAME -->
-        <div class="navbar-header">
-          <a class="navbar-brand" href="/">Dementia Smart System</a>
-        </div>
-        <!-- END PROJECT NAME -->
-
-        <!-- LEFT SIDE NAVS -->
-        <div class="navbar-collapse pull-left">
-          <ul class="nav navbar-nav">
-            <li class="dropdown">
-              <a class="hand-pointer" data-toggle="dropdown" class="dropdown-toggle"> Patients <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="#/patients">List</a></li>
-                <li class="divider"></li>
-                <li><a href="/logout">Create</a></li>
-              </ul>
-            </li>
-            <li><a href="#/virtual_fences">Virtual Fence</a></li>
-            <li><a href="#/reminders">Reminders</a></li>
-            <li><a href="#/locations">Locations</a></li>
-            <li><a href="#/logs">Logs</a></li>
-          </ul>
-        </div>
-        <!-- END LEFT SIDE NAVS -->
-
-
-        <!-- RIGHT SIDE NAVS -->
-        <div class="navbar-collapse pull-right">
-          <ul class="nav navbar-nav">
-            <li class="dropdown">
-              <a class="hand-pointer" data-toggle="dropdown" class="dropdown-toggle"> {{carer.email}} <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="#/account_details">Account Details</a></li>
-                <li class="divider"></li>
-                <li><a href="/logout">Sign Out</a></li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-        <!-- END RIGHT SIDE NAVS -->
-
-
-      </div>
-    </div>
-    <!-- END HEADER -->
-
-    <!-- CONTECT -->
-    <div class="content">
-      <!-- AREA FOR ALERTS -->
-      <div id="alerts"></div>
-      <!-- END AREA FOR ALERTS -->
-
-      <!-- VIEW -->
-      <div class="row">
-        <div class="col-xs-12">
-          <div ng-view></div>
-        </div>
-      </div>
-      <!-- END VIEW -->
-    </div>
-    <!-- END CONTECT -->
-
-    <!-- FOOTER -->
-    <div class="footer">
-      <p>
-        Created by <b>The Swamp Things</b>
-      </p>
-    </div>
-     <!-- END FOOTER -->
+  <body>
+    <front-page></front-page>
   </body>
 </html>

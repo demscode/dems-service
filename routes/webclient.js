@@ -19,9 +19,9 @@
      */
     app.get('/', function(req, res){
       if(req.isAuthenticated()){
-        res.sendFile(templates + 'home-page.html');
-      } else {
         res.sendFile(templates + 'index.html');
+      } else {
+        res.sendFile(templates + 'home-page.html');
       }
     });
 
