@@ -9,8 +9,10 @@
 
 		$scope.carerHasEnoughInfo = function () {
 			return $scope.carer.contact_number !== null &&
+						 $scope.carer.contact_number !== undefined &&
 						 $scope.carer.contact_number !== "" &&
 						 $scope.carer.address !== null &&
+						 $scope.carer.address !== undefined &&
 						 $scope.carer.address !== "";
 		};
 	} ] );

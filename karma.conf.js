@@ -19,6 +19,7 @@ module.exports = function(config) {
       //need to load app.js before any other js as most depend on it
       'public/js/app.js',
       'public/js/*.js',
+      'public/js/**/*.js',
       'tests/client/*.js'
     ],
     preprocessors: {
