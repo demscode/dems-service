@@ -21,7 +21,8 @@
   </head>
 
   <body>
-    <div ng-controller="MapsController as mapsCtrl" ng-init="mapsCtrl.CreateMap(mapsCtrl.mapSettings)">
+    <div ng-controller="MapsController as mapsCtrl">
+      Enter patient id: <input type="number" ng-model="pid"> <input type="button" value="Enter" ng-click="mapsCtrl.init(pid)">
       <div id="map"></div>
     </div>
     <a href="http://hpneo.github.io/gmaps">gmaps.js Example & Documentation</a>

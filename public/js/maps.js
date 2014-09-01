@@ -9,9 +9,9 @@
 (function() {
 	var app = angular.module('DemS.maps', []);
 
-  app.controller('MapsController', function($http) {
+  app.controller('MapsController', ['$http', function($http) {
     var maps = this;
-    var path = [];
+    var path;
     var map, polygon, marker;
 
     this.mapSettings =  {
@@ -36,21 +36,36 @@
       });
     };
 
-    this.CreateMarker = function(position, outofbounds) {
+    this.CreateMarker = function(position) {
       maps.marker = maps.map.addMarker({
         lat: position.latitude,
         lng: position.longitude,
         draggable: false,
         fences: [maps.polygon],
-        outside: outofbounds
+        outside: function(marker, fence) {
+          console.log("Patient outside of fence.");
+        },
+        infoWindow: {
+          content: Date(position.timestamp)
+        }
       });
     };
 
     this.init = function(patientid) {
+      maps.CreateMap(maps.mapSettings);
 
+      $http.get('/api/patient/' + patientid + '/fence').success(function(data) {
+        maps.path = data[0].polygon;
+        maps.CreatePolygon(maps.path);
+      });
+
+      $http.get('/api/patient/' + patientid + '/locations').success(function(data) {
+        maps.locations = data;
+        maps.CreateMarker(maps.locations[0]);
+      });
 
     };
 
-  });
+  }]);
 
 })();
