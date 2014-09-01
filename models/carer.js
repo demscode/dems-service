@@ -17,10 +17,12 @@
     var schemaMongo = new Schema('mongodb', settings);
 
     return schemaMongo.define('Carer', {
-      id : { type: Number, index: true },
-      token : { type: String },
-      email : { type: String, limit: 150 },
-      name: { type: String, limit: 50 }
+      id :              { type: Number, index: true },
+      token :           { type: String },
+      email :           { type: String, limit: 150 },
+      name:             { type: String, limit: 50 },
+      address:          { type: String },
+      contact_number:   { type: String }
     });
   };
 

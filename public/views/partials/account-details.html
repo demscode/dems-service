@@ -1,3 +1,81 @@
-<!-- This will list the current carers account details. - loaded in the carer-view. -->
+<form name="carerForm" novalidate>
+  <div class="row">
+    <div class="col-sm-6">
+      <!--  Form -->
+      <div class="form-group row">
+        <div class="col-md-2">
+          Name
+        </div>
+        <div class="col-md-10">
+          <input ng-model="carer.name" type="text" class="form-control" placeholder="Your Name" title="Name" name="carer[name]" required></input>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-md-2">
+          Email
+        </div>
+        <div class="col-md-10">
+          <input ng-model="carer.email" ng-disabled="true" type="text" class="form-control" title="Email" name="carer[email]"></input>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-md-2">
+          Address
+        </div>
+        <div class="col-md-10">
+          <input ng-model="carer.address" type="text" class="form-control" placeholder="Your Address" title="Address" name="carer[address]" required></input>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-md-2">
+          Number
+        </div>
+        <div class="col-md-10">
+          <input ng-model="carer.contact_number" type="text" class="form-control" placeholder="Prefered contact number" title="Contact Number" name="carer[contact_number]" required/>
+        </div>
 
-<p>Currently un-implemented, come back later!</p>
+      </div>
+
+    </div>
+    <div class="col-sm-6">
+      <!--  Live Preview -->
+      <blockquote>
+        <div class="row">
+          <div class="col-md-2">
+            <strong>Name:</strong>
+          </div>
+          <div class="col-md-10">
+            {{carer.name}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-2">
+            <strong>Email:</strong>
+          </div>
+          <div class="col-md-10">
+            {{carer.email}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-2">
+            <strong>Address:</strong>
+          </div>
+          <div class="col-md-10">
+            {{carer.address}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-2">
+            <strong>Number:</strong>
+          </div>
+          <div class="col-md-10">
+            {{carer.contact_number}}
+          </div>
+        </div>
+      </blockquote>
+    </div>
+  </div>
+  <div class="form-group pull-right">
+    <input type="button" class="btn btn-primary" value="Submit Details" ng-click="(carerForm.$valid || post_validate()) && submit()" />
+  </div>
+</form>

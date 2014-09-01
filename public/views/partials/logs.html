@@ -1,3 +1,35 @@
-<!-- This will contain a log of important notifications for the carer - loaded in the carer-view. -->
+<div class="col-xs-2 btn-group-vertical">
+  <a ng-repeat="patient in patients" ng-click="setPatient(patient.id)" class="btn btn-default">{{patient.first_name + " " + patient.last_name}}</a>
+</div>
 
-<p>Currently un-implemented, come back later!</p>
+<div class="col-xs-10">
+  <div ng-show="patient == null">
+    Select a patient to view the logs
+  </div>
+
+  <div ng-hide="patient == null">
+    <div ng-show="patient.logs != null && patient.logs.length > 0">
+      <table class="table">
+        <thread>
+          <tr>
+            <th>Log ID</th>
+            <th>Log Info 1</th>
+            <th>Log Info 2</th>
+            <th>Log Info 3</th>
+          </tr>
+        </thread>
+        <tbody>
+          <tr ng-repeat="log in patient.logs">
+            <td>{{log.id}}</td>
+            <td>{{log.log_info1}}</td>
+            <td>{{log.log_info2}}</td>
+            <td>{{log.log_info3}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div ng-hide="patient.logs != null && patient.logs.length > 0">
+      No logs for the {{patient.first_name + " " + patient.last_name}}
+    </div>
+  </div>
+</div>
