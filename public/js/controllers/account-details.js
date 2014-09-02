@@ -1,30 +1,36 @@
 (function () {
-	angular.module('DemS').controller("AccountDetailsController", ['$scope', 'Carer', 'Session', 'Alerts', function($scope, Carer, Session, Alerts){
-	$scope.carer = Session.currentCarer;
+  angular.module('DemS').controller("AccountDetailsController", ['$scope', 'Carer', 'Session', 'Alerts', function($scope, Carer, Session, Alerts){
 
-    $scope.form = $("form[name='carerForm']")[0];
+    $scope.init = function () {
+      $scope.carer = Session.currentCarer;
 
-	$scope.post_validate = function () {
-		$.each($($scope.form).find("input[type='text'].ng-pristine"), function (i, elem) {
-			$(elem).addClass("ng-dirty").removeClass("ng-pristine");
-		});
-		Alerts.addAlert("Please check your input as something is invalid", {alert_type: "danger"});
-		return false;
-	};
+      $scope.form = $("form[name='carerForm']")[0];
 
-    $scope.submit = function(){
-        Carer.update($scope.carer, $scope.carer, function () {
-            // Success
-            Session.currentCarer = $scope.carer;
-            Alerts.addAlert("Successfully updated your details");
-        }, function () {
-            // Error
-            Alerts.addAlert("Something has gone wrong.", {alert_type: "danger"});
-        });
+      if(!Session.carerHasEnoughInfo(Session.currentCarer) && !Session.shownNotEnoughInfoMessage) {
+        Alerts.addAlert("You need to add more information. Please enter them by feeling out this form", {alert_type: "danger"});
+        Session.shownNotEnoughInfoMessage = true;
+      }
+    }
+
+    $scope.post_validate = function () {
+      $.each($($scope.form).find("input[type='text'].ng-pristine"), function (i, elem) {
+        $(elem).addClass("ng-dirty").removeClass("ng-pristine");
+      });
+      Alerts.addAlert("Please check your input as something is invalid", {alert_type: "danger"});
+      return false;
     };
 
-    if(!Session.carerHasEnoughInfo(Session.currentCarer) && !Session.shownNotEnoughInfoMessage) {
-        Alerts.addAlert("You need to add more information. Please visit the Account Details page", {alert_type: "danger"});
-    }
+    $scope.submit = function(){
+      Carer.update($scope.carer, $scope.carer, function () {
+        // Success
+        Session.currentCarer = $scope.carer;
+        Alerts.addAlert("Successfully updated your details");
+      }, function () {
+        // Error
+        Alerts.addAlert("Something has gone wrong.", {alert_type: "danger"});
+      });
+    };
+
+    $scope.init();
   } ] );
 })();

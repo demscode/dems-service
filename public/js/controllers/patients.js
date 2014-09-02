@@ -1,10 +1,22 @@
 (function () {
 	angular.module('DemS').controller("PatientsController", ['$scope', '$http', 'Session', 'Alerts', function($scope, $http, Session, Alerts){
-    $scope.carer = Session.currentCarer;
 
-    $http.get("/api/test/patients").success(function(data) {
-      $scope.patients = data;
-    });
+    $scope.init = function () {
+      $scope.carer = Session.currentCarer;
+
+      $http.get("/api/test/patients").success(function(data) {
+        $scope.patients = data;
+      });
+
+      if(!Session.carerHasEnoughInfo(Session.currentCarer) && !Session.shownNotEnoughInfoMessage) {
+        Alerts.addAlert("You need to add more information. Please visit the Account Details page", {alert_type: "danger"});
+        Session.shownNotEnoughInfoMessage = true;
+      }
+
+      if(Session.hiddenSideBar) {
+        $scope.toggleSideBar(false);
+      }
+    }
 
 		$scope.setPatient = function (patientId) {
 			$scope.patient = $scope.patients[patientId];
@@ -40,13 +52,6 @@
 
     };
 
-    if(!Session.carerHasEnoughInfo(Session.currentCarer) && !Session.shownNotEnoughInfoMessage) {
-      Alerts.addAlert("You need to add more information. Please visit the Account Details page", {alert_type: "danger"});
-      Session.shownNotEnoughInfoMessage = true;
-    }
-
-    if(Session.hiddenSideBar) {
-      $scope.toggleSideBar(false);
-    }
+    $scope.init();
   } ] );
 })();
