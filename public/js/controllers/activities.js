@@ -1,5 +1,5 @@
 (function () {
-	angular.module('DemS').controller("ActivitiesController", ['$scope', '$http', 'Session', function($scope, $http, Session){
+	angular.module('DemS').controller("ActivitiesController", ['$scope', 'Session', function($scope, Session){
     $scope.$watch(function () { return Session.currentPatient; }, function (patient) {
         if (patient) $scope.patient = patient;
     });
