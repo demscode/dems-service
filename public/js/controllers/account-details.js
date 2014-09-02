@@ -1,6 +1,5 @@
 (function () {
   angular.module('DemS').controller("AccountDetailsController", ['$scope', 'Carer', 'Session', 'Alerts', function($scope, Carer, Session, Alerts){
-
     $scope.init = function () {
       $scope.carer = Session.currentCarer;
 
@@ -21,7 +20,7 @@
     };
 
     $scope.submit = function(){
-      Carer.update($scope.carer, $scope.carer, function () {
+      $scope.carer.$update(function () {
         // Success
         Session.currentCarer = $scope.carer;
         Alerts.addAlert("Successfully updated your details");
