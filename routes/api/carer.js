@@ -29,9 +29,7 @@
 
       carerModel.find(Number(req.params.id), function(err, data) {
         if (data) {
-          // WAS, changed due to services
-          // data.updateAttributes(req.body, function(err, data) {
-          data.updateAttributes(req.query, function(err, data) {
+          data.updateAttributes(req.body, function(err, data) {
             res.status(200).send(data);
           });
         } else {

@@ -1,30 +1,30 @@
 (function () {
-	angular.module('DemS').controller("AccountDetailsController", ['$scope', 'Carer', 'Session', 'Alerts', function($scope, Carer, Session, Alerts){
-	$scope.carer = Session.currentCarer;
+  angular.module('DemS').controller("AccountDetailsController", ['$scope', 'Carer', 'Session', 'Alerts', function($scope, Carer, Session, Alerts){
+    $scope.carer = Session.currentCarer;
 
     $scope.form = $("form[name='carerForm']")[0];
 
-	$scope.post_validate = function () {
-		$.each($($scope.form).find("input[type='text'].ng-pristine"), function (i, elem) {
-			$(elem).addClass("ng-dirty").removeClass("ng-pristine");
-		});
-		Alerts.addAlert("Please check your input as something is invalid", {alert_type: "danger"});
-		return false;
-	};
+    $scope.post_validate = function () {
+      $.each($($scope.form).find("input[type='text'].ng-pristine"), function (i, elem) {
+        $(elem).addClass("ng-dirty").removeClass("ng-pristine");
+      });
+      Alerts.addAlert("Please check your input as something is invalid", {alert_type: "danger"});
+      return false;
+    };
 
     $scope.submit = function(){
-        Carer.update($scope.carer, $scope.carer, function () {
-            // Success
-            Session.currentCarer = $scope.carer;
-            Alerts.addAlert("Successfully updated your details");
-        }, function () {
-            // Error
-            Alerts.addAlert("Something has gone wrong.", {alert_type: "danger"});
-        });
+      $scope.carer.$update(function () {
+        // Success
+        Session.currentCarer = $scope.carer;
+        Alerts.addAlert("Successfully updated your details");
+      }, function () {
+        // Error
+        Alerts.addAlert("Something has gone wrong.", {alert_type: "danger"});
+      });
     };
 
     if(!Session.carerHasEnoughInfo(Session.currentCarer) && !Session.shownNotEnoughInfoMessage) {
-        Alerts.addAlert("You need to add more information. Please visit the Account Details page", {alert_type: "danger"});
+      Alerts.addAlert("You need to add more information. Please visit the Account Details page", {alert_type: "danger"});
     }
-  } ] );
+  }]);
 })();
