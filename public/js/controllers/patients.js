@@ -22,29 +22,31 @@
       $(tab).addClass("active");
     };
 
-    $scope.toggleSideBar = function () {
+    $scope.toggleSideBar = function (animation) {
       $("#wrapper").toggleClass("toggled");
-      $("#toggle > b").toggleClass("caret-right").toggleClass("caret-left");
-      $("#toggle").toggleClass("sidebar-width").toggleClass("sidebar");
+
+      if(animation) {
+        $("#toggle").animate({width: Session.hiddenSideBar ? "250px" : "30px"}, 400);
+        $("#toggle > b").toggleClass("caret-right").toggleClass("caret-left");
+      } else {
+        if(Session.hiddenSideBar) {
+          $("#toggle").css("width", "250px");
+        } else {
+          $("#toggle").css("width", "30px");
+        }
+      }
+
       Session.hiddenSideBar = $("#wrapper").hasClass("toggled");
+
     };
 
-    $scope.carerHasEnoughInfo = function () {
-      return $scope.carer.contact_number !== null &&
-             $scope.carer.contact_number !== undefined &&
-             $scope.carer.contact_number !== "" &&
-             $scope.carer.address !== null &&
-             $scope.carer.address !== undefined &&
-             $scope.carer.address !== "";
-    };
-
-    if(!$scope.carerHasEnoughInfo() && !Session.shownNotEnoughInfoMessage) {
+    if(!Session.carerHasEnoughInfo(Session.currentCarer) && !Session.shownNotEnoughInfoMessage) {
       Alerts.addAlert("You need to add more information. Please visit the Account Details page", {alert_type: "danger"});
       Session.shownNotEnoughInfoMessage = true;
     }
 
     if(Session.hiddenSideBar) {
-      $scope.toggleSideBar();
+      $scope.toggleSideBar(false);
     }
   } ] );
 })();

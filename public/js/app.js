@@ -3,6 +3,6 @@
  */
  (function() {
 
-  var app = angular.module('DemS', ['ngRoute']);
+  var app = angular.module('DemS', ['ngRoute', 'ngResource']);
 
 })();

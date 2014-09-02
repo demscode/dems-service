@@ -6,10 +6,14 @@
 
   exports.init = function(app, models) {
 
+    // Carer GET CURRENT API
+    app.get('/api/currentCarer', function(req, res) {
+      res.status(200).send(req.user);
+    });
+
     // Carer GET API
     app.get('/api/carer/:id', function(req, res) {
       var carerModel = models.carer;
-
       carerModel.find(Number(req.params.id), function(err, data) {
         if (data) {
           res.status(200).send(data);
@@ -25,7 +29,7 @@
 
       carerModel.find(Number(req.params.id), function(err, data) {
         if (data) {
-          data.updateAttributes(req.body, function(err, data) {
+          data.updateAttributes(req.query, function(err, data) {
             res.status(200).send(data);
           });
         } else {
@@ -59,11 +63,6 @@
           res.status(404).end();
         }
       });
-    });
-
-    // Carer GET CURRENT API
-    app.get('/api/currentCarer', function(req, res) {
-      res.json(req.user);
     });
 
   };

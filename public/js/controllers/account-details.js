@@ -1,5 +1,5 @@
 (function () {
-	angular.module('DemS').controller("AccountDetailsController", ['$scope', '$http', 'Session', 'Alerts', function($scope, $http, Session, Alerts){
+	angular.module('DemS').controller("AccountDetailsController", ['$scope', 'Carer', 'Session', 'Alerts', function($scope, Carer, Session, Alerts){
 	$scope.carer = Session.currentCarer;
 
     $scope.form = $("form[name='carerForm']")[0];
@@ -13,28 +13,14 @@
 	};
 
     $scope.submit = function(){
-      $http({
-            url: '/api/carer/' + $scope.carer.id,
-            method: "PUT",
-            data: $.param($scope.carer),
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-        }).success(function (data, status, headers, config) {
-        	Alerts.addAlert("Successfully updated your details");
-        }).error(function (data, status, headers, config) {
-            // error
-        });
+        Carer.update($scope.carer, $scope.carer);
+        Session.currentCarer = $scope.carer;
+
+        // What if it goes bad? No Promise.
+        Alerts.addAlert("Successfully updated your details");
     };
 
-    $scope.carerHasEnoughInfo = function () {
-      return $scope.carer.contact_number !== null &&
-             $scope.carer.contact_number !== undefined &&
-             $scope.carer.contact_number !== "" &&
-             $scope.carer.address !== null &&
-             $scope.carer.address !== undefined &&
-             $scope.carer.address !== "";
-    };
-
-    if(!$scope.carerHasEnoughInfo() && !Session.shownNotEnoughInfoMessage) {
+    if(!Session.carerHasEnoughInfo(Session.currentCarer) && !Session.shownNotEnoughInfoMessage) {
         Alerts.addAlert("You need to add more information. Please visit the Account Details page", {alert_type: "danger"});
     }
   } ] );
