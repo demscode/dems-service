@@ -1,5 +1,9 @@
 
-
+<a ng-click="toggleSideBar()">
+  <div id="toggle" class="sidebar-width">
+    <b class="caret caret-left"></b>
+  </div>
+</a>
 <div id="wrapper">
   <!-- Sidebar -->
   <div id="sidebar-wrapper">
@@ -24,39 +28,35 @@
           <div id="alerts"></div>
           <!-- END AREA FOR ALERTS -->
 
-            <div ng-show="patient == null">
-              Select a patient to view the details
-            </div>
+          <div ng-show="patient == null">
+            Select a patient to view the details
+          </div>
 
-            <div ng-hide="patient == null">
-              <!-- Nav tabs -->
-              <ul class="nav nav-tabs" role="tablist">
-                <li class="active"><a role="tab" data-toggle="tab" ng-click="setTab('#details')">Details</a></li>
-                <li><a role="tab" data-toggle="tab" ng-click="setTab('#locations')">Locations</a></li>
-                <li><a role="tab" data-toggle="tab" ng-click="setTab('#reminders')">Reminders</a></li>
-                <li><a role="tab" data-toggle="tab" ng-click="setTab('#activities')">Activities</a></li>
-              </ul>
+          <div ng-hide="patient == null">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+              <li class="active"><a role="tab" data-toggle="tab" ng-click="setTab('#details')">Details</a></li>
+              <li><a role="tab" data-toggle="tab" ng-click="setTab('#locations')">Locations</a></li>
+              <li><a role="tab" data-toggle="tab" ng-click="setTab('#reminders')">Reminders</a></li>
+              <li><a role="tab" data-toggle="tab" ng-click="setTab('#activities')">Activities</a></li>
+            </ul>
 
-              <!-- Tab panes -->
-              <div class="tab-content">
-                <div class="tab-pane active" id="details" ng-controller="DetailsController">
-                  <div details></div>
-                </div>
-                <div class="tab-pane" id="locations" ng-controller="LocationsController">
-                  <div locations></div>
-                </div>
-                <div class="tab-pane" id="reminders" ng-controller="RemindersController">
-                  <div reminders></div>
-                </div>
-                <div class="tab-pane" id="activities" ng-controller="ActivitiesController">
-                  <div activities></div>
-                </div>
+            <!-- Tab panes -->
+            <div class="tab-content">
+              <div class="tab-pane active" id="details" ng-controller="DetailsController">
+                <div details></div>
+              </div>
+              <div class="tab-pane" id="locations" ng-controller="LocationsController">
+                <div locations></div>
+              </div>
+              <div class="tab-pane" id="reminders" ng-controller="RemindersController">
+                <div reminders></div>
+              </div>
+              <div class="tab-pane" id="activities" ng-controller="ActivitiesController">
+                <div activities></div>
               </div>
             </div>
-
-            <div style="padding: 20px 0px;">
-              <a class="btn btn-default" ng-click="toggleSideBar()">Toggle Menu</a>
-            </div>
+          </div>
         </div>
       </div>
     </div>

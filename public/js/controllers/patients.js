@@ -2,10 +2,6 @@
 	angular.module('DemS').controller("PatientsController", ['$scope', '$http', 'Session', 'Alerts', function($scope, $http, Session, Alerts){
     $scope.carer = Session.currentCarer;
 
-    if(Session.hiddenSideBar) {
-      $("#wrapper").addClass("toggled");
-    }
-
     $http.get("/api/test/patients").success(function(data) {
       $scope.patients = data;
     });
@@ -28,6 +24,8 @@
 
     $scope.toggleSideBar = function () {
       $("#wrapper").toggleClass("toggled");
+      $("#toggle > b").toggleClass("caret-right").toggleClass("caret-left");
+      $("#toggle").toggleClass("sidebar-width").toggleClass("sidebar");
       Session.hiddenSideBar = $("#wrapper").hasClass("toggled");
     };
 
@@ -43,6 +41,10 @@
     if(!$scope.carerHasEnoughInfo() && !Session.shownNotEnoughInfoMessage) {
       Alerts.addAlert("You need to add more information. Please visit the Account Details page", {alert_type: "danger"});
       Session.shownNotEnoughInfoMessage = true;
+    }
+
+    if(Session.hiddenSideBar) {
+      $scope.toggleSideBar();
     }
   } ] );
 })();

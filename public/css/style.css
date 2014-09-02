@@ -26,7 +26,6 @@ div.header {
 }
 
 div.content {
-  margin: 0px 20px;
   min-height: 500px;
 }
 
@@ -38,8 +37,8 @@ div.footer {
   padding-top: 30px;
 }
 
-div.top-padding {
-  padding-top: 20px;
+div.padding {
+  padding: 20px;
 }
 
 .hand-pointer {
@@ -52,4 +51,34 @@ div.top-padding {
 
 .ng-valid.ng-dirty {
  border-color:green
+}
+
+.caret-right {
+    border-left: 4px solid;
+    border-bottom: 4px solid transparent;
+    border-top: 4px solid transparent;
+    color: #000;
+}
+
+.caret-left {
+    border-right: 4px solid;
+    border-bottom: 4px solid transparent;
+    border-top: 4px solid transparent;
+    color: #000;
+}
+
+#toggle.sidebar-width {
+  width: 250px;
+  background-color: gray;
+  text-align: center;
+  background-color: #f8f8f8;
+  border-color: #e7e7e7;
+}
+
+#toggle.sidebar {
+  max-width: 30px;
+  background-color: gray;
+  text-align: center;
+  background-color: #f8f8f8;
+  border-color: #e7e7e7;
 }
