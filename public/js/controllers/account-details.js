@@ -13,11 +13,14 @@
 	};
 
     $scope.submit = function(){
-        Carer.update($scope.carer, $scope.carer);
-        Session.currentCarer = $scope.carer;
-
-        // What if it goes bad? No Promise.
-        Alerts.addAlert("Successfully updated your details");
+        Carer.update($scope.carer, $scope.carer, function () {
+            // Success
+            Session.currentCarer = $scope.carer;
+            Alerts.addAlert("Successfully updated your details");
+        }, function () {
+            // Error
+            Alerts.addAlert("Something has gone wrong.", {alert_type: "danger"});
+        });
     };
 
     if(!Session.carerHasEnoughInfo(Session.currentCarer) && !Session.shownNotEnoughInfoMessage) {
