@@ -57,7 +57,7 @@ describe('DemS models', function() {
           expect(err).toBe(null);
           expect(patient.id).toBe(newPatient.id);
           expect(patient.carer_id).toBe(newCarer.id);
-          });
+          done();
         });
       });
     });

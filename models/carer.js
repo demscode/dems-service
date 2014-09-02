@@ -5,9 +5,9 @@
 
 (function (exports) {
   'use strict';
-/*
+
   var settings = require('../dems.conf.json').db.mongodb;
-  var Patient = require('./patient.js').init(settings);*/
+  var Patient = require('./patient.js').init(settings);
 
   /**
    * Initialises model with given db settings.
@@ -15,7 +15,6 @@
    * @return {object}           JugglingDB model object
    */
   exports.init = function(settings) {
-    var Patient = require('./patient.js').init(settings);
     var Schema = require('jugglingdb').Schema;
 
     var schemaMongo = new Schema('mongodb', settings);
