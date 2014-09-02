@@ -26,17 +26,16 @@
     };
 
     $scope.carerHasEnoughInfo = function () {
-        return $scope.carer.contact_number !== null &&
-               $scope.carer.contact_number !== undefined &&
-               $scope.carer.contact_number !== "" &&
-               $scope.carer.address !== null &&
-               $scope.carer.address !== undefined &&
-               $scope.carer.address !== "";
+      return $scope.carer.contact_number !== null &&
+             $scope.carer.contact_number !== undefined &&
+             $scope.carer.contact_number !== "" &&
+             $scope.carer.address !== null &&
+             $scope.carer.address !== undefined &&
+             $scope.carer.address !== "";
     };
 
     if(!$scope.carerHasEnoughInfo() && !Session.shownNotEnoughInfoMessage) {
-      Alerts.addAlert("You need to add more information. Please visit the Account Details page", {alert_type: "danger"});
-      Session.shownNotEnoughInfoMessage = true;
+        Alerts.addAlert("You need to add more information. Please visit the Account Details page", {alert_type: "danger"});
     }
   } ] );
 })();

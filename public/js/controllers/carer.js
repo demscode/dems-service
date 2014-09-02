@@ -4,5 +4,5 @@
 			$scope.carer = data;
 			Session.currentCarer = $scope.carer;
 		});
-} ] );
+	} ] );
 })();
