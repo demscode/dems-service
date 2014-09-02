@@ -53,18 +53,10 @@ describe('DemS models', function() {
 
       carerModel.create(newCarer, function(err, carer) {
         expect(err).toBe(null);
-        carer.patients.create(newPatient,
-        function(err, patient) {
+        carer.patients.create(newPatient, function(err, patient) {
           expect(err).toBe(null);
           expect(patient.id).toBe(newPatient.id);
           expect(patient.carer_id).toBe(newCarer.id);
-
-          carer.patients(function(err, patients) {
-            expect(err).toBe(null);
-            // FIX: locations and patients are left dangling in the db
-            // after patient.destroy()
-            // expect(patients.length).toBe(1);
-            done();
           });
         });
       });
