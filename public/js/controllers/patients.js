@@ -13,6 +13,8 @@
 		$scope.setPatient = function (patientId) {
 			$scope.patient = $scope.patients[patientId];
       Session.currentPatient = $scope.patient;
+      $('li[data-area="side-bar-link"] a').removeClass("active");
+      $('li[data-area="side-bar-link"][data-patient-id="' + patientId + '"] a').addClass("active");
 		};
 
     $scope.addPatient = function () {
