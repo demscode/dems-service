@@ -16,7 +16,7 @@
       if(Session.hiddenSideBar) {
         $scope.toggleSideBar(false);
       }
-    }
+    };
 
 		$scope.setPatient = function (patientId) {
 			$scope.patient = $scope.patients[patientId];

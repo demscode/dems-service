@@ -4,7 +4,7 @@
       $scope.$watch(function () { return Session.currentPatient; }, function (patient) {
         if (patient) $scope.patient = patient;
       });
-    }
+    };
 
     $scope.init();
   } ] );

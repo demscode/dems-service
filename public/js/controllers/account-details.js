@@ -9,7 +9,7 @@
         Alerts.addAlert("You need to add more information. Please enter them by feeling out this form", {alert_type: "danger"});
         Session.shownNotEnoughInfoMessage = true;
       }
-    }
+    };
 
     $scope.post_validate = function () {
       $.each($($scope.form).find("input[type='text'].ng-pristine"), function (i, elem) {

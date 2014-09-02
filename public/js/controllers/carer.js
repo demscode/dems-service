@@ -4,7 +4,7 @@
       $scope.carer = Carer.getCurrent({}, function (carer) {
         Session.currentCarer = carer;
       });
-    }
+    };
 
     $scope.init();
 	} ] );
