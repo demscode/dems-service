@@ -5,11 +5,22 @@
 
 
 (function() {
-	var app = angular.module('DemS.maps', []);
+	var app = angular.module('DemS.maps', ['ngResource']);
 
-  app.controller('MapsController', ['$http', function($http) {
+  app.factory("Patient", function($resource) {
+    return $resource('/api/patient/:id');
+  });
+
+  app.factory("Location", function($resource) {
+    return $resource('/api/patient/:id/locations');
+  });
+
+  app.factory("Fence", function($resource) {
+    return $resource('/api/patient/:id/fence');
+  });
+
+  app.controller('MapsController', function(Location, Fence) {
     var maps = this;
-    var path;
     var map, polygon, marker;
 
     this.mapSettings =  {
@@ -24,7 +35,7 @@
 
     this.CreatePolygon = function(paths) {
       maps.polygon = maps.map.drawPolygon({
-        paths: maps.path,
+        paths: paths,
         editable: true,
         strokeColor: '#66b266',
         strokeOpacity: 1,
@@ -49,21 +60,30 @@
       });
     };
 
+    this.GetUpdatedPolygon = function() {
+      var polyobj = maps.polygon.latLngs.j[0].j;
+      var newPath = [];
+      for(var i = 0; i < polyobj.length; i++) {
+        newPath.push([polyobj[i].k, polyobj[i].B]);
+      }
+
+      console.log(newPath);
+      return newPath;
+    };
+
     this.init = function(patientid) {
       maps.CreateMap(maps.mapSettings);
 
-      $http.get('/api/patient/' + patientid + '/fence').success(function(data) {
-        maps.path = data[0].polygon;
-        maps.CreatePolygon(maps.path);
+      Fence.query({ id: patientid }, function(data) {
+        maps.CreatePolygon(data[0].polygon);
       });
 
-      $http.get('/api/patient/' + patientid + '/locations').success(function(data) {
-        maps.locations = data;
-        maps.CreateMarker(maps.locations[0]);
+      Location.query({ id: patientid }, function(data) {
+        maps.CreateMarker(data[data.length-1]);
       });
 
     };
 
-  }]);
+  });
 
 })();
