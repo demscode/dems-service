@@ -1,9 +1,7 @@
 /**
  * DemS.maps
  *
- *
  */
-
 
 
 (function() {

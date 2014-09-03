@@ -43,11 +43,11 @@
           res.status(400).end();
         }
       });
-
     });
 
     //Patient DELETE API
     app.delete('/api/patient/:id', function(req, res) {
+
       patientModel.find(Number(req.params.id), function(err, data) {
         if (data) {
           data.destroy();
@@ -56,7 +56,6 @@
           res.status(404).end();
         }
       });
-
     });
 
     // Location GET API
@@ -70,10 +69,9 @@
           res.status(404).end();
         }
       });
-
     });
 
-        // Location CREATE API
+    // Location CREATE API
     app.post('/api/patient/:id/locations', function(req, res) {
       patientModel.find(Number(req.params.id), function(err, data) {
         if (data) {
@@ -160,6 +158,5 @@
 
 
   };
-
 
 })(exports);
