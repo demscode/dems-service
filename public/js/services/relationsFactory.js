@@ -19,7 +19,7 @@ angular.module('DemS').factory('relationsFactory', ['$resource', function($resou
 	// 	var parameters = {link: false, patientId : patientId};
 		
 	// 	$apiFactory.put(url,parameters);
-	};
+	// };
 
 	return relationsFactory;
 }]);
