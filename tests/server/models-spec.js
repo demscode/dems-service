@@ -49,11 +49,15 @@ describe('DemS models', function() {
       var newCarer = {
         id: 11
       },
-      newPatient =  {id: 99};
+      newPatient =  {
+        id: 99
+      };
 
       carerModel.create(newCarer, function(err, carer) {
         expect(err).toBe(null);
+        console.log("First: "+err);
         carer.patients.create(newPatient, function(err, patient) {
+          console.log("Second: "+err);
           expect(err).toBe(null);
           expect(patient.id).toBe(newPatient.id);
           expect(patient.carer_id).toBe(newCarer.id);
