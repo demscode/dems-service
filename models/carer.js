@@ -12,11 +12,12 @@
    * @return {object}           JugglingDB model object
    */
   exports.init = function(settings) {
+    var Patient = require('./patient.js').init(settings);
     var Schema = require('jugglingdb').Schema;
 
     var schemaMongo = new Schema('mongodb', settings);
 
-    return schemaMongo.define('Carer', {
+    var Carer = schemaMongo.define('Carer', {
       id :              { type: Number, index: true },
       token :           { type: String },
       email :           { type: String, limit: 150 },
@@ -24,6 +25,10 @@
       address:          { type: String },
       contact_number:   { type: String }
     });
+
+    Carer.hasMany(Patient, {as: 'patients', foreignKey: 'carer_id'});
+
+    return Carer;
   };
 
 })(exports);

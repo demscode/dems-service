@@ -1,0 +1,26 @@
+angular.module('DemS').factory('apiFactory', ['$http', function($http){
+
+	var apiFactory = {};
+
+	apiFactory.post = function(url, parameters){
+		
+		$http({
+            url: url,
+            method: "POST",
+            data: parameters,
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        })
+	};
+
+	apiFactory.put = function(url, parameters){
+		
+		$http({
+            url: url,
+            method: "PUT",
+            data: parameters,
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        })
+	};
+
+	return apiFactory;
+}]);
