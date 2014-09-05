@@ -23,18 +23,18 @@
           last_name: "Ferraioli",
           contact_number: "0477 881 223",
           last_location: "Bedroom",
-          logs: [
+          activities: [
           {
             id: "1",
-            log_info1: "hello",
-            log_info2: "sup",
-            log_info3: "YOO",
+            activity_info1: "hello",
+            activity_info2: "sup",
+            activity_info3: "YOO",
           },
           {
             id: "2",
-            log_info1: "HAHAH",
-            log_info2: "Oh Yeah",
-            log_info3: "LOLOLOL",
+            activity_info1: "HAHAH",
+            activity_info2: "Oh Yeah",
+            activity_info3: "LOLOLOL",
           },
           ],
         },
@@ -44,18 +44,18 @@
           last_name: "Jonelynas",
           contact_number: "0423 123 433",
           last_location: "Living Room",
-          logs: [
+          activities: [
           {
             id: "3",
-            log_info1: "test",
-            log_info2: "great",
-            log_info3: "it work",
+            activity_info1: "test",
+            activity_info2: "great",
+            activity_info3: "it work",
           },
           {
             id: "4",
-            log_info1: "ohhhhhh",
-            log_info2: "i rule",
-            log_info3: "hehehe",
+            activity_info1: "ohhhhhh",
+            activity_info2: "i rule",
+            activity_info3: "hehehe",
           },
           ],
         },
