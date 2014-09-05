@@ -56,7 +56,18 @@ function loadDB() {
       // multiplier for fence movement
       fenceIncrement = 0.1,
 
-      numPatients = 10,
+      patient_names = [
+        "Joe Blogs",
+        "Regina Phalange",
+        "Hugh Jass",
+        "Seymour Butts",
+        "Holden McGroin",
+        "Yolo Pepperoni",
+        "Ice Cube",
+        "Jesse Phoenix",
+        "Ferrari Montenegro",
+        "Ken Adams",
+      ],
       numLocations = 100,
       numFences = 3;
 
@@ -64,12 +75,12 @@ function loadDB() {
   /* Patient Creation    */
   /***********************/
 
-  for (var i = 1; i <= numPatients; i++) {
+  for (var i = 0, patientLength = patient_names.length; i < patientLength; i++) {
     var patient = {
-      _id   : i,
-      token :"token" + i,
-      email : "patient_name_" + i + "@yo.com",
-      name  : "Patient Name " + i,
+      _id   : i + 1,
+      token :"token" + patient_names[i].replace(/ /g, ''),
+      email : patient_names[i].toLowerCase().replace(/ /g, '_')  + "@fake.com",
+      name  : patient_names[i],
     };
 
     patientTable.insert(patient);

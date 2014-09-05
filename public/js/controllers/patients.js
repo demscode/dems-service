@@ -4,8 +4,9 @@
     $scope.init = function () {
       $scope.carer = Session.currentCarer;
 
-      $http.get("/api/test/patients").success(function(data) {
-        $scope.patients = data;
+      $http.get("/api/allPatients").success(function(data) {
+        $scope.arrayOfPatients = $scope.orderPatients(data);
+        $scope.patients = $scope.getPatientObject($scope.arrayOfPatients);
       });
 
       if(!Session.carerHasEnoughInfo(Session.currentCarer) && !Session.shownNotEnoughInfoMessage) {
@@ -50,6 +51,25 @@
 
       Session.hiddenSideBar = $("#wrapper").hasClass("toggled");
 
+    };
+
+    $scope.orderPatients = function (patients) {
+      // Sort by name
+      patients.sort(function(a,b) {
+        var x = a.name.toLowerCase();
+        var y = b.name.toLowerCase();
+        return x < y ? -1 : x > y ? 1 : 0;
+      });
+
+      return patients;
+    };
+
+    $scope.getPatientObject = function (patients) {
+      var patientsObject = {};
+      for (var i = 0, length = patients.length; i < length; i++) {
+        patientsObject[patients[i].id] =  patients[i];
+      }
+      return patientsObject;
     };
 
     $scope.init();
