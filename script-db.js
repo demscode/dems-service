@@ -45,7 +45,7 @@ function loadDB() {
                       [-27.475882, 153.026206]],
 
       // Constant of minutes per interval for location tracking
-      minutesPerInterval = 1
+      minutesPerInterval = 1;
 
       timeNow = Date.now();
 
@@ -77,8 +77,8 @@ function loadDB() {
         latitude: latitude,
         timestamp:  timeNow - (j * minutesPerInterval * 60000),
         patient_id: i
-      }
-      locationTable.insert(location)
+      };
+      locationTable.insert(location);
 
       // move the patient around a bit
       longitude = Math.random() > 0.5 ? longitude + Math.random() * 0.01 : longitude - Math.random() * 0.01;
@@ -94,8 +94,8 @@ function loadDB() {
     for(var k = 0; k < 3; k++) {
       var fence = {
         polygon: polygon,
-        patient_id: i,
-      }
+        patient_id: i
+      };
 
       fenceTable.insert(fence);
 
@@ -107,8 +107,8 @@ function loadDB() {
       incrementFenceLat *= Math.random() > 0.5 ? 1 : -1;
 
       for (var f = 0, length = polygon.length; f < length; f++) {
-        polygon[f] = [polygon[f][0] + incrementFenceLat, polygon[f][1] + incrementFenceLong]
-      };
+        polygon[f] = [polygon[f][0] + incrementFenceLat, polygon[f][1] + incrementFenceLong];
+      }
     }
   }
 }

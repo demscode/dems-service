@@ -104,7 +104,6 @@
     app.post('/api/patient/:id/fence', function(req, res) {
       patientModel.find(Number(req.params.id), function(err, data) {
         if (data) {
-          req.body.polygon = JSON.parse(req.body.polygon);
           req.body.patient_id = Number(req.params.id);
           data.fences.create(req.body, function(err, fences) {
             res.status(200).send(fences);
@@ -118,14 +117,13 @@
 
 
     //Fence UPDATE API
-    app.put('/api/patient/:id/fence', function(req, res) {
+    app.put('/api/patient/:id/fence/:fid', function(req, res) {
       patientModel.find(Number(req.params.id), function(err, data) {
         if (data) {
-          data.fences.all(function(err, fences) {
+          data.fences.find(req.params.fid, function(err, fences) {
             if(fences) {
-              req.body.polygon = JSON.parse(req.body.polygon);
-              fences[0].updateAttributes(req.body);
-              res.status(200).send(fences[0]);
+              fences.updateAttributes(req.body);
+              res.status(200).send(fences);
             } else {
               res.status(404).end();
             }
@@ -138,12 +136,12 @@
     });
 
     //Fence DELETE API
-    app.delete('/api/patient/:id/fence', function(req, res) {
+    app.delete('/api/patient/:id/fence/:fid', function(req, res) {
       patientModel.find(Number(req.params.id), function(err, data) {
         if (data) {
-          data.fences.all(function(err, fences) {
+          data.fences.find(req.params.fid, function(err, fences) {
             if(fences) {
-              fences[0].destroy();
+              fences.destroy();
               res.status(200).end();
             } else {
               res.status(404).end();
