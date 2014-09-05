@@ -27,8 +27,8 @@ describe('DemS API /carer', function() {
     });
 
     it('GET valid carers', function(done) {
-      request.get('/api/patient/24').expect(200, carer24);
-      request.get('/api/patient/2405').expect(200, carer2405);
+      request.get('/api/carer/24').expect(200, carer24);
+      request.get('/api/carer/2405').expect(200, carer2405);
       done();
     });
 

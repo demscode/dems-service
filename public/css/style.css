@@ -17,12 +17,8 @@
   -moz-border-radius: 50%;
   -webkit-border-radius: 50%;
   border-radius: 50%;
-  width:25px;
-  height:25px;
-}
-
-body{
-  margin: 20px;
+  width:20px;
+  height:20px;
 }
 
 div.header {
@@ -41,6 +37,10 @@ div.footer {
   padding-top: 30px;
 }
 
+div.padding {
+  padding: 20px;
+}
+
 .hand-pointer {
   cursor: pointer;
 }
@@ -51,4 +51,28 @@ div.footer {
 
 .ng-valid.ng-dirty {
  border-color:green
+}
+
+.caret-right {
+    border-left: 4px solid;
+    border-bottom: 4px solid transparent;
+    border-top: 4px solid transparent;
+    color: #000;
+}
+
+.caret-left {
+    border-right: 4px solid;
+    border-bottom: 4px solid transparent;
+    border-top: 4px solid transparent;
+    color: #000;
+}
+
+#toggle.sidebar {
+  width: 250px;
+  background-color: gray;
+  text-align: center;
+  background-color: #f8f8f8;
+  border-color: #e7e7e7;
+  position: fixed;
+  z-index: 1002;
 }

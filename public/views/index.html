@@ -8,6 +8,7 @@
       <!-- bower:css -->
       <!-- endbower -->
       <link rel="stylesheet" type="text/css" href="../css/style.css" />
+      <link rel="stylesheet" type="text/css" href="../css/simple-sidebar.css" />
     <!-- CSS End -->
 
     <!-- JS -->
@@ -15,17 +16,34 @@
 
       <!-- bower:js -->
       <!-- endbower -->
+
+      <!-- APP -->
       <script type="text/javascript" src="../js/app.js"></script>
-      <script type="text/javascript" src="../js/services/alerts.js"></script>
+
+      <!-- SERVICES -->
+      <script type="text/javascript" src="../js/services/carer.js"></script>
+
+      <!-- FACTORIES -->
+      <script type="text/javascript" src="../js/factories/alerts.js"></script>
+      <script type="text/javascript" src="../js/factories/session.js"></script>
+
+      <!-- CONTROLLERS -->
       <script type="text/javascript" src="../js/controllers/carer.js"></script>
-      <script type="text/javascript" src="../js/controllers/home.js"></script>
-      <script type="text/javascript" src="../js/controllers/patient.js"></script>
+      <script type="text/javascript" src="../js/controllers/patients.js"></script>
       <script type="text/javascript" src="../js/controllers/locations.js"></script>
-      <script type="text/javascript" src="../js/controllers/reminder.js"></script>
-      <script type="text/javascript" src="../js/controllers/fences.js"></script>
-      <script type="text/javascript" src="../js/controllers/logs.js"></script>
+      <script type="text/javascript" src="../js/controllers/reminders.js"></script>
+      <script type="text/javascript" src="../js/controllers/details.js"></script>
+      <script type="text/javascript" src="../js/controllers/activities.js"></script>
       <script type="text/javascript" src="../js/controllers/account-details.js"></script>
-      <script type="text/javascript" src="../js/app-config.js"></script>
+
+      <!-- DIRECTIVES -->
+      <script type="text/javascript" src="../js/directives/locations.js"></script>
+      <script type="text/javascript" src="../js/directives/reminders.js"></script>
+      <script type="text/javascript" src="../js/directives/details.js"></script>
+      <script type="text/javascript" src="../js/directives/activities.js"></script>
+
+      <!-- CONFIG -->
+      <script type="text/javascript" src="../js/config/routes.js"></script>
 
     <!-- JS End -->
   </head>
@@ -37,42 +55,20 @@
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
         <!-- PROJECT NAME -->
         <div class="navbar-header">
-          <a class="navbar-brand" href="/">Dementia Smart System</a>
+          <a class="navbar-brand" href="#/patients">Dementia Smart System</a>
         </div>
         <!-- END PROJECT NAME -->
 
         <!-- LEFT SIDE NAVS -->
-        <div class="navbar-collapse pull-left">
-          <ul class="nav navbar-nav">
-            <li class="dropdown">
-              <a class="hand-pointer" data-toggle="dropdown" class="dropdown-toggle"> Patients <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="#/patients">List</a></li>
-                <li class="divider"></li>
-                <li><a href="#/patients">Create</a></li>
-              </ul>
-            </li>
-            <li><a href="#/virtual_fences">Virtual Fence</a></li>
-            <li><a href="#/reminders">Reminders</a></li>
-            <li><a href="#/locations">Locations</a></li>
-            <li><a href="#/logs">Logs</a></li>
-          </ul>
-        </div>
+        <!-- NOTHING FOR NOW -->
         <!-- END LEFT SIDE NAVS -->
 
 
         <!-- RIGHT SIDE NAVS -->
         <div class="navbar-collapse pull-right">
           <ul class="nav navbar-nav">
-            <li class="dropdown">
-              <a class="hand-pointer" data-toggle="dropdown" class="dropdown-toggle"> {{carer.email}} <img src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=120"
-          alt="Sign In Image" class="user-icon"> <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="#/account_details">Account Details</a></li>
-                <li class="divider"></li>
-                <li><a href="/logout">Sign Out</a></li>
-              </ul>
-            </li>
+            <li><a href="#/account_details">Account Details</a></li>
+            <li><a href="/logout">Sign Out</a></li>
           </ul>
         </div>
         <!-- END RIGHT SIDE NAVS -->
@@ -84,9 +80,6 @@
 
     <!-- CONTECT -->
     <div class="content">
-      <!-- AREA FOR ALERTS -->
-      <div id="alerts"></div>
-      <!-- END AREA FOR ALERTS -->
 
       <!-- VIEW -->
       <div class="row">

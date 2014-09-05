@@ -1,17 +1,11 @@
 (function () {
-	angular.module('DemS').controller('CarerController', ['$scope', '$http', '$location', 'Alerts', function($scope, $http, $location, Alerts){
-		$http.get("/api/currentCarer").success(function(data) {
-			$scope.carer = data;
-			if(!$scope.carerHasEnoughInfo()) {
-				Alerts.addAlert("You need to add more information. Please visit the Account Details page", {alert_type: "danger"});
-			}
-		});
+	angular.module('DemS').controller('CarerController', ['$scope', 'Carer', 'Session', function($scope, Carer, Session){
+    $scope.init = function () {
+      $scope.carer = Carer.getCurrent({}, function (carer) {
+        Session.currentCarer = carer;
+      });
+    };
 
-		$scope.carerHasEnoughInfo = function () {
-			return $scope.carer.contact_number !== null &&
-						 $scope.carer.contact_number !== "" &&
-						 $scope.carer.address !== null &&
-						 $scope.carer.address !== "";
-		};
+    $scope.init();
 	} ] );
 })();
