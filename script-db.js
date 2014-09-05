@@ -45,15 +45,26 @@ function loadDB() {
                       [-27.475882, 153.026206]],
 
       // Constant of minutes per interval for location tracking
-      minutesPerInterval = 1;
+      minutesPerInterval = 1,
 
-      timeNow = Date.now();
+      // the current time used in location calculations
+      timeNow = Date.now(),
+
+      // multiplier for location movement
+      locationIncrement = 0.01,
+
+      // multiplier for fence movement
+      fenceIncrement = 0.1,
+
+      numPatients = 10,
+      numLocations = 100,
+      numFences = 3;
 
   /***********************/
   /* Patient Creation    */
   /***********************/
 
-  for (var i = 1; i < 11; i++) {
+  for (var i = 1; i <= numPatients; i++) {
     var patient = {
       _id   : i,
       token :"token" + i,
@@ -71,7 +82,7 @@ function loadDB() {
     var longitude = startingLocation[1],
         latitude = startingLocation[0];
 
-    for(var j = 0; j < 100; j++) {
+    for(var j = 0; j < numLocations; j++) {
       var location = {
         longitude: longitude,
         latitude: latitude,
@@ -81,17 +92,24 @@ function loadDB() {
       locationTable.insert(location);
 
       // move the patient around a bit
-      longitude = Math.random() > 0.5 ? longitude + Math.random() * 0.01 : longitude - Math.random() * 0.01;
-      latitude = Math.random() < 0.5 ? latitude + Math.random() * 0.01 : latitude - Math.random() * 0.01;
+      var incrementLocationLong = Math.random() * locationIncrement;
+      var incrementLocationLat = Math.random() * locationIncrement;
+
+      incrementLocationLong *= Math.random() > 0.5 ? 1 : -1;
+      incrementLocationLat *= Math.random() > 0.5 ? 1 : -1;
+
+      longitude += incrementLocationLong;
+      latitude += incrementLocationLat;
     }
 
     /***********************/
     /* Fence Creation      */
     /***********************/
 
-    var polygon = startingFence;
+    // concat() is used for passing the array by value instead of reference
+    var polygon = startingFence.concat();
 
-    for(var k = 0; k < 3; k++) {
+    for(var k = 0; k < numFences; k++) {
       var fence = {
         polygon: polygon,
         patient_id: i
@@ -100,8 +118,8 @@ function loadDB() {
       fenceTable.insert(fence);
 
       // move the fence around
-      var incrementFenceLong = Math.random() * 0.1;
-      var incrementFenceLat = Math.random() * 0.1;
+      var incrementFenceLong = Math.random() * fenceIncrement;
+      var incrementFenceLat = Math.random() * fenceIncrement;
 
       incrementFenceLong *= Math.random() > 0.5 ? 1 : -1;
       incrementFenceLat *= Math.random() > 0.5 ? 1 : -1;
