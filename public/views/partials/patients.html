@@ -11,8 +11,8 @@
           <li class="sidebar-brand">
               <a ng-click="addPatient()" class="hand-pointer"> + Add a Patient + </a>
           </li>
-          <li ng-repeat="patient in patients" ng-click="setPatient(patient.id)" class="hand-pointer" data-patient-id="{{patient.id}}" data-area="side-bar-link">
-              <a>{{patient.first_name + " " + patient.last_name}}</a>
+          <li ng-repeat="patient in arrayOfPatients" ng-click="setPatient(patient.id)" class="hand-pointer" data-patient-id="{{patient.id}}" data-area="side-bar-link">
+              <a>{{patient.name}}</a>
           </li>
       </ul>
   </div>

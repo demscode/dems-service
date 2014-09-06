@@ -10,6 +10,17 @@
     var patientModel = models.patient;
 
     // Patient GET API
+    app.get('/api/allPatients', function(req, res) {
+      patientModel.all({},function(err, data) {
+        if (data) {
+          res.status(200).send(data);
+        } else {
+          res.status(404).end();
+        }
+      });
+    });
+
+    // Patient GET API
     app.get('/api/patient/:id', function(req, res) {
       patientModel.find(Number(req.params.id), function(err, data) {
         if (data) {
