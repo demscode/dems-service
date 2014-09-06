@@ -77,10 +77,36 @@
 
     this.SaveUpdatedPolygons = function(patientid) {
       for (var i = 0; i < fences.length; i++) {
-        console.log(fences[i]);
         var paths = maps.GetUpdatedPath(fences[i].polygon);
-        Fence.update({ id: patientid, fid: fences[i].id }, {polygon: paths});
+        if (fences[i].id === null) {
+          Fence.save({id: patientid}, {polygon: paths});
+        } else {
+          Fence.update({id: patientid, fid: fences[i].id}, {polygon: paths});
+        }
       }
+
+      Fence.query({ id: patientid }, function(data) {
+        var freeids = [];
+        for (var i = 0; i < data.length; i++) {
+          var used = false;
+          for (var j = 0; j < fences.length; j++) {
+            if (fences[j].id === data[i].id) {
+              used = true;
+            }
+          }
+
+          if (used === false) {
+            freeids.push(data[i].id);
+          }
+        }
+
+        freeids.reverse();
+        for (var k = 0; k < fences.length; k++) {
+          if (fences[k].id === null) {
+            fences[k].id = freeids.pop();
+          }
+        }
+      });
     };
 
     this.AddFences = function(patientid) {
@@ -91,7 +117,6 @@
             polygon: maps.CreatePolygon(data[i].polygon)
           };
         }
-        console.log(fences);
       });
     };
 
@@ -115,12 +140,35 @@
       maps.map.removeMarkers();
     };
 
+    this.EnableFenceMaking = function() {
+      maps.map.setContextMenu({
+        control: 'map',
+        options: [{
+          title: 'Create fence',
+          name: 'create_fence',
+          action: function(e) {
+            var lat = e.latLng.lat(),
+                lng = e.latLng.lng();
+            var path = [[lat, lng], [lat+0.0015, lng-0.003], [lat-0.003, lng+0.0015]];
+            fences[fences.length] = {
+              id: null,
+              polygon: maps.CreatePolygon(path)
+            };
+          }
+        }]
+      });
+
+    };
+
     this.init = function(patientid) {
-      maps.CreateMap(maps.mapSettings);
+      if (maps.map === undefined) {
+        maps.CreateMap(maps.mapSettings);
+      }
 
       maps.AddFences(patientid);
 
       maps.AddMostRecentMarker(patientid);
+      maps.EnableFenceMaking();
     };
 
   });
