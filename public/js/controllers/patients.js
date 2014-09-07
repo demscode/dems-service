@@ -33,6 +33,7 @@
     $scope.setTab = function(tab) {
       $(".tab-content > .tab-pane.active").removeClass("active");
       $(tab).addClass("active");
+      Session.currentTab =  tab.replace("#", "");
     };
 
     $scope.toggleSideBar = function (animation) {
