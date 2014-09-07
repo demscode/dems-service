@@ -1,6 +1,6 @@
 (function () {
   angular.module('DemS').factory('Session', function () {
-    var currentCarer = "asdf",
+    var currentCarer = null,
       currentPatient = null,
       shownNotEnoughInfoMessage = false,
       hiddenSideBar = false;

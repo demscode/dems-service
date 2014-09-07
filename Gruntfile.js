@@ -55,7 +55,8 @@ module.exports = function(grunt) {
         'models/*',
         'routes/*',
         'public/js/*',
-        'tests/**/*.js'],
+        'tests/**/*.js',
+        'tests/**/**/*.js'],
       options: {
         indent: 2,
         trailing: true
