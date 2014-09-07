@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-xs-12">
-    <div ng-show="patient.locations != null && patient.locations.length > 0">
+    <!--<div ng-show="patient.locations != null && patient.locations.length > 0">
       <table class="table">
         <thread>
           <tr>
@@ -22,6 +22,15 @@
     </div>
     <div ng-hide="patient.locations != null && patient.locations.length > 0">
       No locations for the {{patient.name}}
+    </div>-->
+
+    <div ng-controller="MapsController as mapsCtrl">
+      <h1 ng-hide="inside">{{patient.name}} is outside the fences.</h1>
+      <input type="button" value="Current Location" ng-click="mapsCtrl.CurrentLocation(patient.id)">
+      <input type="button" value="Show All" ng-click="mapsCtrl.ShowAll(patient.id)">
+      <div id="map"></div>
+      <input type="button" value="Save Fences" ng-click="mapsCtrl.SaveUpdatedPolygons(patient.id)">
+      <input type="button" value="Revert Changes" ng-click="mapsCtrl.RevertFenceChanges(patient.id)">
     </div>
   </div>
 </div>

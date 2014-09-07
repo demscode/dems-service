@@ -23,10 +23,13 @@
     });
   });
 
-  app.controller('MapsController', function(Location, Fence) {
+  app.controller('MapsController', function(Location, Fence, $scope, Session) {
     var maps = this;
     var map, marker;
     var fences = [];
+    var showAll = false;
+    var count = 0;
+    $scope.inside = true;
 
     this.mapSettings =  {
       div: '#map',
@@ -51,17 +54,37 @@
     };
 
 
-    this.CreateMarker = function(position) {
+    this.CreateMarker = function(position, current) {
+      if (current) {
+        count = 0;
+      }
       maps.marker = maps.map.addMarker({
         lat: position.latitude,
         lng: position.longitude,
-        draggable: true,
+        draggable: false,
         fences: maps.map.polygons,
-        outside: function(marker, fence) {
-          console.log("Patient outside of fence.");
-        },
+        outside: function(marker, fence) { },
         infoWindow: {
           content: Date(position.timestamp)
+        }
+      });
+    };
+
+    this.CheckPatientInBounds = function(patientid) {
+      console.log(fences);
+      Location.query({id: patientid}, function(data) {
+        lastloc = data[data.length-1];
+        var count = 0;
+        for (var i = 0; i < fences.length; i++) {
+          var infence = maps.map.checkGeofence(lastloc.latitude, lastloc.longitude, fences[i].polygon);
+          if (infence === false) {
+            count++;
+          }
+        }
+        if (count === fences.length) {
+          $scope.inside = false;
+        } else {
+          $scope.inside = true;
         }
       });
     };
@@ -107,6 +130,8 @@
           }
         }
       });
+
+      maps.CheckPatientInBounds(patientid);
     };
 
     this.AddFences = function(patientid) {
@@ -123,6 +148,7 @@
     this.AddMostRecentMarker = function(patientid) {
       Location.query({ id: patientid }, function(data) {
         maps.CreateMarker(data[data.length-1]);
+        maps.map.setCenter(data[data.length-1].latitude, data[data.length-1].longitude);
       });
     };
 
@@ -138,6 +164,14 @@
 
     this.ClearMarkers = function() {
       maps.map.removeMarkers();
+      markersOutOfBounds = [];
+    };
+
+    this.ClearPolygons = function() {
+      for (var i = 0; i < fences.length; i++) {
+        fences[i].polygon.setMap(null);
+      }
+      fences = [];
     };
 
     this.EnableFenceMaking = function() {
@@ -160,17 +194,69 @@
 
     };
 
+    this.RevertFenceChanges = function(patientid) {
+      maps.ClearPolygons();
+      maps.AddFences(patientid);
+    };
+
+    this.CurrentLocation = function(patientid) {
+      maps.ClearMarkers();
+      maps.AddMostRecentMarker(patientid);
+      showAll = false;
+    };
+
+    this.LocationsBetweenDates = function(patientid, startdate, enddate) {
+      maps.ClearMarkers();
+      maps.AddMarkersInRange(patientid, Date(startdate), Date(enddate));
+    };
+
+    this.ShowAll = function(patientid) {
+      maps.ClearMarkers();
+      Location.query({ id: patientid }, function(data) {
+        for (var i = 0; i < data.length; i++) {
+          maps.CreateMarker(data[i]);
+        }
+        maps.map.setCenter(data[data.length-1].latitude, data[data.length-1].longitude);
+      });
+      showAll = true;
+    };
+
     this.init = function(patientid) {
       if (maps.map === undefined) {
         maps.CreateMap(maps.mapSettings);
+      } else {
+        maps.ClearMarkers();
+        maps.ClearPolygons();
       }
 
       maps.AddFences(patientid);
 
-      maps.AddMostRecentMarker(patientid);
+      if (showAll) {
+        maps.ShowAll(patientid);
+      } else {
+        maps.CurrentLocation(patientid);
+      }
       maps.EnableFenceMaking();
+      maps.CheckPatientInBounds(patientid);
     };
 
+    $scope.$watch('patient.id', function(newid, oldid) {
+      if (newid !== undefined) {
+        if (maps.map !== undefined) {
+          maps.init(newid);
+        }
+      }
+    });
+
+    $scope.$watch(function() { return Session.currentTab; },
+        function(tab) {
+          if (!Session.mapLoaded && tab == "locations") {
+            maps.init(Session.currentPatient.id);
+            Session.mapLoaded = true;
+          }
+    });
+
   });
+
 
 })();
