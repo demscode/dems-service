@@ -11,7 +11,7 @@
  * loadDB() will load the database with some dummy data to use
  *  - 10 patients
  *  - 100 locations each
- *  - 3 fences each
+ *  - 6 fences each
  *******************************************************************************************************************/
 
 
@@ -51,10 +51,10 @@ function loadDB() {
       timeNow = Date.now(),
 
       // multiplier for location movement
-      locationIncrement = 0.01,
+      locationIncrement = 0.003,
 
       // multiplier for fence movement
-      fenceIncrement = 0.1,
+      fenceIncrement = 0.05,
 
       patient_names = [
         "Joe Blogs",
@@ -69,7 +69,7 @@ function loadDB() {
         "Ken Adams",
       ],
       numLocations = 100,
-      numFences = 3;
+      numFences = 6;
 
   /***********************/
   /* Patient Creation    */
@@ -97,8 +97,8 @@ function loadDB() {
       var location = {
         longitude: longitude,
         latitude: latitude,
-        timestamp:  timeNow - (j * minutesPerInterval * 60000),
-        patient_id: i
+        timestamp:  timeNow - ((numLocations - 1 - j) * minutesPerInterval * 60000),
+        patient_id: patient._id
       };
       locationTable.insert(location);
 
@@ -123,7 +123,7 @@ function loadDB() {
     for(var k = 0; k < numFences; k++) {
       var fence = {
         polygon: polygon,
-        patient_id: i
+        patient_id: patient._id
       };
 
       fenceTable.insert(fence);
