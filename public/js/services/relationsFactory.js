@@ -11,7 +11,7 @@ angular.module('DemS').factory('relationsFactory', ['$resource', function($resou
     },
     {
         update: { 
-          method: 'PUT',
+          method: 'PUT'
         }
       }
     );

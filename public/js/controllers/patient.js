@@ -10,7 +10,7 @@
   		};
 
       $scope.saveNewPatient = function () {
-        var carerId = 130;
+        var carerId = 139;
         relationsFactory.addPatientToCarer(carerId, $scope.newPatient.id);
       };
     }]);

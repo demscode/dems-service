@@ -24,7 +24,7 @@
       name:             { type: String, limit: 50 },
       address:          { type: String },
       contact_number:   { type: String },
-      patients:          { type: Number }
+      patientsIds:      []
     });
 
     Carer.hasMany(Patient, {as: 'patients', foreignKey: 'carer_id'});
