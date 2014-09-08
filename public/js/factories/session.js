@@ -1,9 +1,11 @@
 (function () {
   angular.module('DemS').factory('Session', function () {
-    var currentCarer = "asdf",
+    var currentCarer = null,
       currentPatient = null,
       shownNotEnoughInfoMessage = false,
-      hiddenSideBar = false;
+      hiddenSideBar = false,
+      currentTab = null,
+      mapLoaded = false;
 
     var carerHasEnoughInfo = function (carer) {
       return carer !== null &&
@@ -21,6 +23,8 @@
       shownNotEnoughInfoMessage: shownNotEnoughInfoMessage,
       hiddenSideBar: hiddenSideBar,
       carerHasEnoughInfo: carerHasEnoughInfo,
+      currentTab: currentTab,
+      mapLoaded: mapLoaded,
     };
   });
 })();

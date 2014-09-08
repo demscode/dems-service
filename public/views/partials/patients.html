@@ -1,4 +1,5 @@
-<a ng-click="toggleSideBar(true)">
+
+<a ng-click="patientsCtrl.toggleSideBar(true)">
   <div id="toggle" class="sidebar">
     <b class="caret caret-left"></b>
   </div>
@@ -8,10 +9,10 @@
   <div id="sidebar-wrapper">
       <ul class="sidebar-nav">
           <li class="sidebar-brand">
-              <a ng-click="addPatient()" data-toggle="modal" data-target="#addPatientModal" class="hand-pointer"> + Add a Patient + </a>
+              <a ng-click="patientsCtrl.addPatient()" data-toggle="modal" data-target="#addPatientModal" class="hand-pointer"> + Add a Patient + </a>
           </li>
-          <li ng-repeat="patient in patients" ng-click="setPatient(patient.id)" class="hand-pointer" data-patient-id="{{patient.id}}" data-area="side-bar-link">
-              <a>{{patient.first_name + " " + patient.last_name}}</a>
+          <li ng-repeat="patient in arrayOfPatients" ng-click="patientsCtrl.setPatient(patient.id)" class="hand-pointer" data-patient-id="{{patient.id}}" data-area="side-bar-link">
+              <a>{{patient.name}}</a>
           </li>
       </ul>
   </div>
@@ -34,24 +35,24 @@
           <div ng-hide="patient == null">
             <!-- Nav tabs -->
             <ul class="nav nav-tabs" role="tablist">
-              <li class="active"><a role="tab" data-toggle="tab" ng-click="setTab('#details')">Details</a></li>
-              <li><a role="tab" data-toggle="tab" ng-click="setTab('#locations')">Locations</a></li>
-              <li><a role="tab" data-toggle="tab" ng-click="setTab('#reminders')">Reminders</a></li>
-              <li><a role="tab" data-toggle="tab" ng-click="setTab('#activities')">Activities</a></li>
+              <li class="active"><a role="tab" data-toggle="tab" ng-click="patientsCtrl.setTab('#details')">Details</a></li>
+              <li><a role="tab" data-toggle="tab" ng-click="patientsCtrl.setTab('#locations')">Locations</a></li>
+              <li><a role="tab" data-toggle="tab" ng-click="patientsCtrl.setTab('#reminders')">Reminders</a></li>
+              <li><a role="tab" data-toggle="tab" ng-click="patientsCtrl.setTab('#activities')">Activities</a></li>
             </ul>
 
             <!-- Tab panes -->
-            <div class="tab-content">
-              <div class="tab-pane active" id="details" ng-controller="DetailsController">
+            <div class="tab-content patients">
+              <div class="tab-pane active" id="details">
                 <div details></div>
               </div>
-              <div class="tab-pane" id="locations" ng-controller="LocationsController">
+              <div class="tab-pane" id="locations">
                 <div locations></div>
               </div>
-              <div class="tab-pane" id="reminders" ng-controller="RemindersController">
+              <div class="tab-pane" id="reminders">
                 <div reminders></div>
               </div>
-              <div class="tab-pane" id="activities" ng-controller="ActivitiesController">
+              <div class="tab-pane" id="activities">
                 <div activities></div>
               </div>
             </div>

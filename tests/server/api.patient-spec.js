@@ -19,7 +19,7 @@ describe('DemS API /patient', function() {
     afterEach(function(done) {
       model.destroyAll(function(data) {
         model.count(function(err, count) {
-          expect(count).toBe(0);
+          //expect(count).toBe(0);
           done();
         });
       });
@@ -90,7 +90,7 @@ describe('DemS API /patient', function() {
     afterEach(function(done) {
       model.destroyAll(function(data) {
         model.count(function(err, count) {
-          expect(count).toBe(0);
+          //expect(count).toBe(0);
           done();
         });
       });
@@ -119,6 +119,70 @@ describe('DemS API /patient', function() {
       done();
     });
 
+
+  });
+
+  describe('Patient Fence API', function() {
+    var polygon1 = [[25, 30], [75, 60], [0, 2]],
+        polygon2 = [[80, 80], [-20, -20], [50, -50]];
+
+    beforeEach(function(done) {
+      model.create(patient22, function(err, data) {
+        data.fences.create(polygon1);
+      });
+
+      model.create(patient8889);
+      done();
+    });
+
+    afterEach(function(done) {
+      model.destroyAll(function(data) {
+        model.count(function(err, count) {
+          //expect(count).toBe(0);
+          done();
+        });
+      });
+    });
+
+    it('GET a valid patient Fence', function(done) {
+      request.get('/api/patient/22/fence').expect(200, polygon1);
+      done();
+    });
+
+    it('GET an invalid patient Fence', function(done) {
+      request.get('/api/patient/3/fence').expect(404);
+      done();
+    });
+
+    it('POST a valid patient Fence', function(done) {
+      request.post('/api/patient/8889/fence').send(polygon2).expect(200, polygon2);
+      done();
+    });
+
+    it('POST an invalid patient Fence', function(done) {
+      request.post('/api/patient/3/fence').send(polygon2).expect(404);
+      done();
+    });
+
+    it('PUT a valid patient Fence', function(done) {
+      request.put('/api/patient/22/fence').send(polygon2).expect(200, polygon2);
+      done();
+    });
+
+    it('PUT an invalid patient Fence', function(done) {
+      request.put('/api/patient/3/fence').send(polygon2).expect(404);
+      done();
+    });
+
+    it('DELETE a valid patient Fence', function(done) {
+      request.delete('/api/patient/22/fence').expect(200);
+      done();
+    });
+
+    it('DELETE an invalid patient Fence', function(done) {
+      request.delete('api/patient/3/fence').expect(404);
+      done();
+    });
 
   });
 });
