@@ -4,6 +4,7 @@
       restrict: 'A',
       templateUrl: "partials/reminders",
       controller: "RemindersController",
+      controllerAs: "remindersCtrl",
     };
   });
 })();

@@ -1,9 +1,11 @@
 (function () {
   angular.module('DemS').controller("AccountDetailsController", ['$scope', 'Carer', 'Session', 'Alerts', function($scope, Carer, Session, Alerts){
-    $scope.init = function () {
+    var self = this;
+
+    self.init = function () {
       $scope.carer = Session.currentCarer;
 
-      $scope.form = $("form[name='carerForm']")[0];
+      self.form = $("form[name='carerForm']")[0];
 
       if(!Session.carerHasEnoughInfo(Session.currentCarer) && !Session.shownNotEnoughInfoMessage) {
         Alerts.addAlert("You need to add more information. Please enter them by feeling out this form", {alert_type: "danger"});
@@ -14,15 +16,15 @@
       Session.currentTab = null;
     };
 
-    $scope.post_validate = function () {
-      $.each($($scope.form).find("input[type='text'].ng-pristine"), function (i, elem) {
+    self.post_validate = function () {
+      $.each($(self.form).find("input[type='text'].ng-pristine"), function (i, elem) {
         $(elem).addClass("ng-dirty").removeClass("ng-pristine");
       });
       Alerts.addAlert("Please check your input as something is invalid", {alert_type: "danger"});
       return false;
     };
 
-    $scope.submit = function(){
+    self.submit = function(){
       $scope.carer.$update(function () {
         // Success
         Session.currentCarer = $scope.carer;
@@ -33,6 +35,6 @@
       });
     };
 
-    $scope.init();
+    self.init();
   } ] );
 })();

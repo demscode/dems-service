@@ -4,6 +4,7 @@
       restrict: 'A',
       templateUrl: "partials/activities",
       controller: "ActivitiesController",
+      controllerAs: "activitiesCtrl",
     };
   });
 })();

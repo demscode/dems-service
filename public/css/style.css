@@ -76,3 +76,7 @@ div.padding {
   position: fixed;
   z-index: 1002;
 }
+
+div.tab-content.patients > div.tab-pane {
+  padding-top: 10px;
+}

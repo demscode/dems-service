@@ -1,29 +1,5 @@
-/**
- * DemS.self
- *
- */
-
-
 (function() {
-	var app = angular.module('DemS');
-
-  app.factory("Patient", function($resource) {
-    return $resource('/api/patient/:id');
-  });
-
-  app.factory("Location", function($resource) {
-    return $resource('/api/patient/:id/locations');
-  });
-
-  app.factory("Fence", function($resource) {
-    return $resource('/api/patient/:id/fence/:fid', {}, {
-      update: {
-        method: 'PUT'
-      }
-    });
-  });
-
-  app.controller('MapsController', function(Location, Fence, $scope, Session) {
+  angular.module('DemS').controller('MapsController', function(Location, Fence, $scope, Session) {
     var self = this;
     var map, marker;
     var fences = [];
@@ -241,32 +217,28 @@
       self.CheckPatientInBounds(patientid);
     };
 
-    $scope.$watch('patient.id', function(newid, oldid) {
-      console.log('patient.id changed from' + oldid + 'to' + newid);
+    $scope.$watch(function() { return Session.currentPatient; }, function(newPatient, oldPatient) {
+      console.log('current patient changed from', oldPatient, 'to', newPatient);
+      $scope.patient = newPatient;
       if (Session.mapLoaded){
         console.log('map loaded & id changed');
-        if (newid !== undefined) {
+        if (newPatient !== undefined) {
           console.log('id no undefined');
           if (self.map !== undefined) {
             console.log('map is not undefined');
-            self.init(newid);
+            self.init(newPatient.id);
           }
         }
       }
 
     });
 
-    $scope.$watch(function() { return Session.currentTab; },
-        function(tab) {
-          if (!Session.mapLoaded && tab == "locations") {
-
-          console.log('locations tab selected and map no loaded');
-            self.init(Session.currentPatient.id);
-            Session.mapLoaded = true;
-          }
+    $scope.$watch(function() { return Session.currentTab; }, function(tab) {
+      if (!Session.mapLoaded && tab == "locations") {
+        console.log('locations tab selected and map no loaded');
+        self.init(Session.currentPatient.id);
+        Session.mapLoaded = true;
+      }
     });
-
   });
-
-
 })();

@@ -69,17 +69,17 @@ describe('PatientsController', function() {
   });
 
   it("does not call toggleSideBar if hiddenSideBar is false", function () {
-    spyOn($scope, 'toggleSideBar');
+    spyOn(controller, 'toggleSideBar');
     Session.hiddenSideBar = false;
-    $scope.init();
-    expect($scope.toggleSideBar).not.toHaveBeenCalled();
+    controller.init();
+    expect(controller.toggleSideBar).not.toHaveBeenCalled();
   });
 
   it("does call toggleSideBar if hiddenSideBar is true", function () {
-    spyOn($scope, 'toggleSideBar');
+    spyOn(controller, 'toggleSideBar');
     Session.hiddenSideBar = true;
-    $scope.init();
-    expect($scope.toggleSideBar).toHaveBeenCalled();
+    controller.init();
+    expect(controller.toggleSideBar).toHaveBeenCalled();
   });
 
   it("gets the array of patients from backend and orders them by name", function () {
@@ -95,7 +95,7 @@ describe('PatientsController', function() {
   it("sets the patient in the session", function () {
     $httpBackend.flush();
     expect(Session.currentPatient).toEqual(null);
-    $scope.setPatient("1");
+    controller.setPatient("1");
     expect(Session.currentPatient).toEqual(patient1);
   });
 });

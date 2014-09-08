@@ -1,36 +1,37 @@
 <div class="row">
   <div class="col-xs-12">
-    <!--<div ng-show="patient.locations != null && patient.locations.length > 0">
-      <table class="table">
-        <thread>
-          <tr>
-            <th>Location ID</th>
-            <th>Location Info 1</th>
-            <th>Location Info 2</th>
-            <th>Location Info 3</th>
-          </tr>
-        </thread>
-        <tbody>
-          <tr ng-repeat="location in patient.locations">
-            <td>{{location.id}}</td>
-            <td>{{location.location_info1}}</td>
-            <td>{{location.location_info2}}</td>
-            <td>{{location.location_info3}}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div ng-hide="patient.locations != null && patient.locations.length > 0">
-      No locations for the {{patient.name}}
-    </div>-->
-
     <div ng-controller="MapsController as mapsCtrl">
-      <h1 ng-hide="inside">{{patient.name}} is outside the fences.</h1>
-      <input type="button" value="Current Location" ng-click="mapsCtrl.CurrentLocation(patient.id)">
-      <input type="button" value="Show All" ng-click="mapsCtrl.ShowAll(patient.id)">
-      <div id="map"></div>
-      <input type="button" value="Save Fences" ng-click="mapsCtrl.SaveUpdatedPolygons(patient.id)">
-      <input type="button" value="Revert Changes" ng-click="mapsCtrl.RevertFenceChanges(patient.id)">
+      <!-- ALERT MSG IF OUTSIDE -->
+      <div ng-hide="inside" class="alert alert-danger">
+        {{patient.name}} is outside the fences.
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <!-- LOCATIONS SECTION -->
+          <div class="panel panel-default">
+            <div class="panel-heading">Locations</div>
+            <div class="panel-body">
+              <input type="button" value="Current Location" class="btn btn-primary" ng-click="mapsCtrl.CurrentLocation(patient.id)">
+              <input type="button" value="Show All" class="btn btn-info" ng-click="mapsCtrl.ShowAll(patient.id)">
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <!-- FENCE SECTION -->
+          <div class="panel panel-default">
+            <div class="panel-heading">Fences</div>
+            <div class="panel-body">
+              <input type="button" value="Save Fences" class="btn btn-primary" ng-click="mapsCtrl.SaveUpdatedPolygons(patient.id)">
+              <input type="button" value="Revert Changes" class="btn btn-danger" ng-click="mapsCtrl.RevertFenceChanges(patient.id)">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- THE MAP -->
+      <div id="map" style="width:100%"></div>
+
     </div>
   </div>
 </div>

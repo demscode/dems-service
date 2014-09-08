@@ -4,6 +4,7 @@
       restrict: 'A',
       templateUrl: "partials/details",
       controller: "DetailsController",
+      controllerAs: "detailsCtrl",
     };
   });
 })();
