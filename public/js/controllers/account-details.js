@@ -9,6 +9,9 @@
         Alerts.addAlert("You need to add more information. Please enter them by feeling out this form", {alert_type: "danger"});
         Session.shownNotEnoughInfoMessage = true;
       }
+
+      Session.mapLoaded = false;
+      Session.currentTab = null;
     };
 
     $scope.post_validate = function () {
