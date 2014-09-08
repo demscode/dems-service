@@ -2,15 +2,21 @@ angular.module('DemS').factory('relationsFactory', ['$resource', function($resou
 
 	var relationsFactory = {};
 
-	relationsFactory.addPatientToCarer = function(patientId, carerId){
+	relationsFactory.addPatientToCarer = function(carerId, patientId){
 
-		var url = '/carer/:carerId';
+		var carerUrl = '/api/carer/:carerId/patients';
+    var carerResource = $resource(carerUrl, {
+      carerId:carerId,
+      patientId:patientId
+    },
+    {
+        update: { 
+          method: 'PUT',
+        }
+      }
+    );
 
-     var carerResource = $resource(url, {carerId:'@carerId'});
-     carerResource.get({carerId:carerId}, function(carer) {
-       carer.patients.put(patientId);
-       carer.$save();
-     });
+    carerResource.update();
 	};
 
 	// relationsFactory.removePatientFromCarer = function(patientId, carerId){

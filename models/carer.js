@@ -23,7 +23,8 @@
       email :           { type: String, limit: 150 },
       name:             { type: String, limit: 50 },
       address:          { type: String },
-      contact_number:   { type: String }
+      contact_number:   { type: String },
+      patients:          { type: Number }
     });
 
     Carer.hasMany(Patient, {as: 'patients', foreignKey: 'carer_id'});
