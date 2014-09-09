@@ -18,7 +18,7 @@ angular.module('DemS').factory('relationsFactory', ['$resource', function($resou
     );
 
     carerResource.update(function(){
-      callback();
+      callback(patientId);
     });
 	};
 
