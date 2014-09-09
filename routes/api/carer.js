@@ -102,7 +102,7 @@
         }else {
           res.status(404).end();
         }
-      })
+      });
     });
   };
 })(exports);

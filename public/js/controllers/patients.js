@@ -13,9 +13,8 @@
             patients.push(angular.copy(patient));
             $scope.arrayOfPatients = self.orderPatients(patients);
             $scope.patients = self.getPatientObject($scope.arrayOfPatients);
-          })
-
-        })
+          });
+        });
         
         // wait for digest to occur, certainly better way to do it
         window.setTimeout(function() {
@@ -68,7 +67,7 @@
           $("#toggle").css("width", "250px");
           $("#toggle > b").removeClass("caret-right").addClass("caret-left");
         }
-      };
+      }
 
       Session.hiddenSideBar = $("#wrapper").hasClass("toggled");
 
