@@ -5,13 +5,14 @@
  * Make sure you have a mongo server running (otherwise open a new tab and type mongod)
  * Move back to the first tab if you moved to another
  * mongo - Start the mongo client
- * use dems - Tell mongo client to use dems db (not necessary to run this script, just for later use if needed)
- * load("script-db.js") - Loads this file
+ * use dems - Tell mongo client to use dems db
+ * load("scripts/db.js") - Loads this file
  * dropDB() will clear the Patient, Location and Fence table
  * loadDB() will load the database with some dummy data to use
  *  - 10 patients
  *  - 100 locations each
  *  - 6 fences each
+ *  - Relationships are made with carer but every 3rd patient
  *******************************************************************************************************************/
 
 
@@ -20,22 +21,18 @@ function loadDB() {
   /* Variables           */
   /***********************/
 
-      // Your carer - For later use when we want to link patients to ourself (carers)
-  var carer = db.getSiblingDB("dems").getCollection("Carer").find()[0],
 
-      patientIds = [];
+  var // Your carer - For later use when we want to link patients to ourself (carers)
+      carer = db.getCollection("Carer").find()[0],
 
-  if (!carer) {
-    return "This wont work if you don't have a carer in the db. Sign in first";
-  }
       // Reference to the patient table
-  var patientTable = db.getSiblingDB("dems").getCollection("Patient"),
+      patientTable = db.getCollection("Patient"),
 
       // Reference to the location table
-      locationTable = db.getSiblingDB("dems").getCollection("Location"),
+      locationTable = db.getCollection("Location"),
 
       // Reference to the fence table
-      fenceTable = db.getSiblingDB("dems").getCollection("Fence"),
+      fenceTable = db.getCollection("Fence"),
 
       // An arbitrary location to start with
       startingLocation = [-27.474911, 153.027188],
@@ -73,8 +70,16 @@ function loadDB() {
         "Ferrari Montenegro",
         "Ken Adams",
       ],
+
       numLocations = 100,
-      numFences = 6;
+
+      numFences = 6,
+
+      patientIds = [];
+
+  if (!carer) {
+    return "This wont work if you don't have a carer in the db. Sign in first";
+  }
 
   /***********************/
   /* Patient Creation    */
@@ -151,10 +156,9 @@ function loadDB() {
       }
     }
   }
-  // return "SUP";
-  // add the patients to the carer
-  // carer.update()
-  db.getSiblingDB("dems").getCollection("Carer").update(
+
+  // set the carer patientIds
+  db.getCollection("Carer").update(
     {_id: carer._id},
     {
       $set: {
@@ -165,9 +169,9 @@ function loadDB() {
 }
 
 function dropDB() {
-  var patientTable = db.getSiblingDB("dems").getCollection("Patient"),
-      locationTable = db.getSiblingDB("dems").getCollection("Location"),
-      fenceTable = db.getSiblingDB("dems").getCollection("Fence");
+  var patientTable = db.getCollection("Patient"),
+      locationTable = db.getCollection("Location"),
+      fenceTable = db.getCollection("Fence");
 
   // Drop the tables
   patientTable.drop();
