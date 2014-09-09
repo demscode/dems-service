@@ -1,15 +1,14 @@
 (function () {
-	angular.module('DemS').controller("PatientsController", ['$scope', '$http', 'Session', 'Alerts','relationsFactory', function($scope, $http, Session, Alerts, relationsFactory){
+	angular.module('DemS').controller("PatientsController", ['$scope', 'Session', 'Alerts','Carer','Patient', function($scope, Session, Alerts, Carer, Patient){
     var self = this;
 
     self.init = function () {
       $scope.carer = Session.currentCarer;
 
-      $http.get("/api/carer/"+$scope.carer.id+"/patients").success(function(data) {
-
+      Carer.get({id:$scope.carer.id}, function(carer){
         var patients = [];
-        data.forEach(function(patient){
-          $http.get('/api/patient/'+patient.id).success(function(patient){
+        carer.patientsIds.forEach(function(patient){
+          Patient.get({id:patient.id}, function(patient){
             patients.push(angular.copy(patient));
             $scope.arrayOfPatients = self.orderPatients(patients);
             $scope.patients = self.getPatientObject($scope.arrayOfPatients);
@@ -67,7 +66,7 @@
           $("#toggle").css("width", "250px");
           $("#toggle > b").removeClass("caret-right").addClass("caret-left");
         }
-      };
+      }
 
       Session.hiddenSideBar = $("#wrapper").hasClass("toggled");
 
@@ -75,15 +74,17 @@
 
     var addPatientToPatientList = function(patientId){
       var patients = $scope.arrayOfPatients;
-      $http.get('/api/patient/'+patientId).success(function(patient){
+      Patient.get({id:patient.id}, function(patient){
         patients.push(angular.copy(patient));
         $scope.arrayOfPatients = self.orderPatients(patients);
         $scope.patients = self.getPatientObject($scope.arrayOfPatients);
       });
-    }
+    };
 
-    self.saveNewPatient = function () {
-        relationsFactory.addPatientToCarer($scope.carer.id, $scope.newPatient.id, addPatientToPatientList);
+    self.addPatientToCarerRelationsship = function () {
+        Carer.updateRelation({carerId:$scope.carer.id, patientId:$scope.newPatient.id}, function(message){
+          addPatientToPatientList(patientId);
+        });
         $scope.newPatient.id = null;
       };
 
