@@ -6,7 +6,7 @@
     var count = 0;
     $scope.inside = true;
 
-    $scope.fences = [];
+    self.fences = [];
 
     self.mapSettings =  {
       div: '#map',
@@ -48,17 +48,17 @@
     };
 
     self.CheckPatientInBounds = function(patientid) {
-      console.log($scope.fences);
+      console.log(self.fences);
       Location.query({id: patientid}, function(data) {
         lastloc = data[data.length-1];
         var count = 0;
-        for (var i = 0; i < $scope.fences.length; i++) {
-          var infence = self.map.checkGeofence(lastloc.latitude, lastloc.longitude, $scope.fences[i].polygon);
+        for (var i = 0; i < self.fences.length; i++) {
+          var infence = self.map.checkGeofence(lastloc.latitude, lastloc.longitude, self.fences[i].polygon);
           if (infence === false) {
             count++;
           }
         }
-        if (count === $scope.fences.length) {
+        if (count === self.fences.length) {
           $scope.inside = false;
         } else {
           $scope.inside = true;
@@ -76,12 +76,12 @@
     };
 
     self.SaveUpdatedPolygons = function(patientid) {
-      for (var i = 0; i < $scope.fences.length; i++) {
-        var paths = self.GetUpdatedPath($scope.fences[i].polygon);
-        if ($scope.fences[i].id === null) {
+      for (var i = 0; i < self.fences.length; i++) {
+        var paths = self.GetUpdatedPath(self.fences[i].polygon);
+        if (self.fences[i].id === null) {
           Fence.save({id: patientid}, {polygon: paths});
         } else {
-          Fence.update({id: patientid, fid: $scope.fences[i].id}, {polygon: paths});
+          Fence.update({id: patientid, fid: self.fences[i].id}, {polygon: paths});
         }
       }
 
@@ -89,8 +89,8 @@
         var freeids = [];
         for (var i = 0; i < data.length; i++) {
           var used = false;
-          for (var j = 0; j < $scope.fences.length; j++) {
-            if ($scope.fences[j].id === data[i].id) {
+          for (var j = 0; j < self.fences.length; j++) {
+            if (self.fences[j].id === data[i].id) {
               used = true;
             }
           }
@@ -101,9 +101,9 @@
         }
 
         freeids.reverse();
-        for (var k = 0; k < $scope.fences.length; k++) {
-          if ($scope.fences[k].id === null) {
-            $scope.fences[k].id = freeids.pop();
+        for (var k = 0; k < self.fences.length; k++) {
+          if (self.fences[k].id === null) {
+            self.fences[k].id = freeids.pop();
           }
         }
       });
@@ -114,10 +114,9 @@
     self.AddFences = function(patientid) {
       Fence.query({ id: patientid }, function(data) {
         for (var i = 0; i < data.length; i++) {
-          $scope.fences[i] = {
+          self.fences[i] = {
             id: data[i].id,
             polygon: self.CreatePolygon(data[i].polygon),
-            polygonlatlngs: data[i].polygon,
             name: data[i].name,
           };
         }
@@ -147,10 +146,10 @@
     };
 
     self.ClearPolygons = function() {
-      for (var i = 0; i < $scope.fences.length; i++) {
-        $scope.fences[i].polygon.setMap(null);
+      for (var i = 0; i < self.fences.length; i++) {
+        self.fences[i].polygon.setMap(null);
       }
-      $scope.fences = [];
+      self.fences = [];
     };
 
     self.EnableFenceMaking = function() {
@@ -163,12 +162,12 @@
             var lat = e.latLng.lat(),
                 lng = e.latLng.lng();
             var path = self.getTrianglePolygon(lat, lng);
-            $scope.fences[$scope.fences.length] = {
+            self.fences[self.fences.length] = {
               id: null,
               polygon: self.CreatePolygon(path),
-              polygonlatlngs: path,
-              name: prompt("Enter a name for the fence"),
+              name: "",
             };
+            self.EditFenceName($scope.patient.id, self.fences.length - 1);
           }
         },
         {
@@ -178,12 +177,12 @@
             var lat = e.latLng.lat(),
                 lng = e.latLng.lng();
             var path = self.getSquarePolygon(lat, lng);
-            $scope.fences[$scope.fences.length] = {
+            self.fences[self.fences.length] = {
               id: null,
               polygon: self.CreatePolygon(path),
-              polygonlatlngs: path,
-              name: prompt("Enter a name for the fence"),
+              name: "",
             };
+            self.EditFenceName($scope.patient.id, self.fences.length - 1);
           }
         }]
       });
@@ -225,9 +224,39 @@
       showAll = true;
     };
 
-    self.moveToFence = function(index) {
-      var fence = $scope.fences[index];
-      self.map.setCenter(fence.polygonlatlngs[0][0], fence.polygonlatlngs[0][1]);
+    self.MoveToFence = function(index) {
+      var fence = self.fences[index];
+      self.map.setCenter(self.GetUpdatedPath(fence.polygon)[0][0], self.GetUpdatedPath(fence.polygon)[0][1]);
+    };
+
+    self.EditFenceName = function(patientId, index) {
+      $("#editFenceNameInput").val(self.fences[index].name);
+      $("#editFenceModal").modal({backdrop: 'static', keyboard: false});
+      $("#editFenceModal").modal('show');
+
+      $('#editFenceModal').on('hidden.bs.modal', function () {
+        self.fences[index].name = $("#editFenceNameInput").val();
+        if(self.fences[index].id === null){
+          Fence.save({id: patientId}, {
+            polygon: self.GetUpdatedPath(self.fences[index].polygon),
+            name: self.fences[index].name,
+          }, function (data) {
+            self.fences[index].id = data.id;
+          });
+        } else {
+          Fence.update({id: patientId, fid: self.fences[index].id}, {
+            name: self.fences[index].name,
+          });
+        }
+
+        $('#editFenceModal').unbind('hidden.bs.modal');
+      });
+    };
+
+    self.DeleteFence = function(patientId, index) {
+      Fence.delete({id: patientId, fid: self.fences[index].id});
+      self.fences[index].polygon.setMap(null);
+      self.fences.splice(index, 1);
     };
 
     self.init = function(patientid) {
