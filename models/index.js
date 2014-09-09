@@ -6,8 +6,12 @@
 (function (exports) {
   'use strict';
 
-  var settings = require('../dems.conf.json');
-  var mongo = settings.db.mongo;
+  var mongo = {};
+  if (process.env.MONGOHQ_URL) {
+    mongo.url = process.env.MONGOHQ_URL;
+  } else {
+    mongo = require('../dems.conf.json').db.mongo;
+  }
 
   exports.carer = require('./carer').init(mongo);
   exports.patient = require('./patient').init(mongo);
