@@ -146,9 +146,12 @@ function loadDB() {
     var polygon = startingFence.concat();
 
     for(var k = 0; k < numFences; k++) {
+      var names = patient.name.split(' ');
+      var initials = names[0] && names[1] ? names[0].charAt(0) + " " + names[1].charAt(0) : "Test";
       var fence = {
         polygon    : polygon,
-        patient_id : patient._id
+        name       : initials  + " Fence " + (k+1),
+        patient_id : patient._id,
       };
 
       fenceTable.insert(fence);

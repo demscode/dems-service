@@ -29,9 +29,31 @@
         </div>
       </div>
 
-      <!-- THE MAP -->
-      <div id="map" style="width:100%"></div>
+      <div class="row">
+        <div class="col-xs-9">
+          <!-- THE MAP -->
+          <div id="map" class="full-width"></div>
+        </div>
 
+        <div class="col-xs-3">
+          <!-- FENCE LIST -->
+          <div class="panel panel-default">
+            <div class="panel-heading">Saved Fences</div>
+            <div class="panel-body no-padding">
+              <table class="full-width table table-striped no-margin">
+                <tr ng-repeat="fence in fences" class="padding-top-bottom">
+                  <td>
+                    {{fence.name}}
+                  </td>
+                  <td>
+                    <a class="btn btn-info" ng-click="mapsCtrl.moveToFence($index)">Show</a>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

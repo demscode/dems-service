@@ -80,3 +80,19 @@ div.padding {
 div.tab-content.patients > div.tab-pane {
   padding-top: 10px;
 }
+
+.full-width {
+  width: 100% !important;
+}
+
+.padding-top-bottom {
+  padding: 5px 0px;
+}
+
+.no-padding {
+  padding: 0px;
+}
+
+.no-margin {
+  margin: 0px;
+}
