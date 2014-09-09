@@ -20,9 +20,14 @@ function loadDB() {
   /* Variables           */
   /***********************/
 
-      // Your carer ID - For later use when we want to link patients to ourself (carers)
-  // var carerId = db.getSiblingDB("dems").getCollection("Carer").find()[0].id;
+      // Your carer - For later use when we want to link patients to ourself (carers)
+  var carer = db.getSiblingDB("dems").getCollection("Carer").find()[0],
 
+      patientIds = [];
+
+  if (!carer) {
+    return "This wont work if you don't have a carer in the db. Sign in first";
+  }
       // Reference to the patient table
   var patientTable = db.getSiblingDB("dems").getCollection("Patient"),
 
@@ -77,11 +82,17 @@ function loadDB() {
 
   for (var i = 0, patientLength = patient_names.length; i < patientLength; i++) {
     var patient = {
-      _id   : i + 1,
-      token :"token" + patient_names[i].replace(/ /g, ''),
-      email : patient_names[i].toLowerCase().replace(/ /g, '_')  + "@fake.com",
-      name  : patient_names[i],
+      _id      : i + 1,
+      token    :"token" + patient_names[i].replace(/ /g, ''),
+      email    : patient_names[i].toLowerCase().replace(/ /g, '_')  + "@fake.com",
+      name     : patient_names[i],
     };
+
+    // don't add every third one to the carer
+    if((i+1) % 3 != 0) {
+      patient.carer_id = carer._id;
+      patientIds.push(patient._id);
+    }
 
     patientTable.insert(patient);
 
@@ -95,10 +106,10 @@ function loadDB() {
 
     for(var j = 0; j < numLocations; j++) {
       var location = {
-        longitude: longitude,
-        latitude: latitude,
-        timestamp:  timeNow - ((numLocations - 1 - j) * minutesPerInterval * 60000),
-        patient_id: patient._id
+        longitude  : longitude,
+        latitude   : latitude,
+        timestamp  :  timeNow - ((numLocations - 1 - j) * minutesPerInterval * 60000),
+        patient_id : patient._id
       };
       locationTable.insert(location);
 
@@ -122,8 +133,8 @@ function loadDB() {
 
     for(var k = 0; k < numFences; k++) {
       var fence = {
-        polygon: polygon,
-        patient_id: patient._id
+        polygon    : polygon,
+        patient_id : patient._id
       };
 
       fenceTable.insert(fence);
@@ -140,6 +151,17 @@ function loadDB() {
       }
     }
   }
+  // return "SUP";
+  // add the patients to the carer
+  // carer.update()
+  db.getSiblingDB("dems").getCollection("Carer").update(
+    {_id: carer._id},
+    {
+      $set: {
+        patientsIds: patientIds
+      }
+    }
+  );
 }
 
 function dropDB() {
