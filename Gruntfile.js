@@ -97,6 +97,9 @@ module.exports = function(grunt) {
 
   // Default tasks.
   grunt.registerTask('setup', ['wiredep']);
+  grunt.registerTask('heroku:production', [
+    'wiredep'
+  ]);
   // jasmine_node must come after karma.conf.js gets
   // wrongfullly covered
   grunt.registerTask('test', ['jshint', 'karma:continuous', 'jasmine_node']);
