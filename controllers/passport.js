@@ -8,7 +8,14 @@
 
   var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
       Carer = require('../models').carer,
-      Keys = require('../dems.conf.json').auth.google;
+      Keys = {};
+      if (process.env.GOOGLE_AUTH) {
+        Keys.clientID = process.env.GOOGLE_CID;
+        Keys.clientSecret = process.env.GOOGLE_CSE;
+        Keys.callbackURL = process.env.GOOGLE_CBU;
+      } else {
+        Keys = require('../dems.conf.json').auth.google;
+      }
 
   exports.init = function(passport) {
     //serialise user for the session
