@@ -1,8 +1,9 @@
+(function () {
 angular.module('DemS').factory('relationsFactory', ['$resource', function($resource){
 
 	var relationsFactory = {};
 
-	relationsFactory.addPatientToCarer = function(carerId, patientId){
+	relationsFactory.addPatientToCarer = function(carerId, patientId, callback){
 
 		var carerUrl = '/api/carer/:carerId/patients';
     var carerResource = $resource(carerUrl, {
@@ -16,7 +17,9 @@ angular.module('DemS').factory('relationsFactory', ['$resource', function($resou
       }
     );
 
-    carerResource.update();
+    carerResource.update(function(){
+      callback();
+    });
 	};
 
 	// relationsFactory.removePatientFromCarer = function(patientId, carerId){
@@ -29,3 +32,4 @@ angular.module('DemS').factory('relationsFactory', ['$resource', function($resou
 
 	return relationsFactory;
 }]);
+})();

@@ -71,7 +71,7 @@
       var patientModel = models.patient;
 
       patientModel.find(Number(req.query.patientId), function(err, patient) {
-        if (patient) {
+        if (patient && patient.carer_id != req.params.carerId) {
           patient.updateAttributes({carer_id : Number(req.params.carerId)}, function(err, updatedPatientData) {
             carerModel.find(Number(req.params.carerId), function(err, carer) {
               if(carer){
@@ -89,6 +89,20 @@
           res.status(404).end();
         }
       });
+    });
+
+    //Get Carer Patients
+    app.get('/api/carer/:carerId/patients', function(req, res) {
+      var carerModel = models.carer;
+      var patientModel = models.patient;
+
+      carerModel.find(Number(req.params.carerId), function(err, carer){
+        if(carer){
+          res.status(200).send(carer.patientsIds);
+        }else {
+          res.status(404).end();
+        }
+      })
     });
   };
 })(exports);

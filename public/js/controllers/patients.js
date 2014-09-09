@@ -1,13 +1,22 @@
 (function () {
-	angular.module('DemS').controller("PatientsController", ['$scope', '$http', 'Session', 'Alerts', function($scope, $http, Session, Alerts){
+	angular.module('DemS').controller("PatientsController", ['$scope', '$http', 'Session', 'Alerts','relationsFactory', function($scope, $http, Session, Alerts, relationsFactory){
     var self = this;
 
     self.init = function () {
       $scope.carer = Session.currentCarer;
 
-      $http.get("/api/allPatients").success(function(data) {
-        $scope.arrayOfPatients = self.orderPatients(data);
-        $scope.patients = self.getPatientObject($scope.arrayOfPatients);
+      $http.get("/api/carer/"+$scope.carer.id+"/patients").success(function(data) {
+
+        var patients = [];
+        data.forEach(function(patient){
+          $http.get('/api/patient/'+patient.id).success(function(patient){
+            patients.push(angular.copy(patient));
+            $scope.arrayOfPatients = self.orderPatients(patients);
+            $scope.patients = self.getPatientObject($scope.arrayOfPatients);
+          })
+
+        })
+        
         // wait for digest to occur, certainly better way to do it
         window.setTimeout(function() {
           if(Session.currentPatient) {
@@ -59,16 +68,16 @@
           $("#toggle").css("width", "250px");
           $("#toggle > b").removeClass("caret-right").addClass("caret-left");
         }
-      }
-
-      $scope.saveNewPatient = function () {
-        var carerId = 139;
-        relationsFactory.addPatientToCarer(carerId, $scope.newPatient.id);
       };
 
       Session.hiddenSideBar = $("#wrapper").hasClass("toggled");
 
     };
+
+    self.saveNewPatient = function () {
+        relationsFactory.addPatientToCarer($scope.carer.id, $scope.newPatient.id, self.init);
+        $scope.newPatient.id = null;
+      };
 
     self.orderPatients = function (patients) {
       // Sort by name
