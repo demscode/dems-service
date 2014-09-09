@@ -67,14 +67,23 @@
           $("#toggle").css("width", "250px");
           $("#toggle > b").removeClass("caret-right").addClass("caret-left");
         }
-      }
+      };
 
       Session.hiddenSideBar = $("#wrapper").hasClass("toggled");
 
     };
 
+    var addPatientToPatientList = function(patientId){
+      var patients = $scope.arrayOfPatients;
+      $http.get('/api/patient/'+patientId).success(function(patient){
+        patients.push(angular.copy(patient));
+        $scope.arrayOfPatients = self.orderPatients(patients);
+        $scope.patients = self.getPatientObject($scope.arrayOfPatients);
+      });
+    }
+
     self.saveNewPatient = function () {
-        relationsFactory.addPatientToCarer($scope.carer.id, $scope.newPatient.id, self.init);
+        relationsFactory.addPatientToCarer($scope.carer.id, $scope.newPatient.id, addPatientToPatientList);
         $scope.newPatient.id = null;
       };
 
