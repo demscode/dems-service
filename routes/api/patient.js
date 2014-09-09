@@ -20,6 +20,20 @@
       });
     });
 
+    // Patient GET Carers Patients API
+    app.get('/api/carersPatients', function(req, res) {
+      patientModel.all(
+        {where: {carer_id:Number(req.query.id)},
+        order:"name"},
+        function(err, data) {
+        if (data) {
+          res.status(200).send(data);
+        } else {
+          res.status(404).end();
+        }
+      });
+    });
+
     // Patient GET API
     app.get('/api/patient/:id', function(req, res) {
       patientModel.find(Number(req.params.id), function(err, data) {

@@ -5,15 +5,7 @@
     self.init = function () {
       $scope.carer = Session.currentCarer;
 
-      Carer.get({id:$scope.carer.id}, function(carer){
-        var patients = [];
-        carer.patientsIds.forEach(function(patient){
-          Patient.get({id:patient.id}, function(patient){
-            patients.push(angular.copy(patient));
-            $scope.arrayOfPatients = self.orderPatients(patients);
-            $scope.patients = self.getPatientObject($scope.arrayOfPatients);
-          });
-        });
+      refreshCarerPatientsList();
         
         // wait for digest to occur, certainly better way to do it
         window.setTimeout(function() {
@@ -22,7 +14,7 @@
             self.setPatient(Session.currentPatient.id);
           }
         }, 100);
-      });
+
 
       // TODO: What if we get here and the current carer hasn't been set just yet (still waiting for response from server)
       if(!Session.carerHasEnoughInfo(Session.currentCarer) && !Session.shownNotEnoughInfoMessage) {
@@ -72,20 +64,11 @@
 
     };
 
-    var addPatientToPatientList = function(patientId){
-      var patients = $scope.arrayOfPatients;
-      Patient.get({id:patient.id}, function(patient){
-        patients.push(angular.copy(patient));
-        $scope.arrayOfPatients = self.orderPatients(patients);
-        $scope.patients = self.getPatientObject($scope.arrayOfPatients);
-      });
-    };
-
     self.addPatientToCarerRelationsship = function () {
         Carer.updateRelation({carerId:$scope.carer.id, patientId:$scope.newPatient.id}, function(message){
-          addPatientToPatientList(patientId);
+          updateCarerPatientsList();
+          $scope.newPatient.id = null;
         });
-        $scope.newPatient.id = null;
       };
 
     self.orderPatients = function (patients) {
@@ -105,6 +88,13 @@
         patientsObject[patients[i].id] =  patients[i];
       }
       return patientsObject;
+    };
+
+    var refreshCarerPatientsList = function(){
+      Patient.getCarersPatients({id:$scope.carer.id}, function(patients){
+        $scope.arrayOfPatients = patients;
+        $scope.patients = self.getPatientObject($scope.arrayOfPatients);
+      });
     };
 
     self.init();
