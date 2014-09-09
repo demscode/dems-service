@@ -154,12 +154,25 @@
       self.map.setContextMenu({
         control: 'map',
         options: [{
-          title: 'Create fence',
-          name: 'create_fence',
+          title: 'Triangle',
+          name: 'triangle',
           action: function(e) {
             var lat = e.latLng.lat(),
                 lng = e.latLng.lng();
-            var path = [[lat, lng], [lat+0.0015, lng-0.003], [lat-0.003, lng+0.0015]];
+            var path = self.getTrianglePolygon(lat, lng);
+            fences[fences.length] = {
+              id: null,
+              polygon: self.CreatePolygon(path)
+            };
+          }
+        },
+        {
+          title: 'Square',
+          name: 'square',
+          action: function(e) {
+            var lat = e.latLng.lat(),
+                lng = e.latLng.lng();
+            var path = self.getSquarePolygon(lat, lng);
             fences[fences.length] = {
               id: null,
               polygon: self.CreatePolygon(path)
@@ -168,6 +181,14 @@
         }]
       });
 
+    };
+
+    self.getTrianglePolygon = function(lat, lng) {
+      return [[lat, lng], [lat+0.0015, lng-0.003], [lat-0.003, lng+0.0015]];
+    };
+
+    self.getSquarePolygon = function(lat, lng) {
+      return [[lat, lng], [lat+0.003, lng], [lat+0.003, lng+0.003], [lat, lng+0.003]];
     };
 
     self.RevertFenceChanges = function(patientid) {
