@@ -8,6 +8,7 @@ describe('PatientsController', function() {
       patients,
       orderedPatientsByName,
       patientsObject,
+      carer,
       patients1,
       patients2;
 
@@ -34,8 +35,13 @@ describe('PatientsController', function() {
 
     orderedPatientsByName = [patient2, patient1];
 
+    carer = {
+      name: "Frankie Cares",
+      id: 1,
+    };
+
     Session = {
-      currentCarer: null,
+      currentCarer: carer,
       currentPatient: null,
       shownNotEnoughInfoMessage: false,
       hiddenSideBar: false,
@@ -57,9 +63,14 @@ describe('PatientsController', function() {
 
       $httpBackend = $injector.get('$httpBackend');
 
-      $httpBackend.whenGET('/api/allPatients')
-        .respond(patients);
+      $httpBackend.whenGET('/api/carer/:carerId/patients')
+        .respond([1,2]);
 
+      $httpBackend.whenGET('/api/patient/:patientId')
+        .respond(function(method, url, data) {
+          return patients[data.patientId];
+        });
+      
       createController = function () {
         controller = $injector.get('$controller')("PatientsController", {$scope: $scope, $http: $http, Session: Session, Alerts: Alerts});
       };
