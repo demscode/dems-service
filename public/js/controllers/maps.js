@@ -4,6 +4,18 @@
     var map, marker;
     var showAll = false;
     var count = 0;
+    var polygonOptions = {
+      notify : {
+        strokeColor: '#600000',
+        fillColor: '#FF0000',
+        fillOpacity: 0.4,
+      },
+      notNotify: {
+        strokeColor: '#66b266',
+        fillColor: '#b2d8b2',
+        fillOpacity: 0.6,
+      },
+    };
     $scope.inside = true;
 
     self.fences = [];
@@ -18,16 +30,25 @@
       self.map = GMaps(settings);
     };
 
-    self.createPolygon = function(paths) {
+    self.createPolygon = function(paths, notifyCarer) {
+      var options = polygonOptions[notifyCarer ? 'notify' : 'notNotify'];
       return self.map.drawPolygon({
         paths: paths,
         editable: true,
-        strokeColor: '#66b266',
+        strokeColor: options.strokeColor,
         strokeOpacity: 1,
         strokeWeight: 3,
-        fillColor: '#b2d8b2',
-        fillOpacity: 0.6
+        fillColor: options.fillColor,
+        fillOpacity: options.fillOpacity,
       });
+    };
+
+    self.setPolygonType = function (index) {
+      var polygon = self.fences[index].polygon,
+          notifyCarer = self.fences[index].notifyCarer;
+
+      var options = polygonOptions[notifyCarer ? 'notify' : 'notNotify'];
+      polygon.setOptions(options);
     };
 
 
@@ -51,18 +72,14 @@
       console.log(self.fences);
       Location.query({id: patientid}, function(data) {
         lastloc = data[data.length-1];
-        var count = 0;
         for (var i = 0; i < self.fences.length; i++) {
           var infence = self.map.checkGeofence(lastloc.latitude, lastloc.longitude, self.fences[i].polygon);
-          if (infence === false) {
-            count++;
+          if (infence && self.fences[i].notifyCarer) {
+            $scope.inside = true;
+            return;
           }
         }
-        if (count === self.fences.length) {
-          $scope.inside = false;
-        } else {
-          $scope.inside = true;
-        }
+        $scope.inside = false;
       });
     };
 
@@ -116,8 +133,9 @@
         for (var i = 0; i < data.length; i++) {
           self.fences[i] = {
             id: data[i].id,
-            polygon: self.createPolygon(data[i].polygon),
+            polygon: self.createPolygon(data[i].polygon, data[i].notifyCarer),
             name: data[i].name,
+            notifyCarer: data[i].notifyCarer,
           };
         }
       });
@@ -164,8 +182,9 @@
             var path = self.getTrianglePolygon(lat, lng);
             self.fences[self.fences.length] = {
               id: null,
-              polygon: self.createPolygon(path),
+              polygon: self.createPolygon(path, true),
               name: "",
+              notifyCarer: true,
             };
             self.editFenceName($scope.patient.id, self.fences.length - 1);
           }
@@ -179,8 +198,9 @@
             var path = self.getSquarePolygon(lat, lng);
             self.fences[self.fences.length] = {
               id: null,
-              polygon: self.createPolygon(path),
+              polygon: self.createPolygon(path, true),
               name: "",
+              notifyCarer: true,
             };
             self.editFenceName($scope.patient.id, self.fences.length - 1);
           }
@@ -230,27 +250,41 @@
     };
 
     self.editFenceName = function(patientId, index) {
-      $("#editFenceNameInput").val(self.fences[index].name);
+      $scope.editFence = {};
+      $scope.editFence.name = self.fences[index].name;
+      $scope.editFence.notifyCarer = self.fences[index].notifyCarer;
+
+      // set it through JQuery as it doesn't seem to do it straight away.
+      $("#editFenceNofityCarer").prop("checked", self.fences[index].notifyCarer);
+
       $("#editFenceModal").modal({backdrop: 'static', keyboard: false});
       $("#editFenceModal").modal('show');
 
-      $('#editFenceModal').on('hidden.bs.modal', function () {
-        self.fences[index].name = $("#editFenceNameInput").val();
+      $('#editFenceModal').on('hide.bs.modal', function (event) {
+        if($scope.editFence.name === "" || self.fenceNameExists($scope.editFence.name, index)) {
+          event.preventDefault();
+          return false;
+        }
+        self.fences[index].name = $scope.editFence.name;
+        self.fences[index].notifyCarer = $scope.editFence.notifyCarer;
         if(self.fences[index].id === null){
           Fence.save({id: patientId}, {
             polygon: self.getUpdatedPath(self.fences[index].polygon),
             name: self.fences[index].name,
+            notifyCarer: self.fences[index].notifyCarer,
           }, function (data) {
             self.fences[index].id = data.id;
           });
         } else {
           Fence.update({id: patientId, fid: self.fences[index].id}, {
             name: self.fences[index].name,
+            notifyCarer: self.fences[index].notifyCarer,
           });
         }
-
-        $('#editFenceModal').unbind('hidden.bs.modal');
+        self.setPolygonType(index);
+        $('#editFenceModal').unbind('hide.bs.modal');
         self.checkPatientInBounds(patientId);
+        $scope.editFence = {};
       });
     };
 
@@ -259,6 +293,21 @@
       self.fences[index].polygon.setMap(null);
       self.fences.splice(index, 1);
       self.checkPatientInBounds(patientId);
+    };
+
+    self.fenceNameExists = function(name, index) {
+      for (var i = 0, length = self.fences.length; i < length; i++) {
+        if (self.fences[i].name === name && i !== index) {
+          return true;
+        }
+      }
+      return false;
+    };
+
+    self.isFenceComplete = function(fence) {
+      return fence.id !== null &&
+             fence.name !== null &&
+             fence.name !== "";
     };
 
     self.init = function(patientid) {

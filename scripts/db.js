@@ -152,6 +152,7 @@ function loadDB() {
         polygon    : polygon,
         name       : initials  + " Fence " + (k+1),
         patient_id : patient._id,
+        notifyCarer: Math.random() > 0.5,
       };
 
       fenceTable.insert(fence);

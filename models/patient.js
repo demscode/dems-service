@@ -37,6 +37,7 @@
       //fid: { type: Number, default: Date.now(), index: true },
       polygon: { type: Object, default: [] },
       name: { type: String },
+      notifyCarer: { type: Boolean },
       patient_id: { type: Number }
     });
 

@@ -42,9 +42,9 @@
               <div class="panel-heading">Saved Fences</div>
               <div class="panel-body no-padding">
                 <table class="full-width table table-striped no-margin">
-                  <tr ng-repeat="fence in mapsCtrl.fences" class="padding-top-bottom">
+                  <tr ng-repeat="fence in mapsCtrl.fences" ng-show="mapsCtrl.isFenceComplete(fence)" class="padding-top-bottom">
                     <td>
-                      {{fence.name}}
+                      {{fence.name}}&nbsp;<span ng-show="fence.notifyCarer" class="glyphicon glyphicon-envelope"></span>
                     </td>
                     <td>
                       <a class="btn btn-info btn-xs" ng-click="mapsCtrl.moveToFence($index)"><span class="glyphicon glyphicon-search"></span></a>
@@ -76,7 +76,22 @@
           <h4 class="modal-title" id="myModalLabel">New Fence</h4>
         </div>
         <div class="modal-body">
-          Fence Name: <input type="text" id="editFenceNameInput">
+          <div class="form-group row">
+            <div class="col-xs-3">
+              <label for="editFenceName">Fence Name</label>
+            </div>
+            <div class="col-xs-9">
+              <input type="text" class="form-control" id="editFenceName" ng-model="editFence.name" placeholder="Fence Name">
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-xs-3">
+              <label for="editFenceNofityCarer">Notify Carer</label>
+            </div>
+            <div class="col-xs-9">
+              <input type="checkbox" id="editFenceNofityCarer" ng-model="editFence.notifyCarer" placeholder="Fence Name">
+            </div>
+          </div>
         </div>
         <div class="modal-footer">
           <a type="button" class="btn btn-primary" data-dismiss="modal">Save</a>
