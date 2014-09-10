@@ -6,14 +6,17 @@
       $scope.carer = Session.currentCarer;
 
       refreshCarerPatientsList();
-        
-        // wait for digest to occur, certainly better way to do it
-        window.setTimeout(function() {
-          if(Session.currentPatient) {
-            console.log("setting patient");
-            self.setPatient(Session.currentPatient.id);
-          }
-        }, 100);
+
+      // wait for digest to occur, certainly better way to do it
+      window.setTimeout(function() {
+        if(Session.currentPatient) {
+          console.log("setting patient");
+          self.setPatient(Session.currentPatient.id);
+        }
+      }, 100);
+
+      // needed for smaller screen when reloading and having scrolled down.
+      $("body").animate({ scrollTop: 0 }, 1000);
 
 
       // TODO: What if we get here and the current carer hasn't been set just yet (still waiting for response from server)

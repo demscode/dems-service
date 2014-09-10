@@ -13,8 +13,8 @@
             <div class="panel panel-default">
               <div class="panel-heading">Locations</div>
               <div class="panel-body">
-                <input type="button" value="Current Location" class="btn btn-primary" ng-click="mapsCtrl.CurrentLocation(patient.id)">
-                <input type="button" value="Show All" class="btn btn-info" ng-click="mapsCtrl.ShowAll(patient.id)">
+                <input type="button" value="Current Location" class="btn btn-primary" ng-click="mapsCtrl.currentLocation(patient.id)">
+                <input type="button" value="Show All" class="btn btn-info" ng-click="mapsCtrl.showAll(patient.id)">
               </div>
             </div>
           </div>
@@ -23,8 +23,8 @@
             <div class="panel panel-default">
               <div class="panel-heading">Fences</div>
               <div class="panel-body">
-                <input type="button" value="Save Fences" class="btn btn-primary" ng-click="mapsCtrl.SaveUpdatedPolygons(patient.id)">
-                <input type="button" value="Revert Changes" class="btn btn-danger" ng-click="mapsCtrl.RevertFenceChanges(patient.id)">
+                <input type="button" value="Save Fences" class="btn btn-primary" ng-click="mapsCtrl.saveUpdatedPolygons(patient.id)">
+                <input type="button" value="Revert Changes" class="btn btn-danger" ng-click="mapsCtrl.revertFenceChanges(patient.id)">
               </div>
             </div>
           </div>
@@ -47,13 +47,13 @@
                       {{fence.name}}
                     </td>
                     <td>
-                      <a class="btn btn-info btn-xs" ng-click="mapsCtrl.MoveToFence($index)"><span class="glyphicon glyphicon-search"></span></a>
+                      <a class="btn btn-info btn-xs" ng-click="mapsCtrl.moveToFence($index)"><span class="glyphicon glyphicon-search"></span></a>
                     </td>
                     <td>
-                      <a class="btn btn-primary btn-xs" ng-click="mapsCtrl.EditFenceName(patient.id, $index)"><span class="glyphicon glyphicon-pencil"></span></a>
+                      <a class="btn btn-primary btn-xs" ng-click="mapsCtrl.editFenceName(patient.id, $index)"><span class="glyphicon glyphicon-pencil"></span></a>
                     </td>
                     <td>
-                      <a class="btn btn-danger btn-xs" ng-click="mapsCtrl.DeleteFence(patient.id, $index)"><span class="glyphicon glyphicon-trash"></span></a>
+                      <a class="btn btn-danger btn-xs" ng-click="mapsCtrl.deleteFence(patient.id, $index)"><span class="glyphicon glyphicon-trash"></span></a>
                     </td>
                   </tr>
                 </table>
