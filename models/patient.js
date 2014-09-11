@@ -19,7 +19,8 @@
       id : { type: Number, index: true },
       token : { type: String },
       email : { type: String, limit: 150 },
-      name: { type: String, limit: 50 }
+      name: { type: String, limit: 50 },
+      carer_id: {type: Number}
     });
 
     var Location = schemaMongo.define('Location', {

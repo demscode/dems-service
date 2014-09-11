@@ -1,13 +1,12 @@
 (function () {
-	angular.module('DemS').controller("PatientsController", ['$scope', '$http', 'Session', 'Alerts', function($scope, $http, Session, Alerts){
+	angular.module('DemS').controller("PatientsController", ['$scope', 'Session', 'Alerts','Carer','Patient', function($scope, Session, Alerts, Carer, Patient){
     var self = this;
 
     self.init = function () {
       $scope.carer = Session.currentCarer;
 
-      $http.get("/api/allPatients").success(function(data) {
-        $scope.arrayOfPatients = self.orderPatients(data);
-        $scope.patients = self.getPatientObject($scope.arrayOfPatients);
+      refreshCarerPatientsList();
+        
         // wait for digest to occur, certainly better way to do it
         window.setTimeout(function() {
           if(Session.currentPatient) {
@@ -15,7 +14,7 @@
             self.setPatient(Session.currentPatient.id);
           }
         }, 100);
-      });
+
 
       // TODO: What if we get here and the current carer hasn't been set just yet (still waiting for response from server)
       if(!Session.carerHasEnoughInfo(Session.currentCarer) && !Session.shownNotEnoughInfoMessage) {
@@ -65,6 +64,13 @@
 
     };
 
+    self.addPatientToCarerRelationsship = function () {
+        Carer.updateRelation({carerId:$scope.carer.id, patientId:$scope.newPatient.id}, function(message){
+          updateCarerPatientsList();
+          $scope.newPatient.id = null;
+        });
+      };
+
     self.orderPatients = function (patients) {
       // Sort by name
       patients.sort(function(a,b) {
@@ -82,6 +88,13 @@
         patientsObject[patients[i].id] =  patients[i];
       }
       return patientsObject;
+    };
+
+    var refreshCarerPatientsList = function(){
+      Patient.getCarersPatients({id:$scope.carer.id}, function(patients){
+        $scope.arrayOfPatients = patients;
+        $scope.patients = self.getPatientObject($scope.arrayOfPatients);
+      });
     };
 
     self.init();

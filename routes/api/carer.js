@@ -65,7 +65,47 @@
       });
     });
 
+    //Add patient to carer
+    app.put('/api/carer/:carerId/patients', function(req, res) {
+      var carerModel = models.carer;
+      var patientModel = models.patient;
+
+      patientModel.find(Number(req.query.patientId), function(err, patient) {
+        if (patient) {
+          if(patient.carer_id != req.params.carerId){
+            patient.updateAttributes({carer_id : Number(req.params.carerId)}, function(err, updatedPatientData) {
+              carerModel.find(Number(req.params.carerId), function(err, carer) {
+                if(carer){
+                  var patients = carer.patientsIds;
+                  patients.push(Number(req.query.patientId));
+                  carer.updateAttributes({patientsIds:patients}, function(err, updatedCarerData) {
+                    res.status(200).send(updatedCarerData);
+                  });
+                }else {
+                  res.status(404).end();
+                }
+              });
+            });
+          } else{
+            console.log("Patient already added");
+          }
+        } else {
+          res.status(404).end();
+        }
+      });
+    });
+
+    //Get Carer Patients
+    app.get('/api/carer/:carerId/patients', function(req, res) {
+      var carerModel = models.carer;
+
+      carerModel.find(Number(req.params.carerId), function(err, carer){
+        if(carer){
+          res.status(200).send(carer.patientsIds);
+        }else {
+          res.status(404).end();
+        }
+      });
+    });
   };
-
-
 })(exports);

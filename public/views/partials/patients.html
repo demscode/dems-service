@@ -9,7 +9,7 @@
   <div id="sidebar-wrapper">
       <ul class="sidebar-nav">
           <li class="sidebar-brand">
-              <a ng-click="patientsCtrl.addPatient()" class="hand-pointer"> + Add a Patient + </a>
+              <a ng-click="patientsCtrl.addPatient()" data-toggle="modal" data-target="#addPatientModal" class="hand-pointer"> + Add a Patient + </a>
           </li>
           <li ng-repeat="patient in arrayOfPatients" ng-click="patientsCtrl.setPatient(patient.id)" class="hand-pointer" data-patient-id="{{patient.id}}" data-area="side-bar-link">
               <a>{{patient.name}}</a>
@@ -62,6 +62,24 @@
     </div>
   </div>
   <!-- /#page-content-wrapper -->
-
 </div>
 <!-- /#wrapper -->
+
+<!--Add new patient modal-->
+  <div class="modal fade" id="addPatientModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Connect to Patient</h4>
+      </div>
+      <div class="modal-body">
+        Patient ID: <input type="number" ng-model="newPatient.id">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <a type="button" class="btn btn-primary" data-dismiss="modal" ng-click="patientsCtrl.addPatientToCarerRelationsship()">Add</a>
+      </div>
+    </div>
+  </div>
+</div>
