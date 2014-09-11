@@ -98,7 +98,6 @@
     //Get Carer Patients
     app.get('/api/carer/:carerId/patients', function(req, res) {
       var carerModel = models.carer;
-      var patientModel = models.patient;
 
       carerModel.find(Number(req.params.carerId), function(err, carer){
         if(carer){
