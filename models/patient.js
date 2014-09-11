@@ -32,6 +32,7 @@
     var Fence = schemaMongo.define('Fence', {
       // array of objects: {longitude: Number, latitude: Number}
       // as given by google maps and consumed by geolib
+      //fid: { type: Number, default: Date.now(), index: true },
       polygon: { type: Object, default: [] },
       patient_id: { type: Number }
     });

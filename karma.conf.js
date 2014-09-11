@@ -12,7 +12,8 @@ module.exports = function(config) {
       'public/js/app.js',
       'public/js/*.js',
       'public/js/**/*.js',
-      'tests/client/*.js'
+      'tests/client/*.js',
+      'tests/client/**/*.js',
     ],
     preprocessors: {
       'public/js/*.js': ['coverage'],
