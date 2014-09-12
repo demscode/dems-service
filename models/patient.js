@@ -38,9 +38,19 @@
       patient_id: { type: Number }
     });
 
+    var Reminder = schemaMongo.define('Reminder', {
+      name: { type: String },
+      time: { type: Date },
+      message: { type: String, limit: 200 },
+      type: { type: String, limit: 50 },
+      createdAt: { type: Number, default: Date.now },
+      patient_id: { type: Number }
+    });
+
     // Model Relationships
     Patient.hasMany(Location, {as: 'locations', foreignKey: 'patient_id'});
     Patient.hasMany(Fence, {as: 'fences', foreignKey: 'patient_id'});
+    Patient.hasMany(Reminder, {as: 'reminders', foreignKey: 'patient_id'});
 
     return Patient;
   };

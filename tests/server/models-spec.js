@@ -202,6 +202,34 @@ describe('DemS models', function() {
         });
       });
     });
+
+    it('should create patient reminder', function(done) {
+
+      var newPatient = {
+        id: 11
+      },
+      newReminder = {
+        name: "Pills",
+        time: new Date("October 13, 2014 11:13:00"),
+        message: "Remember to take your pills",
+        type: "Important"
+      };
+
+      patientModel.create(newPatient, function(err, patient) {
+        expect(err).toBe(null);
+        patient.reminders.create(newReminder,
+        function(err, reminder) {
+          expect(err).toBe(null);
+          expect(reminder.name).toBe(newReminder.name);
+          expect(reminder.time.getUTCMilliseconds()).toBe(newReminder.time.getUTCMilliseconds());
+          expect(reminder.message).toBe(newReminder.message);
+          expect(reminder.type).toBe(newReminder.type);
+          expect(reminder.patient_id).toBe(newPatient.id);
+            done();
+          });
+        });
+      });
+
   });
 });
         // pos_latitude : -27.481781,
