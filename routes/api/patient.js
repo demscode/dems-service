@@ -8,6 +8,7 @@
   exports.init = function(app, models) {
 
     var patientModel = models.patient;
+    var reminderModel = models.reminder;
 
     // Patient GET API
     app.get('/api/allPatients', function(req, res) {
@@ -179,12 +180,31 @@
 
     });
 
-        //Reminder CREATE API
+    //Get Patients Reminders API
+    app.get('/api/patient/:id/reminder', function(req, res) {
+      reminderModel.all({
+        where: {
+          patient_id:Number(req.params.id)
+        }
+      },
+        function(err, data) {
+        if (data) {
+          res.status(200).send(data);
+        } else {
+          res.status(404).end();
+        }
+      });
+
+
+    });
+
+    //Reminder CREATE API
     app.post('/api/patient/:id/reminder', function(req, res) {
       patientModel.find(Number(req.params.id), function(err, patient) {
         if (patient) {
           req.body.patient_id = Number(req.params.id);
-          data.reminders.create(req.body, function(err, reminder) {
+
+          patient.reminders.create(req.body, function(err, reminder) {
             res.status(200).send(reminder);
           });
         } else {
@@ -217,7 +237,7 @@
     app.delete('/api/patient/:id/reminder/:reminderId', function(req, res) {
       patientModel.find(Number(req.params.id), function(err, patient) {
         if (patient) {
-          data.reminders.find(req.params.reminderId, function(err, reminder) {
+          patient.reminders.find(req.params.reminderId, function(err, reminder) {
             if(reminder) {
               reminder.destroy();
               res.status(200).end();
@@ -229,9 +249,7 @@
           res.status(404).end();
         }
       });
-
     });
-
 
   };
 

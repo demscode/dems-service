@@ -20,7 +20,8 @@
     "jquery": "~2.1.1",
     "gmaps": "~0.4.14",
     "angular-route": "~1.2.23",
-    "angular-resource": "~1.2.23"
+    "angular-resource": "~1.2.23",
+    "angular-bootstrap-datetimepicker": "latest"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.22"

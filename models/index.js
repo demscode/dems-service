@@ -15,5 +15,6 @@
 
   exports.carer = require('./carer').init(mongo);
   exports.patient = require('./patient').init(mongo);
+  exports.reminder = require('./reminder').init(mongo);
 
 })(exports);
