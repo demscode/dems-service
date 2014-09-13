@@ -185,4 +185,79 @@ describe('DemS API /patient', function() {
     });
 
   });
+
+describe('Patient Reminder API', function() {
+    var reminder1 = {
+        name: "Pills",
+        time: new Date("October 13, 2014 11:13:00"),
+        message: "Remember to take your pills",
+        type: "Important"
+      };
+
+    var reminder2 = {
+        name: "Walk",
+        time: new Date("October 16, 2015 05:23:00"),
+        message: "Remember to take a walk",
+        type: "Less important"
+      };
+
+    beforeEach(function(done) {
+      model.create(patient22, function(err, patient) {
+        patient.reminders.create(reminder1);
+      });
+
+      model.create(patient8889);
+      done();
+    });
+
+    afterEach(function(done) {
+      model.destroyAll(function(data) {
+        model.count(function(err, count) {
+          //expect(count).toBe(0);
+          done();
+        });
+      });
+    });
+
+    it('GET a valid patient Reminder', function(done) {
+      request.get('/api/patient/22/reminder').expect(200, reminder1);
+      done();
+    });
+
+    it('GET an invalid patient Reminder', function(done) {
+      request.get('/api/patient/3/reminder').expect(404);
+      done();
+    });
+
+    it('POST a valid patient Reminder', function(done) {
+      request.post('/api/patient/8889/reminder').send(reminder2).expect(200, reminder2);
+      done();
+    });
+
+    it('POST an invalid patient Reminder', function(done) {
+      request.post('/api/patient/3/reminder').send(reminder2).expect(404);
+      done();
+    });
+
+    it('PUT a valid patient Reminder', function(done) {
+      request.put('/api/patient/22/reminder').send(reminder2).expect(200, reminder2);
+      done();
+    });
+
+    it('PUT an invalid patient Reminder', function(done) {
+      request.put('/api/patient/3/reminder').send(reminder2).expect(404);
+      done();
+    });
+
+    it('DELETE a valid patient Reminder', function(done) {
+      request.delete('/api/patient/22/reminder').expect(200);
+      done();
+    });
+
+    it('DELETE an invalid patient Reminder', function(done) {
+      request.delete('api/patient/3/reminder').expect(404);
+      done();
+    });
+
+  });
 });

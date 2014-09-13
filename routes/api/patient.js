@@ -179,6 +179,59 @@
 
     });
 
+        //Reminder CREATE API
+    app.post('/api/patient/:id/reminder', function(req, res) {
+      patientModel.find(Number(req.params.id), function(err, patient) {
+        if (patient) {
+          req.body.patient_id = Number(req.params.id);
+          data.reminders.create(req.body, function(err, reminder) {
+            res.status(200).send(reminder);
+          });
+        } else {
+          res.status(404).end();
+        }
+      });
+
+    });
+
+    //Reminder UPDATE API
+    app.put('/api/patient/:id/reminder/:reminderId', function(req, res) {
+      patientModel.find(Number(req.params.id), function(err, patient) {
+        if (patient) {
+          patient.reminders.find(req.params.reminderId, function(err, reminder) {
+            if(reminder) {
+              reminder.updateAttributes(req.body);
+              res.status(200).send(reminder);
+            } else {
+              res.status(404).end();
+            }
+          });
+        } else {
+          res.status(404).end();
+        }
+      });
+
+    });
+
+    //Reminder DELETE API
+    app.delete('/api/patient/:id/reminder/:reminderId', function(req, res) {
+      patientModel.find(Number(req.params.id), function(err, patient) {
+        if (patient) {
+          data.reminders.find(req.params.reminderId, function(err, reminder) {
+            if(reminder) {
+              reminder.destroy();
+              res.status(200).end();
+            } else {
+              res.status(404).end();
+            }
+          });
+        } else {
+          res.status(404).end();
+        }
+      });
+
+    });
+
 
   };
 
