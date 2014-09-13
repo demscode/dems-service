@@ -1,5 +1,5 @@
 (function () {
-	angular.module('DemS').controller("RemindersController", ['$scope', 'Session', function($scope, Session){
+	angular.module('DemS').controller("RemindersController", ['$scope', 'Session','Reminder', function($scope, Session, Reminder){
     var self = this;
     var calendarOptions = {
       theme: true,
@@ -29,7 +29,7 @@
 
     };
 
-    self.events = [
+    self.reminders = [
       {
         title: 'Frankie Rules',
         start: Date.now(),
@@ -37,9 +37,14 @@
       }
     ];
 
+    $scope.reminders = [];
+
     self.init = function () {
       $scope.$watch(function () { return Session.currentPatient; }, function (patient) {
-        if (patient) $scope.patient = patient;
+        if (patient) {
+          $scope.patient = patient;
+          self.refreshReminders();
+        }
       });
 
       $scope.$watch(function() { return Session.currentTab; }, function(tab) {
@@ -47,6 +52,25 @@
           Session.calendarLoaded = true;
           self.initCalendar(Session.currentPatient.id);
         }
+      });
+    };
+
+    self.addNewReminder = function(){
+      Reminder.save({id:$scope.patient.id}, {name:$scope.newReminder.name, time:$scope.newReminder.time, type:$scope.newReminder.type, message:$scope.newReminder.message}, function(message){
+        self.refreshReminders();
+      });
+    };
+
+    self.removeReminder = function(reminderId){
+      Reminder.delete({id:$scope.patient.id, reminderId:reminderId}, function(message){
+        self.refreshReminders();
+      });
+    };
+
+    self.refreshReminders = function(){
+      Reminder.getPatientsReminders({id:$scope.patient.id}, function(reminders){
+        $scope.reminders = reminders;
+        console.log(reminders);
       });
     };
 
@@ -70,7 +94,7 @@
 
     self.initCalendar = function (patientId) {
       self.calendar = $("#calendar").fullCalendar(calendarOptions);
-      self.calendar.fullCalendar('addEventSource', self.events);
+      self.calendar.fullCalendar('addEventSource', self.reminders);
     };
 
     self.init();

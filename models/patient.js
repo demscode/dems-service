@@ -12,6 +12,7 @@
    * @return {object}           JugglingDB model object
    */
   exports.init = function(settings) {
+    var Reminder = require('./reminder.js').init(settings);
     var Schema = require('jugglingdb').Schema;
     var schemaMongo = new Schema('mongodb', settings);
 
@@ -35,15 +36,6 @@
       // as given by google maps and consumed by geolib
       //fid: { type: Number, default: Date.now(), index: true },
       polygon: { type: Object, default: [] },
-      patient_id: { type: Number }
-    });
-
-    var Reminder = schemaMongo.define('Reminder', {
-      name: { type: String },
-      time: { type: Date },
-      message: { type: String, limit: 200 },
-      type: { type: String, limit: 50 },
-      createdAt: { type: Number, default: Date.now },
       patient_id: { type: Number }
     });
 
