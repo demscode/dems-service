@@ -5,7 +5,8 @@
       shownNotEnoughInfoMessage = false,
       hiddenSideBar = false,
       currentTab = null,
-      mapLoaded = false;
+      mapLoaded = false,
+      calendarLoaded = false;
 
     var carerHasEnoughInfo = function (carer) {
       return carer !== null &&
@@ -25,6 +26,7 @@
       carerHasEnoughInfo: carerHasEnoughInfo,
       currentTab: currentTab,
       mapLoaded: mapLoaded,
+      calendarLoaded: calendarLoaded,
     };
   });
 })();

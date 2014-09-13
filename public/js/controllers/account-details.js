@@ -13,6 +13,7 @@
       }
 
       Session.mapLoaded = false;
+      Session.calendarLoaded = false;
       Session.currentTab = null;
     };
 
