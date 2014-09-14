@@ -22,10 +22,9 @@
       eventClick: function(calEvent, jsEvent, view) {
         self.openEditEvent(calEvent);
       },
-      eventDragStop: function(calEvent, jsEvent, ui, view) {
+      eventDrop: function(calEvent, jsEvent, ui, view) {
         self.editEvent(calEvent);
       },
-
     };
 
     $scope.reminders = [];
@@ -46,7 +45,7 @@
     };
 
     self.addNewReminder = function(){
-      Reminder.save({id:$scope.patient.id}, {name:$scope.newReminder.name, time:$scope.newReminder.time, type:$scope.newReminder.type, message:$scope.newReminder.message}, function(message){
+      Reminder.save({id:$scope.patient.id}, $scope.newReminder, function(message){
         self.refreshReminders();
       });
     };
@@ -66,10 +65,19 @@
       });
     };
 
+    self.getReminder = function (reminderId) {
+      for (var i = 0, length = $scope.reminders.length; i < length; i++) {
+        if ($scope.reminders[i].id === reminderId) {
+          return $scope.reminders[i];
+        }
+      }
+    };
+
     self.getEventsFromReminders = function () {
       var reminderEvents = [];
       for (var i = 0, length = $scope.reminders.length; i < length; i++) {
         var reminderEvent = {
+          id: $scope.reminders[i].id,
           title: $scope.reminders[i].name + " - " + $scope.reminders[i].message,
           start: new Date($scope.reminders[i].time),
           end: new Date(new Date($scope.reminders[i].time).getTime() + 60 * 60000),
@@ -84,8 +92,11 @@
 
     self.editEvent = function (calEvent) {
       console.log("Edit event", calEvent);
-
-      // api call to edit event
+      Reminder.update({id:$scope.patient.id, reminderId:self.getReminder(calEvent.id).id},
+        {time: new Date(calEvent.start._d)},
+        function(message){
+          // self.refreshReminders();
+      });
     };
 
     self.openEditEvent = function (calEvent) {
@@ -98,6 +109,10 @@
       console.log("Open modal to add event from", start, "to", end);
 
       // open up a model to add the event
+    };
+
+    self.openModal = function () {
+      $("#addReminderModal").modal('show');
     };
 
     self.initCalendar = function () {

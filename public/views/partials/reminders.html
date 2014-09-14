@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-xs-12">
-  <a data-toggle="modal" data-target="#addReminderModal" class="hand-pointer"> + Add a Reminder + </a>
+  <a ng-click="remindersCtrl.openModal()" class="hand-pointer btn btn-primary"> + Add a Reminder + </a>
     <div ng-show="reminders != null && reminders.length > 0">
       <table class="table">
         <thread>
