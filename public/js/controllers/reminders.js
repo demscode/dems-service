@@ -10,6 +10,9 @@
       },
       editable: true,
       selectable: true,
+      displayEventEnd: {
+        "default": false
+      },
       select: function(start, end, jsEvent, view) {
         // Change to the date selected and go to the day view
         if(view.name === "agendaDay"){
@@ -22,8 +25,8 @@
       eventClick: function(calEvent, jsEvent, view) {
         self.openEditEvent(calEvent);
       },
-      eventDrop: function(calEvent, jsEvent, ui, view) {
-        self.editEvent(calEvent);
+      eventDrop: function(calEvent, delta) {
+        self.editEvent(calEvent, delta);
       },
     };
 
@@ -90,10 +93,15 @@
     };
 
 
-    self.editEvent = function (calEvent) {
+    self.editEvent = function (calEvent, delta) {
       console.log("Edit event", calEvent);
-      Reminder.update({id:$scope.patient.id, reminderId:self.getReminder(calEvent.id).id},
-        {time: new Date(calEvent.start._d)},
+      var reminder = self.getReminder(calEvent.id);
+      var previousDate = new Date(reminder.time);
+
+      var newTime = new Date(previousDate.getTime()).setMinutes(previousDate.getMinutes() + delta.asMinutes());
+
+      Reminder.update({id:$scope.patient.id, reminderId:reminder.id},
+        {time: newTime},
         function(message){
           // self.refreshReminders();
       });
