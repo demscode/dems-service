@@ -1,27 +1,87 @@
 <div class="row">
   <div class="col-xs-12">
-    <div ng-show="patient.reminders != null && patient.reminders.length > 0">
+  <a ng-click="remindersCtrl.openModal()" class="hand-pointer btn btn-primary"> + Add a Reminder + </a>
+    <div ng-show="reminders != null && reminders.length > 0">
       <table class="table">
         <thread>
           <tr>
-            <th>Reminder ID</th>
-            <th>Reminder Info 1</th>
-            <th>Reminder Info 2</th>
-            <th>Reminder Info 3</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Time</th>
+            <th>Message</th>
           </tr>
         </thread>
         <tbody>
-          <tr ng-repeat="reminder in patient.reminders">
-            <td>{{reminder.id}}</td>
-            <td>{{reminder.reminder_info1}}</td>
-            <td>{{reminder.reminder_info2}}</td>
-            <td>{{reminder.reminder_info3}}</td>
+          <tr ng-repeat="reminder in reminders">
+            <td>{{reminder.name}}</td>
+            <td>{{reminder.type}}</td>
+            <td>{{reminder.time}}</td>
+            <td>{{reminder.message}}</td>
+            <td><button class='btn btn-default' ng-click="remindersCtrl.removeReminder(reminder.id)">Remove</button></td>
           </tr>
         </tbody>
       </table>
     </div>
-    <div ng-hide="patient.reminders != null && patient.reminders.length > 0">
-      No reminders for the {{patient.name}}
+    <div ng-hide="reminders != null && reminders.length > 0">
+      No reminders for {{patient.name}}
     </div>
   </div>
 </div>
+
+<!-- CALENDAR -->
+<div id="calendar"></div>
+
+<!--Add new reminder modal-->
+  <div class="modal fade" id="addReminderModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Add new Reminder</h4>
+      </div>
+      <div class="modal-body">
+      <table class="table">
+        <tbody>
+          <tr>
+            <td>Name:</td>
+            <td><input type="text" ng-model="newReminder.name"></td>
+          </tr>
+          <tr>
+            <td>Time:</td>
+            <td>
+              <div class="dropdown">
+                <a class="dropdown-toggle my-toggle-select" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="">
+                  <div class="input-append">
+                    <input type="text" class="input-large" data-ng-model="newReminder.time">
+                    <span class="add-on">
+                      <i class="icon-calendar"></i>
+                    </span>
+                  </div>
+                </a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                  <datetimepicker data-ng-model="newReminder.time"
+                        data-datetimepicker-config="{ dropdownSelector: '.my-toggle-select' }"></datetimepicker>
+                </ul>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Type:</td>
+            <td><input type="text" ng-model="newReminder.type"></td>
+          </tr>
+          <tr>
+            <td>Message:</td>
+            <td><input type="text" ng-model="newReminder.message"></td>
+          </tr>
+        </tbody>
+      </table>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <a type="button" class="btn btn-primary" data-dismiss="modal" ng-click="remindersCtrl.addNewReminder()">Add</a>
+      </div>
+    </div>
+  </div>
+</div>
+
