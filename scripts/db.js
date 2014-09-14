@@ -176,7 +176,7 @@ function loadDB() {
     for(var m = 0; m < numReminders; m++) {
       var reminder = {
         name: patient.name + " Reminder " + (m + 1),
-        time: new Date(timeNow + m * daysPerInterval * 24 * 60 * 60000).setMinutes(0),
+        time: new Date(new Date(timeNow + m * daysPerInterval * 24 * 60 * 60000).setMinutes(0)),
         message: "Remember to take your medicine",
         type: "Medicine Reminder",
         createdAt: timeNow,
