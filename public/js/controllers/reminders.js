@@ -10,7 +10,6 @@
       },
       editable: true,
       selectable: true,
-      disableResizing: true,
       select: function(start, end, jsEvent, view) {
         // Change to the date selected and go to the day view
         if(view.name === "agendaDay"){
@@ -29,14 +28,6 @@
 
     };
 
-    self.reminders = [
-      {
-        title: 'Frankie Rules',
-        start: Date.now(),
-        end: Date.now() + 60 * 60000,
-      }
-    ];
-
     $scope.reminders = [];
 
     self.init = function () {
@@ -48,9 +39,8 @@
       });
 
       $scope.$watch(function() { return Session.currentTab; }, function(tab) {
-        if (!Session.calendarLoaded && tab == "reminders") {
-          Session.calendarLoaded = true;
-          self.initCalendar(Session.currentPatient.id);
+        if (tab == "reminders") {
+          self.refreshReminders();
         }
       });
     };
@@ -70,9 +60,27 @@
     self.refreshReminders = function(){
       Reminder.getPatientsReminders({id:$scope.patient.id}, function(reminders){
         $scope.reminders = reminders;
+        $scope.reminderEvents = self.getEventsFromReminders();
+        self.initCalendar();
         console.log(reminders);
       });
     };
+
+    self.getEventsFromReminders = function () {
+      var reminderEvents = [];
+      for (var i = 0, length = $scope.reminders.length; i < length; i++) {
+        var reminderEvent = {
+          title: $scope.reminders[i].name + " - " + $scope.reminders[i].message,
+          start: new Date($scope.reminders[i].time),
+          end: new Date(new Date($scope.reminders[i].time).getTime() + 60 * 60000),
+          durationEditable: false,
+        };
+        reminderEvents.push(reminderEvent);
+      }
+
+      return reminderEvents;
+    };
+
 
     self.editEvent = function (calEvent) {
       console.log("Edit event", calEvent);
@@ -92,9 +100,15 @@
       // open up a model to add the event
     };
 
-    self.initCalendar = function (patientId) {
-      self.calendar = $("#calendar").fullCalendar(calendarOptions);
-      self.calendar.fullCalendar('addEventSource', self.reminders);
+    self.initCalendar = function () {
+      if(self.calendar === undefined) {
+        self.calendar = $("#calendar").fullCalendar(calendarOptions);
+      } else {
+        self.calendar.fullCalendar('destroy');
+        self.calendar = $("#calendar").fullCalendar(calendarOptions);
+      }
+      self.calendar.fullCalendar('addEventSource', $scope.reminderEvents);
+
     };
 
     self.init();

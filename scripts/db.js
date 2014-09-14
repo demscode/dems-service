@@ -12,6 +12,7 @@
  *  - 10 patients
  *  - 100 locations each
  *  - 6 fences each
+ *  - 10 reminders each
  *  - Relationships are made with carer but every 3rd patient
  *******************************************************************************************************************/
 
@@ -34,6 +35,9 @@ function loadDB() {
       // Reference to the fence table
       fenceTable = db.getCollection("Fence"),
 
+      // Reference to the reminders table
+      reminderTable = db.getCollection("Reminder"),
+
       // An arbitrary location to start with
       startingLocation = [-27.474911, 153.027188],
 
@@ -48,6 +52,9 @@ function loadDB() {
 
       // Constant of minutes per interval for location tracking
       minutesPerInterval = 1,
+
+      // Constant of days per interval for reminders
+      daysPerInterval = 1,
 
       // the current time used in location calculations
       timeNow = Date.now(),
@@ -74,6 +81,8 @@ function loadDB() {
       numLocations = 100,
 
       numFences = 6,
+
+      numReminders = 10,
 
       patientIds = [];
 
@@ -155,6 +164,23 @@ function loadDB() {
         polygon[f] = [polygon[f][0] + incrementFenceLat, polygon[f][1] + incrementFenceLong];
       }
     }
+
+    /***********************/
+    /* Reminder Creation   */
+    /***********************/
+
+    for(var m = 0; m < numReminders; m++) {
+      var reminder = {
+        name: patient.name + " Reminder " + (m + 1),
+        time: new Date(timeNow + m * daysPerInterval * 24 * 60 * 60000),
+        message: "Remember to take your medicine",
+        type: "Medicine Reminder",
+        createdAt: timeNow,
+        patient_id: patient._id
+      };
+
+      reminderTable.insert(reminder);
+    }
   }
 
   // set the carer patientIds
@@ -171,10 +197,12 @@ function loadDB() {
 function dropDB() {
   var patientTable = db.getCollection("Patient"),
       locationTable = db.getCollection("Location"),
-      fenceTable = db.getCollection("Fence");
+      fenceTable = db.getCollection("Fence"),
+      reminderTable = db.getCollection("Reminder");
 
   // Drop the tables
   patientTable.drop();
   locationTable.drop();
   fenceTable.drop();
+  reminderTable.drop();
 }
