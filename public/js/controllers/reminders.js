@@ -1,5 +1,5 @@
 (function () {
-	angular.module('DemS').controller("RemindersController", ['$scope', 'Session','Reminder', function($scope, Session, Reminder){
+  angular.module('DemS').controller("RemindersController", ['$scope', 'Session','Reminder', function($scope, Session, Reminder){
     var self = this;
     var calendarOptions = {
       theme: true,
@@ -13,24 +13,30 @@
       displayEventEnd: {
         "default": false
       },
+      timezone: "local",
       select: function(start, end, jsEvent, view) {
         // Change to the date selected and go to the day view
         if(view.name === "agendaDay"){
-          self.openAddEvent(start, end);
+          self.openAddEvent(start);
         } else {
           self.calendar.fullCalendar('gotoDate', start);
           self.calendar.fullCalendar('changeView', 'agendaDay');
         }
       },
       eventClick: function(calEvent, jsEvent, view) {
-        self.openEditEvent(calEvent);
+        self.openEditReminderModal(calEvent.id);
       },
+
+      timeFormat: "h:mma",
+
       eventDrop: function(calEvent, delta) {
         self.editEvent(calEvent, delta);
-      },
+      }
     };
 
     $scope.reminders = [];
+    self.reminder = {};
+    self.reminderModalTitle= "";
 
     self.init = function () {
       $scope.$watch(function () { return Session.currentPatient; }, function (patient) {
@@ -47,14 +53,33 @@
       });
     };
 
+    self.saveReminder = function(){};
     self.addNewReminder = function(){
-      Reminder.save({id:$scope.patient.id}, $scope.newReminder, function(message){
+      self.reminder.time = self.reminder.timeAsDate.getTime();
+      Reminder.save({id:$scope.patient.id}, self.reminder, function(message){
         self.refreshReminders();
       });
     };
 
-    self.removeReminder = function(reminderId){
-      Reminder.delete({id:$scope.patient.id, reminderId:reminderId}, function(message){
+    self.editReminder = function () {
+      console.log("Edit event", self.reminder.id);
+      self.reminder.time = self.reminder.timeAsDate.getTime();
+      Reminder.update({id:$scope.patient.id, reminderId:self.reminder.id},self.reminder,function(message){
+        self.refreshReminders();
+      });
+    };
+
+    self.editReminderTime = function (calEvent) {
+      console.log("Edit event time", calEvent.id);
+      Reminder.update({id:$scope.patient.id, reminderId:self.getReminder(calEvent.id).id},
+        {time: new Date(calEvent.start._i).getTime()},
+        function(message){
+          self.refreshReminders();
+      });
+    };
+
+    self.removeReminder = function(){
+      Reminder.delete({id:$scope.patient.id, reminderId:self.reminder.id}, function(message){
         self.refreshReminders();
       });
     };
@@ -63,8 +88,8 @@
       Reminder.getPatientsReminders({id:$scope.patient.id}, function(reminders){
         $scope.reminders = reminders;
         $scope.reminderEvents = self.getEventsFromReminders();
+        self.reminder = {};
         self.initCalendar();
-        console.log(reminders);
       });
     };
 
@@ -83,7 +108,7 @@
           id: $scope.reminders[i].id,
           title: $scope.reminders[i].name + " - " + $scope.reminders[i].message,
           start: new Date($scope.reminders[i].time),
-          end: new Date(new Date($scope.reminders[i].time).getTime() + 60 * 60000),
+          end: new Date($scope.reminders[i].time + 60 * 60000),
           durationEditable: false,
         };
         reminderEvents.push(reminderEvent);
@@ -92,35 +117,46 @@
       return reminderEvents;
     };
 
-
     self.editEvent = function (calEvent, delta) {
       console.log("Edit event", calEvent);
       var reminder = self.getReminder(calEvent.id);
       var previousDate = new Date(reminder.time);
 
-      var newTime = new Date(previousDate.getTime()).setMinutes(previousDate.getMinutes() + delta.asMinutes());
+      var newTime = new Date(reminder.time).setMinutes(previousDate.getMinutes() + delta.asMinutes());
 
       Reminder.update({id:$scope.patient.id, reminderId:reminder.id},
         {time: newTime},
         function(message){
-          // self.refreshReminders();
+           //self.refreshReminders();
       });
     };
 
-    self.openEditEvent = function (calEvent) {
-      console.log("Open modal to edit event", calEvent);
-
-      // open up modal to edit the event
+    self.openAddEvent = function(startDate) {
+      self.reminder.timeAsDate = startDate.toDate();
+      $scope.$apply();
+      self.openAddReminderModal();
     };
 
-    self.openAddEvent = function (start, end) {
-      console.log("Open modal to add event from", start, "to", end);
-
-      // open up a model to add the event
+    self.openAddReminderModal = function () {
+      console.log("Opening Add Reminder Modal");
+      self.reminderModalTitle = "Add new Reminder";
+      self.saveReminder = self.addNewReminder;
+      $("#reminderModal").modal('show');
     };
 
-    self.openModal = function () {
-      $("#addReminderModal").modal('show');
+    self.openEditReminderModal = function (reminderId) {
+      console.log("Opening Edit Reminder Modal");
+      self.reminderModalTitle = "Edit Reminder";
+      self.reminder = self.getReminder(reminderId);
+      self.reminder.timeAsDate = new Date (self.reminder.time);
+      self.saveReminder = self.editReminder;
+      $scope.$apply();
+      $("#reminderModal").modal('show');
+    };
+
+    self.closeReminderModal = function(){
+      console.log(self.reminder);
+      self.reminder = {};
     };
 
     self.initCalendar = function () {
@@ -131,7 +167,6 @@
         self.calendar = $("#calendar").fullCalendar(calendarOptions);
       }
       self.calendar.fullCalendar('addEventSource', $scope.reminderEvents);
-
     };
 
     self.init();

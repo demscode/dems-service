@@ -210,7 +210,7 @@ describe('DemS models', function() {
       },
       newReminder = {
         name: "Pills",
-        time: new Date("October 13, 2014 11:13:00"),
+        time: "October 13, 2014 11:13:00",
         message: "Remember to take your pills",
         type: "Important"
       };
@@ -221,7 +221,7 @@ describe('DemS models', function() {
         function(err, reminder) {
           expect(err).toBe(null);
           expect(reminder.name).toBe(newReminder.name);
-          expect(reminder.time.getUTCMilliseconds()).toBe(newReminder.time.getUTCMilliseconds());
+          expect(reminder.time).toBe(newReminder.time);
           expect(reminder.message).toBe(newReminder.message);
           expect(reminder.type).toBe(newReminder.type);
           expect(reminder.patient_id).toBe(newPatient.id);
