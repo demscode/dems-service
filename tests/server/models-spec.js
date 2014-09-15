@@ -210,7 +210,7 @@ describe('DemS models', function() {
       },
       newReminder = {
         name: "Pills",
-        time: "October 13, 2014 11:13:00",
+        time: new Date("October 13, 2014 11:13:00").getTime(),
         message: "Remember to take your pills",
         type: "Important"
       };

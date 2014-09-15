@@ -189,14 +189,14 @@ describe('DemS API /patient', function() {
 describe('Patient Reminder API', function() {
     var reminder1 = {
         name: "Pills",
-        time: new Date("October 13, 2014 11:13:00"),
+        time: new Date("October 13, 2014 11:13:00").getTime(),
         message: "Remember to take your pills",
         type: "Important"
       };
 
     var reminder2 = {
         name: "Walk",
-        time: new Date("October 16, 2015 05:23:00"),
+        time: new Date("October 16, 2015 05:23:00").getTime(),
         message: "Remember to take a walk",
         type: "Less important"
       };
