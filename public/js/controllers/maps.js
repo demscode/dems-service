@@ -1,7 +1,7 @@
 (function() {
   angular.module('DemS').controller('MapsController', function(Location, Fence, $scope, Session) {
     var self = this;
-    var map, marker, line;
+    var map, marker;
     var showTracking = false;
     var count = 0;
     var polygonOptions = {
@@ -73,18 +73,18 @@
       for (var i = 0; i < data.length; i++) {
         path.push([data[i].latitude, data[i].longitude]);
       }
-
+      var arrow = google.maps.SymbolPath.FORWARD_CLOSED_ARROW;
+      self.map.removePolylines();
       self.map.drawPolyline({
         path: path,
         icons: [{
           icon: {
-            path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
+            path: arrow
           },
           offset: '100%'
-        },
-        {
+        }, {
           icon: {
-            path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
+            path: arrow
           },
           offset: '0%'
         }],
