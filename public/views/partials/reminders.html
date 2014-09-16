@@ -1,50 +1,25 @@
-<div class="row">
-  <div class="col-xs-12">
-  <a ng-click="remindersCtrl.openModal()" class="hand-pointer btn btn-primary"> + Add a Reminder + </a>
-    <div ng-show="reminders != null && reminders.length > 0">
-      <table class="table">
-        <thread>
-          <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Time</th>
-            <th>Message</th>
-          </tr>
-        </thread>
-        <tbody>
-          <tr ng-repeat="reminder in reminders">
-            <td>{{reminder.name}}</td>
-            <td>{{reminder.type}}</td>
-            <td>{{reminder.time}}</td>
-            <td>{{reminder.message}}</td>
-            <td><button class='btn btn-default' ng-click="remindersCtrl.removeReminder(reminder.id)">Remove</button></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div ng-hide="reminders != null && reminders.length > 0">
-      No reminders for {{patient.name}}
-    </div>
-  </div>
+<div class="padding-top-bottom">
+  <a ng-click="remindersCtrl.openAddReminderModal()" class="hand-pointer btn btn-primary"> + Add a Reminder + </a>
 </div>
+
 
 <!-- CALENDAR -->
 <div id="calendar"></div>
 
-<!--Add new reminder modal-->
-  <div class="modal fade" id="addReminderModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<!--Reminder modal-->
+  <div class="modal fade" id="reminderModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="myModalLabel">Add new Reminder</h4>
+        <h4 class="modal-title" id="myModalLabel">{{remindersCtrl.reminderModalTitle}}</h4>
       </div>
       <div class="modal-body">
       <table class="table">
         <tbody>
           <tr>
             <td>Name:</td>
-            <td><input type="text" ng-model="newReminder.name"></td>
+            <td><input type="text" ng-model="remindersCtrl.reminder.name"></td>
           </tr>
           <tr>
             <td>Time:</td>
@@ -52,14 +27,14 @@
               <div class="dropdown">
                 <a class="dropdown-toggle my-toggle-select" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="">
                   <div class="input-append">
-                    <input type="text" class="input-large" data-ng-model="newReminder.time">
+                    <input type="text" class="input-large" data-ng-model="remindersCtrl.reminder.timeAsDate">
                     <span class="add-on">
                       <i class="icon-calendar"></i>
                     </span>
                   </div>
                 </a>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                  <datetimepicker data-ng-model="newReminder.time"
+                  <datetimepicker data-ng-model="remindersCtrl.reminder.timeAsDate"
                         data-datetimepicker-config="{ dropdownSelector: '.my-toggle-select' }"></datetimepicker>
                 </ul>
               </div>
@@ -67,19 +42,19 @@
           </tr>
           <tr>
             <td>Type:</td>
-            <td><input type="text" ng-model="newReminder.type"></td>
+            <td><input type="text" ng-model="remindersCtrl.reminder.type"></td>
           </tr>
           <tr>
             <td>Message:</td>
-            <td><input type="text" ng-model="newReminder.message"></td>
+            <td><textarea rows="3"; type="text" ng-model="remindersCtrl.reminder.message"></textarea></td>
           </tr>
         </tbody>
       </table>
-
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <a type="button" class="btn btn-primary" data-dismiss="modal" ng-click="remindersCtrl.addNewReminder()">Add</a>
+        <a ng-show="remindersCtrl.saveReminder == remindersCtrl.editReminder" type="button" class="btn btn-danger" data-dismiss="modal" ng-click="remindersCtrl.removeReminder()">Delete</a>
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="remindersCtrl.closeReminderModal()">Close</button>
+        <a type="button" class="btn btn-primary" data-dismiss="modal" ng-click="remindersCtrl.saveReminder()">Save</a>
       </div>
     </div>
   </div>

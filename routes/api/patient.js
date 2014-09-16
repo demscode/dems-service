@@ -203,7 +203,6 @@
       patientModel.find(Number(req.params.id), function(err, patient) {
         if (patient) {
           req.body.patient_id = Number(req.params.id);
-
           patient.reminders.create(req.body, function(err, reminder) {
             res.status(200).send(reminder);
           });
@@ -220,8 +219,9 @@
         if (patient) {
           patient.reminders.find(req.params.reminderId, function(err, reminder) {
             if(reminder) {
-              reminder.updateAttributes(req.body);
-              res.status(200).send(reminder);
+              reminder.updateAttributes(req.body, function(){
+                res.status(200).send(reminder);
+              });
             } else {
               res.status(404).end();
             }

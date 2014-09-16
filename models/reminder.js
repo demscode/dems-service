@@ -16,9 +16,8 @@
     var schemaMongo = new Schema('mongodb', settings);
 
     var Reminder = schemaMongo.define('Reminder', {
-      id: {type: Number},
       name: { type: String },
-      time: { type: Date },
+      time: { type: Number },
       message: { type: String, limit: 200 },
       type: { type: String, limit: 50 },
       createdAt: { type: Number, default: Date.now },
