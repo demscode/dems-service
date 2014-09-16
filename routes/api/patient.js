@@ -5,7 +5,7 @@
 (function(exports) {
   'use strict';
 
-  exports.init = function(app, models) {
+  exports.init = function(app, geolib, models) {
 
     var patientModel = models.patient;
     var reminderModel = models.reminder;
@@ -102,9 +102,36 @@
       patientModel.find(Number(req.params.id), function(err, data) {
         if (data) {
           req.body.patient_id = Number(req.params.id);
+
+          // Check if the patient is inside his fences
+          patientModel.find(Number(req.params.id), function(err, data) {
+            if (data) {
+              data.fences(function(err, fences) {
+                var inside = false;
+                if(fences) {
+                  for (var i = 0, length = fences.length; i < length; i++) {
+                    var fence = fences[i];
+                    if (fence.carerNotify) {
+                      if(geolib.isPointInside(
+                        {latitude: req.body.latitude, longitude: req.body.longitude},
+                        fence.polygon)) {
+                        inside = true;
+                      }
+                    }
+                  }
+                }
+
+                if(!inside) {
+                  // send the email and shit
+                }
+              });
+            }
+          });
+
           data.locations.create(req.body, function(err, locations) {
             res.status(200).send(locations);
           });
+
         } else {
           res.status(404).end();
         }
