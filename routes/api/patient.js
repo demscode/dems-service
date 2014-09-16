@@ -107,22 +107,40 @@
           patientModel.find(Number(req.params.id), function(err, data) {
             if (data) {
               data.fences(function(err, fences) {
-                var inside = false;
+                var outsideAll = true;
+                var outsideAllInner = true;
                 if(fences) {
                   for (var i = 0, length = fences.length; i < length; i++) {
                     var fence = fences[i];
-                    if (fence.carerNotify) {
-                      if(geolib.isPointInside(
-                        {latitude: req.body.latitude, longitude: req.body.longitude},
-                        fence.polygon)) {
-                        inside = true;
+                    var polygonArrObj = [];
+
+                    // turn polygon array into an array of objects
+                    for (var j = 0, polygonLength = fence.polygon.length; j < polygonLength; j++) {
+                      polygonArrObj.push({latitude: fence.polygon[j][0], longitude: fence.polygon[j][1]});
+                    }
+
+                    // check if inside
+                    if(geolib.isPointInside(
+                      {latitude: req.body.latitude, longitude: req.body.longitude},
+                      polygonArrObj)) {
+
+                      outsideAll = false;
+
+                      if (!fence.notifyCarer) {
+                        outsideAllInner = false;
                       }
                     }
                   }
                 }
 
-                if(!inside) {
-                  // send the email and shit
+                if(outsideAllInner) {
+                  // Send push notification to phone as they are outside a fence
+                  console.log("OUTSIDE ALL INNER FENCES - ALERT THE PATIENT");
+
+                  if(outsideAll) {
+                    // Send an email to the carer as they are outside an outer (carer notify) fence
+                    console.log("OUTSIDE ALL - ALERT THE CARER");
+                  }
                 }
               });
             }

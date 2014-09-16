@@ -8,12 +8,14 @@
       notify : {
         strokeColor: '#600000',
         fillColor: '#FF0000',
-        fillOpacity: 0.4,
+        fillOpacity: 0.2,
+        zIndez: 0,
       },
       notNotify: {
         strokeColor: '#66b266',
         fillColor: '#b2d8b2',
         fillOpacity: 0.6,
+        zIndez: 1,
       },
     };
     $scope.inside = true;
@@ -70,16 +72,26 @@
 
     self.checkPatientInBounds = function(patientid) {
       console.log(self.fences);
+      var outsideAll = true;
+      var outsideAllInner = true;
       Location.query({id: patientid}, function(data) {
         lastloc = data[data.length-1];
         for (var i = 0; i < self.fences.length; i++) {
           var infence = self.map.checkGeofence(lastloc.latitude, lastloc.longitude, self.fences[i].polygon);
-          if (infence && self.fences[i].notifyCarer) {
-            $scope.inside = true;
-            return;
+          if(infence) {
+            outsideAll = false;
+
+            if(!self.fences[i].notifyCarer) {
+              outsideAllInner = false;
+            }
           }
         }
-        $scope.inside = false;
+
+        $scope.inside = !outsideAllInner;
+        $scope.outside_msg = $scope.patient.name + " is outside the inner fences.";
+        if(outsideAll) {
+          $scope.outside_msg = $scope.patient.name + " is outside the fence.";
+        }
       });
     };
 
