@@ -1,7 +1,7 @@
 (function() {
   angular.module('DemS').controller('MapsController', function(Location, Fence, $scope, Session) {
     var self = this;
-    var map, marker;
+    var map, marker, line;
     var showTracking = false;
     var count = 0;
     var polygonOptions = {
@@ -76,6 +76,18 @@
 
       self.map.drawPolyline({
         path: path,
+        icons: [{
+          icon: {
+            path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
+          },
+          offset: '100%'
+        },
+        {
+          icon: {
+            path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
+          },
+          offset: '0%'
+        }],
         strokeColor: '#000',
         strokeOpacity: 0.7,
         strokeWeight: 3
