@@ -2,7 +2,7 @@
   angular.module('DemS').controller('MapsController', function(Location, Fence, $scope, Session) {
     var self = this;
     var map, marker;
-    var showAll = false;
+    var showTracking = false;
     var count = 0;
     var polygonOptions = {
       notify : {
@@ -65,6 +65,20 @@
         infoWindow: {
           content: Date(position.timestamp)
         }
+      });
+    };
+
+    self.createPolyline = function(data) {
+      var path = [];
+      for (var i = 0; i < data.length; i++) {
+        path.push([data[i].latitude, data[i].longitude]);
+      }
+
+      self.map.drawPolyline({
+        path: path,
+        strokeColor: '#000',
+        strokeOpacity: 0.7,
+        strokeWeight: 3
       });
     };
 
@@ -163,6 +177,11 @@
       markersOutOfBounds = [];
     };
 
+    self.clearPolylines = function() {
+      self.map.removePolylines();
+      markersOutOfBounds = [];
+    };
+
     self.clearPolygons = function() {
       for (var i = 0; i < self.fences.length; i++) {
         self.fences[i].polygon.setMap(null);
@@ -223,9 +242,10 @@
     };
 
     self.currentLocation = function(patientid) {
+      self.clearPolylines();
       self.clearMarkers();
       self.addMostRecentMarker(patientid);
-      showAll = false;
+      showTracking = false;
     };
 
     self.locationsBetweenDates = function(patientid, startdate, enddate) {
@@ -233,15 +253,14 @@
       self.addMarkersInRange(patientid, Date(startdate), Date(enddate));
     };
 
-    self.showAll = function(patientid) {
+    self.showTracking = function(patientid) {
       self.clearMarkers();
       Location.query({ id: patientid }, function(data) {
-        for (var i = 0; i < data.length; i++) {
-          self.createMarker(data[i]);
-        }
+        self.createPolyline(data);
+        self.addMostRecentMarker(patientid);
         self.map.setCenter(data[data.length-1].latitude, data[data.length-1].longitude);
       });
-      showAll = true;
+      showTracking = true;
     };
 
     self.moveToFence = function(index) {
@@ -317,12 +336,13 @@
       } else {
         self.clearMarkers();
         self.clearPolygons();
+        self.clearPolylines();
       }
 
       self.addFences(patientid);
 
-      if (showAll) {
-        self.showAll(patientid);
+      if (showTracking) {
+        self.showTracking(patientid);
       } else {
         self.currentLocation(patientid);
       }
