@@ -11,7 +11,8 @@ var express = require('express'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
     methodOverride = require('method-override'),
-    session = require('express-session');
+    session = require('express-session'),
+    geolib = require('geolib');
 
 var app = express();
 
@@ -49,7 +50,7 @@ if (env === 'production') {
 /*
  * Routes
  */
-routes.init(app, passport);
+routes.init(app, passport, geolib);
 
 /**
  * Server Start

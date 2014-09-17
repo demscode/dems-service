@@ -5,7 +5,7 @@
 (function(exports) {
   'use strict';
 
-  exports.init = function(app, models) {
+  exports.init = function(app, geolib, models) {
 
     var patientModel = models.patient;
     var reminderModel = models.reminder;
@@ -102,9 +102,54 @@
       patientModel.find(Number(req.params.id), function(err, data) {
         if (data) {
           req.body.patient_id = Number(req.params.id);
+
+          // Check if the patient is inside his fences
+          patientModel.find(Number(req.params.id), function(err, data) {
+            if (data) {
+              data.fences(function(err, fences) {
+                var outsideAll = true;
+                var outsideAllInner = true;
+                if(fences) {
+                  for (var i = 0, length = fences.length; i < length; i++) {
+                    var fence = fences[i];
+                    var polygonArrObj = [];
+
+                    // turn polygon array into an array of objects
+                    for (var j = 0, polygonLength = fence.polygon.length; j < polygonLength; j++) {
+                      polygonArrObj.push({latitude: fence.polygon[j][0], longitude: fence.polygon[j][1]});
+                    }
+
+                    // check if inside
+                    if(geolib.isPointInside(
+                      {latitude: req.body.latitude, longitude: req.body.longitude},
+                      polygonArrObj)) {
+
+                      outsideAll = false;
+
+                      if (!fence.notifyCarer) {
+                        outsideAllInner = false;
+                      }
+                    }
+                  }
+                }
+
+                if(outsideAllInner) {
+                  // Send push notification to phone as they are outside a fence
+                  console.log("OUTSIDE ALL INNER FENCES - ALERT THE PATIENT");
+
+                  if(outsideAll) {
+                    // Send an email to the carer as they are outside an outer (carer notify) fence
+                    console.log("OUTSIDE ALL - ALERT THE CARER");
+                  }
+                }
+              });
+            }
+          });
+
           data.locations.create(req.body, function(err, locations) {
             res.status(200).send(locations);
           });
+
         } else {
           res.status(404).end();
         }

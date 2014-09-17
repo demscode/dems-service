@@ -8,13 +8,13 @@
   /**
    * Aggregation of declared routes used by Express.
    */
-  exports.init = function(app, passport) {
+  exports.init = function(app, passport, geolib) {
 
     var routesApi = require('./api.js');
     var routesWebClient = require('./webclient.js');
     var routesAuth = require('./auth.js');
 
-    routesApi.init(app);
+    routesApi.init(app, geolib);
     routesWebClient.init(app);
     routesAuth.init(app, passport);
 
