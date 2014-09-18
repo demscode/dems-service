@@ -296,6 +296,18 @@
       });
     });
 
+    // Get patient details by Google ID
+    app.get('/api/patient/google/:googleID', function(req, res) {
+      patientModel.all([{where : {'gid' : req.params.googleID}}], function(err, data) {
+        if (data[0]) {
+         res.status(200).send(data[0]);
+        } else {
+          res.status(404).end();
+        }
+
+      });
+    });
+
   };
 
 })(exports);

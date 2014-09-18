@@ -96,7 +96,7 @@ function loadDB() {
 
   for (var i = 0, patientLength = patient_names.length; i < patientLength; i++) {
     var patient = {
-      //_id      : i + 1,
+      gid      : String(i + 1),
       token    :"token" + patient_names[i].replace(/ /g, ''),
       email    : patient_names[i].toLowerCase().replace(/ /g, '_')  + "@fake.com",
       name     : patient_names[i],
