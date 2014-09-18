@@ -24,8 +24,8 @@
     });
 
     //deserialise user
-    passport.deserializeUser(function(id, done) {
-      Carer.all([ {where : { 'gid' : id }} ], function(err, user) {
+    passport.deserializeUser(function(profile, done) {
+      Carer.all({where : { 'gid' : profile.gid }}, function(err, user) {
         done(err, user[0]);
       });
     });
@@ -34,7 +34,7 @@
       //wait for Google to respond
       process.nextTick(function() {
         //find user based on google id
-        Carer.all([ {where : { 'gid' : profile.id }}], function(err, user) {
+        Carer.all({where : { 'gid' : profile.id }}, function(err, user) {
           if (err) {
             return done(err);
           }
