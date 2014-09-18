@@ -18,7 +18,7 @@
     var schemaMongo = new Schema('mongodb', settings);
 
     var Carer = schemaMongo.define('Carer', {
-      id :              { type: Number, index: true },
+      gid :             { type: String, index: true },
       token :           { type: String },
       email :           { type: String, limit: 150 },
       name:             { type: String, limit: 50 },

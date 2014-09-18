@@ -24,8 +24,8 @@
     });
 
     //deserialise user
-    passport.deserializeUser(function(gid, done) {
-      Carer.all([ {where : { id : gid }} ], function(err, user) {
+    passport.deserializeUser(function(id, done) {
+      Carer.all([ {where : { 'gid' : id }} ], function(err, user) {
         done(err, user[0]);
       });
     });
@@ -34,7 +34,7 @@
       //wait for Google to respond
       process.nextTick(function() {
         //find user based on google id
-        Carer.all([ {where : { 'id' : profile.id }}], function(err, user) {
+        Carer.all([ {where : { 'gid' : profile.id }}], function(err, user) {
           if (err) {
             return done(err);
           }
@@ -45,7 +45,7 @@
           } else {
             //create a new user
             var newCarer = {
-              id : profile.id,
+              gid : profile.id,
               token : accessToken,
               name : profile.displayName,
               email : profile.emails[0].value

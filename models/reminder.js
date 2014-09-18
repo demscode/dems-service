@@ -21,7 +21,7 @@
       message: { type: String, limit: 200 },
       type: { type: String, limit: 50 },
       createdAt: { type: Number, default: Date.now },
-      patient_id: { type: Number }
+      patient_id: { type: String }
     });
 
     return Reminder;
