@@ -175,7 +175,7 @@
     app.post('/api/patient/:id/fence', function(req, res) {
       patientModel.find((req.params.id), function(err, data) {
         if (data) {
-          req.body.patient_id = (req.params.id);
+          req.body.patient_id = data._id;
           data.fences.create(req.body, function(err, fences) {
             res.status(200).send(fences);
           });
