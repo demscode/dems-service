@@ -12,7 +12,8 @@ var express = require('express'),
     bodyParser = require('body-parser'),
     methodOverride = require('method-override'),
     session = require('express-session'),
-    geolib = require('geolib');
+    geolib = require('geolib'),
+    email = require('emailjs');
 
 var app = express();
 
@@ -21,6 +22,8 @@ var app = express();
  */
 var passportConfig = require('./controllers/passport.js');
 passportConfig.init(passport);
+var emailConfig = require('./controllers/email.js');
+var sendMail = emailConfig.init(email);
 
 app.use(express.static(path.join(__dirname + '/public')));
 app.use(morgan('dev'));
@@ -50,7 +53,7 @@ if (env === 'production') {
 /*
  * Routes
  */
-routes.init(app, passport, geolib);
+routes.init(app, passport, geolib, sendMail);
 
 /**
  * Server Start
