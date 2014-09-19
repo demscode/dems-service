@@ -141,6 +141,7 @@
       console.log("Opening Add Reminder Modal");
       self.reminderModalTitle = "Add new Reminder";
       self.saveReminder = self.addNewReminder;
+      $scope.$apply();
       $("#reminderModal").modal('show');
     };
 

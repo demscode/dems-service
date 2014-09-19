@@ -209,7 +209,7 @@ function loadDB() {
         message: "Remember to take your medicine",
         type: "Medicine Reminder",
         createdAt: timeNow,
-        patient_id: patient._id.valueOf()
+        patient_id: patient._id
       };
 
       reminderTable.insert(reminder);
