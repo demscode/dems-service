@@ -58,7 +58,7 @@ describe('DemS models', function() {
         carer.patients.create(newPatient, function(err, patient) {
           //expect(err).toBe(null);
           expect(patient.id).toBe(newPatient.id);
-          expect(patient.carer_id).toBe(newCarer.id);
+          expect(patient.carer_id).toBe(String(newCarer.id));
           done();
         });
       });
@@ -224,7 +224,7 @@ describe('DemS models', function() {
           expect(reminder.time).toBe(newReminder.time);
           expect(reminder.message).toBe(newReminder.message);
           expect(reminder.type).toBe(newReminder.type);
-          expect(reminder.patient_id).toBe(newPatient.id);
+          expect(reminder.patient_id).toBe(String(newPatient.id));
             done();
           });
         });

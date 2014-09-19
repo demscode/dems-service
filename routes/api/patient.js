@@ -24,7 +24,7 @@
     // Patient GET Carers Patients API
     app.get('/api/carersPatients', function(req, res) {
       patientModel.all(
-        {where: {carer_id:Number(req.query.id)},
+        {where: {carer_id:(req.query.id)},
         order:"name"},
         function(err, data) {
         if (data) {
@@ -37,7 +37,7 @@
 
     // Patient GET API
     app.get('/api/patient/:id', function(req, res) {
-      patientModel.find(Number(req.params.id), function(err, data) {
+      patientModel.find((req.params.id), function(err, data) {
         if (data) {
           res.status(200).send(data);
         } else {
@@ -49,7 +49,7 @@
 
     // Patient UPDATE API
     app.put('/api/patient/:id', function(req, res) {
-      patientModel.find(Number(req.params.id), function(err, data) {
+      patientModel.find((req.params.id), function(err, data) {
         if (data) {
           data.updateAttributes(req.body, function(err, data) {
             res.status(200).send(data);
@@ -74,7 +74,7 @@
     //Patient DELETE API
     app.delete('/api/patient/:id', function(req, res) {
 
-      patientModel.find(Number(req.params.id), function(err, data) {
+      patientModel.find((req.params.id), function(err, data) {
         if (data) {
           data.destroy();
           res.status(200).end();
@@ -86,7 +86,7 @@
 
     // Location GET API
     app.get('/api/patient/:id/locations', function(req, res) {
-      patientModel.find(Number(req.params.id), function(err, data) {
+      patientModel.find((req.params.id), function(err, data) {
         if (data) {
           data.locations(function(err, locations) {
             res.status(200).send(locations);
@@ -99,12 +99,12 @@
 
     // Location CREATE API
     app.post('/api/patient/:id/locations', function(req, res) {
-      patientModel.find(Number(req.params.id), function(err, data) {
+      patientModel.find((req.params.id), function(err, data) {
         if (data) {
-          req.body.patient_id = Number(req.params.id);
+          req.body.patient_id = (req.params.id);
 
           // Check if the patient is inside his fences
-          patientModel.find(Number(req.params.id), function(err, data) {
+          patientModel.find((req.params.id), function(err, data) {
             if (data) {
               data.fences(function(err, fences) {
                 var outsideAll = true;
@@ -159,7 +159,7 @@
 
     // Fence GET API
     app.get('/api/patient/:id/fence', function(req, res) {
-      patientModel.find(Number(req.params.id), function(err, data) {
+      patientModel.find((req.params.id), function(err, data) {
         if (data) {
           data.fences(function(err, fences) {
             res.status(200).send(fences);
@@ -173,9 +173,9 @@
 
     //Fence CREATE API
     app.post('/api/patient/:id/fence', function(req, res) {
-      patientModel.find(Number(req.params.id), function(err, data) {
+      patientModel.find((req.params.id), function(err, data) {
         if (data) {
-          req.body.patient_id = Number(req.params.id);
+          req.body.patient_id = (req.params.id);
           data.fences.create(req.body, function(err, fences) {
             res.status(200).send(fences);
           });
@@ -189,7 +189,7 @@
 
     //Fence UPDATE API
     app.put('/api/patient/:id/fence/:fid', function(req, res) {
-      patientModel.find(Number(req.params.id), function(err, data) {
+      patientModel.find((req.params.id), function(err, data) {
         if (data) {
           data.fences.find(req.params.fid, function(err, fences) {
             if(fences) {
@@ -208,7 +208,7 @@
 
     //Fence DELETE API
     app.delete('/api/patient/:id/fence/:fid', function(req, res) {
-      patientModel.find(Number(req.params.id), function(err, data) {
+      patientModel.find((req.params.id), function(err, data) {
         if (data) {
           data.fences.find(req.params.fid, function(err, fences) {
             if(fences) {
@@ -229,7 +229,7 @@
     app.get('/api/patient/:id/reminder', function(req, res) {
       reminderModel.all({
         where: {
-          patient_id:Number(req.params.id)
+          patient_id:(req.params.id)
         }
       },
         function(err, data) {
@@ -245,9 +245,9 @@
 
     //Reminder CREATE API
     app.post('/api/patient/:id/reminder', function(req, res) {
-      patientModel.find(Number(req.params.id), function(err, patient) {
+      patientModel.find((req.params.id), function(err, patient) {
         if (patient) {
-          req.body.patient_id = Number(req.params.id);
+          req.body.patient_id = (req.params.id);
           patient.reminders.create(req.body, function(err, reminder) {
             res.status(200).send(reminder);
           });
@@ -260,7 +260,7 @@
 
     //Reminder UPDATE API
     app.put('/api/patient/:id/reminder/:reminderId', function(req, res) {
-      patientModel.find(Number(req.params.id), function(err, patient) {
+      patientModel.find((req.params.id), function(err, patient) {
         if (patient) {
           patient.reminders.find(req.params.reminderId, function(err, reminder) {
             if(reminder) {
@@ -280,7 +280,7 @@
 
     //Reminder DELETE API
     app.delete('/api/patient/:id/reminder/:reminderId', function(req, res) {
-      patientModel.find(Number(req.params.id), function(err, patient) {
+      patientModel.find((req.params.id), function(err, patient) {
         if (patient) {
           patient.reminders.find(req.params.reminderId, function(err, reminder) {
             if(reminder) {
@@ -293,6 +293,18 @@
         } else {
           res.status(404).end();
         }
+      });
+    });
+
+    // Get patient details by Google ID
+    app.get('/api/patient/google/:googleID', function(req, res) {
+      patientModel.all({where : {'gid' : req.params.googleID}}, function(err, data) {
+        if (data[0]) {
+         res.status(200).send(data[0]);
+        } else {
+          res.status(404).end();
+        }
+
       });
     });
 

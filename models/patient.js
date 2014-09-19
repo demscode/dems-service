@@ -17,18 +17,18 @@
     var schemaMongo = new Schema('mongodb', settings);
 
     var Patient = schemaMongo.define('Patient', {
-      id : { type: Number, index: true },
+      gid : { type: String, index: true },
       token : { type: String },
       email : { type: String, limit: 150 },
       name: { type: String, limit: 50 },
-      carer_id: {type: Number}
+      carer_id: {type: String}
     });
 
     var Location = schemaMongo.define('Location', {
       longitude: { type: Number },
       latitude: { type: Number },
       timestamp: { type: Number, default: Date.now },
-      patient_id: { type: Number }
+      patient_id: { type: Object }
     });
 
     var Fence = schemaMongo.define('Fence', {
@@ -38,7 +38,7 @@
       polygon: { type: Object, default: [] },
       name: { type: String },
       notifyCarer: { type: Boolean },
-      patient_id: { type: Number }
+      patient_id: { type: Object }
     });
 
     // Model Relationships

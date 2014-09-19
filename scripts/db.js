@@ -96,7 +96,7 @@ function loadDB() {
 
   for (var i = 0, patientLength = patient_names.length; i < patientLength; i++) {
     var patient = {
-      _id      : i + 1,
+      gid      : String(i + 1),
       token    :"token" + patient_names[i].replace(/ /g, ''),
       email    : patient_names[i].toLowerCase().replace(/ /g, '_')  + "@fake.com",
       name     : patient_names[i],
@@ -104,11 +104,15 @@ function loadDB() {
 
     // don't add every third one to the carer
     if((i+1) % 3 != 0) {
-      patient.carer_id = carer._id;
-      patientIds.push(patient._id);
+      patient.carer_id = carer._id.valueOf();
+      //patientIds.push(patient._id);
     }
 
     patientTable.insert(patient);
+    patient._id = patientTable.find()[patientTable.count()-1]._id;
+    if ((i+1) % 3 != 0) {
+      patientIds.push(patient._id.valueOf());
+    }
 
     /***********************/
     /* Location Creation   */
@@ -180,7 +184,7 @@ function loadDB() {
         message: "Remember to take your medicine",
         type: "Medicine Reminder",
         createdAt: timeNow,
-        patient_id: patient._id
+        patient_id: patient._id.valueOf()
       };
 
       reminderTable.insert(reminder);

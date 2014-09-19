@@ -4,8 +4,8 @@ describe('DemS API /patient', function() {
       request = require('supertest');
       request = request('http://localhost:3000');
 
-  var patient22 = { id: 22, token: "firstkey", email: "someone@something.com", name: "Generic Bob" },
-      patient8889 = {id: 8889, token: "myticket", email: "janedoe@gmail.com", name: "Jane" };
+  var patient22 = { id: 22, token: "firstkey", email: "someone@something.com", name: "Generic Bob", gid: "22g" },
+      patient8889 = {id: 8889, token: "myticket", email: "janedoe@gmail.com", name: "Jane", gid: "8889g" };
 
 
   describe('Patient Details', function() {
@@ -64,6 +64,16 @@ describe('DemS API /patient', function() {
       done();
     });
 
+    it('GET patient from valid GoogleID', function(done) {
+      request.get('/api/patient/google/22g').expect(200);
+      request.get('/api/patient/google/8889g').expect(200);
+      done();
+    });
+
+    it('GET 404 from invalid GoogleID', function(done) {
+      request.get('/api/patient/google/003b').expect(404);
+      done();
+    });
 
   });
 
