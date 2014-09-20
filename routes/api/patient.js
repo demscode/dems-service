@@ -144,11 +144,11 @@
                     console.log("OUTSIDE ALL - ALERT THE CARER");
                     carerModel.find(data.carer_id, function(err, carer) {
                       if (carer) {
-                        recipient = carer.email;
-                        subject = "Fence Notification - " + data.name;
-                        message = data.name + " is outside the virtual fences set for them.\n" +
+                        var recipient = carer.email;
+                        var subject = "Fence Notification - " + data.name;
+                        var message = data.name + " is outside the virtual fences set for them.\n" +
                                   "Location: " + req.body.latitude + ", " + req.body.longitude +
-                                  "\nTime: " + Date.now.toString();
+                                  "\nTime: " + Date.now().toString();
 
                         sendMail(recipient, subject, message);
                       }
