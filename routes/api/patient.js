@@ -101,7 +101,7 @@
     app.post('/api/patient/:id/locations', function(req, res) {
       patientModel.find((req.params.id), function(err, data) {
         if (data) {
-          req.body.patient_id = (req.params.id);
+          req.body.patient_id = data._id;
 
           // Check if the patient is inside his fences
           patientModel.find((req.params.id), function(err, data) {
@@ -175,7 +175,7 @@
     app.post('/api/patient/:id/fence', function(req, res) {
       patientModel.find((req.params.id), function(err, data) {
         if (data) {
-          req.body.patient_id = (req.params.id);
+          req.body.patient_id = data._id;
           data.fences.create(req.body, function(err, fences) {
             res.status(200).send(fences);
           });
@@ -227,27 +227,22 @@
 
     //Get Patients Reminders API
     app.get('/api/patient/:id/reminder', function(req, res) {
-      reminderModel.all({
-        where: {
-          patient_id:(req.params.id)
-        }
-      },
-        function(err, data) {
+      patientModel.find((req.params.id), function(err, data) {
         if (data) {
-          res.status(200).send(data);
+          data.reminders(function(err, reminders) {
+            res.status(200).send(reminders);
+          });
         } else {
           res.status(404).end();
         }
       });
-
-
     });
 
     //Reminder CREATE API
     app.post('/api/patient/:id/reminder', function(req, res) {
       patientModel.find((req.params.id), function(err, patient) {
         if (patient) {
-          req.body.patient_id = (req.params.id);
+          req.body.patient_id = patient._id;
           patient.reminders.create(req.body, function(err, reminder) {
             res.status(200).send(reminder);
           });

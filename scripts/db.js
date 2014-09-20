@@ -41,14 +41,25 @@ function loadDB() {
       // An arbitrary location to start with
       startingLocation = [-27.474911, 153.027188],
 
-      // An arbitrary fence to start with
-      startingFence = [[-27.474911, 153.027188],
-                      [-27.477143, 153.029623],
-                      [-27.477276, 153.030299],
-                      [-27.478776, 153.029049],
-                      [-27.478414, 153.027665],
-                      [-27.477219, 153.026759],
-                      [-27.475882, 153.026206]],
+      // An arbitrary outer fence to start with
+      startingOuterFence = [ [ -27.474530248854226, 153.02770298413088 ],
+                             [ -27.47488475983727, 153.029135060852 ],
+                             [ -27.4760007657552, 153.03022381481935 ],
+                             [ -27.47761866755047, 153.03012733862306 ],
+                             [ -27.478509483685947, 153.02892025396727 ],
+                             [ -27.47833785229718, 153.02719293121345 ],
+                             [ -27.47676210803827, 153.02602943914792 ],
+                             [ -27.47553932704794, 153.02616308465576 ] ],
+
+      // An arbitrary inner fence to start with
+      startingInnerFence = [ [ -27.477764254100908, 153.0286892989534 ],
+                             [ -27.47781040342794, 153.02748766931472 ],
+                             [ -27.476592027193174, 153.02671111902168 ],
+                             [ -27.475704773402665, 153.02682913621834 ],
+                             [ -27.47522306889365, 153.0277249940293 ],
+                             [ -27.475274412493054, 153.0286208518403 ],
+                             [ -27.476165131859787, 153.02950061639717 ],
+                             [ -27.477059881688213, 153.02954556878979 ] ],
 
       // Constant of minutes per interval for location tracking
       minutesPerInterval = 1,
@@ -147,19 +158,29 @@ function loadDB() {
     /***********************/
 
     // concat() is used for passing the array by value instead of reference
-    var polygon = startingFence.concat();
+    var outerPolygon = startingOuterFence.concat();
+    var innerPolygon = startingInnerFence.concat();
 
     for(var k = 0; k < numFences; k++) {
       var names = patient.name.split(' ');
       var initials = names[0] && names[1] ? names[0].charAt(0) + " " + names[1].charAt(0) : "Test";
-      var fence = {
-        polygon    : polygon,
-        name       : initials  + " Fence " + (k+1),
+      var outerFence = {
+        polygon    : outerPolygon,
+        name       : initials  + " Outer Fence " + (k+1),
         patient_id : patient._id,
-        notifyCarer: Math.random() > 0.5,
+        notifyCarer: true,
       };
 
-      fenceTable.insert(fence);
+      fenceTable.insert(outerFence);
+
+      var innerFence = {
+        polygon    : innerPolygon,
+        name       : initials  + " Inner Fence " + (k+1),
+        patient_id : patient._id,
+        notifyCarer: false,
+      };
+
+      fenceTable.insert(innerFence);
 
       // move the fence around
       var incrementFenceLong = Math.random() * fenceIncrement;
@@ -168,8 +189,12 @@ function loadDB() {
       incrementFenceLong *= Math.random() > 0.5 ? 1 : -1;
       incrementFenceLat *= Math.random() > 0.5 ? 1 : -1;
 
-      for (var f = 0, length = polygon.length; f < length; f++) {
-        polygon[f] = [polygon[f][0] + incrementFenceLat, polygon[f][1] + incrementFenceLong];
+      for (var f = 0, length = outerPolygon.length; f < length; f++) {
+        outerPolygon[f] = [outerPolygon[f][0] + incrementFenceLat, outerPolygon[f][1] + incrementFenceLong];
+      }
+
+      for (var g = 0, length = innerPolygon.length; g < length; g++) {
+        innerPolygon[g] = [innerPolygon[g][0] + incrementFenceLat, innerPolygon[g][1] + incrementFenceLong];
       }
     }
 
@@ -184,7 +209,7 @@ function loadDB() {
         message: "Remember to take your medicine",
         type: "Medicine Reminder",
         createdAt: timeNow,
-        patient_id: patient._id.valueOf()
+        patient_id: patient._id
       };
 
       reminderTable.insert(reminder);
