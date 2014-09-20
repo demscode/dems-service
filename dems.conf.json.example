@@ -13,5 +13,12 @@
       "clientSecret": "XXXXXXXXXX",
       "callbackURL": "http://localhost:3000/auth/google/callback"
     }
+  },
+  "email": {
+    "user": "xxxxxxxx@xxxxx.xxx",
+    "password": "yyyyyyyyyyyy",
+    "host": "xxx.xxx",
+    "ssl": true,
+    "port": 465
   }
 }

@@ -5,10 +5,11 @@
 (function(exports) {
   'use strict';
 
-  exports.init = function(app, geolib, models) {
+  exports.init = function(app, geolib, sendMail, models) {
 
     var patientModel = models.patient;
     var reminderModel = models.reminder;
+    var carerModel = models.carer;
 
     // Patient GET API
     app.get('/api/allPatients', function(req, res) {
@@ -136,10 +137,22 @@
                 if(outsideAllInner) {
                   // Send push notification to phone as they are outside a fence
                   console.log("OUTSIDE ALL INNER FENCES - ALERT THE PATIENT");
+                  //perhaps set a variable here, and attach it to the json returned
 
                   if(outsideAll) {
                     // Send an email to the carer as they are outside an outer (carer notify) fence
                     console.log("OUTSIDE ALL - ALERT THE CARER");
+                    carerModel.find(data.carer_id, function(err, carer) {
+                      if (carer) {
+                        var recipient = carer.email;
+                        var subject = "Fence Notification - " + data.name;
+                        var message = data.name + " is outside the virtual fences set for them.\n" +
+                                  "Location: " + req.body.latitude + ", " + req.body.longitude +
+                                  "\nTime: " + Date.now().toString();
+
+                        sendMail(recipient, subject, message);
+                      }
+                    });
                   }
                 }
               });

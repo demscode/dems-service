@@ -8,11 +8,11 @@
   /**
    * Intialises declared API routes.
    */
-  exports.init = function(app, geolib) {
+  exports.init = function(app, geolib, sendMail) {
 
     var Models = require('../models');
 
-    require('./api/patient.js').init(app, geolib, Models);
+    require('./api/patient.js').init(app, geolib, sendMail, Models);
     require('./api/carer.js').init(app, Models);
 
   }; // end init
