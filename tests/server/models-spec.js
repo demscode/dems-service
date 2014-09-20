@@ -212,7 +212,7 @@ describe('DemS models', function() {
         name: "Pills",
         time: new Date("October 13, 2014 11:13:00").getTime(),
         message: "Remember to take your pills",
-        type: "Important"
+        type: "Important",
       };
 
       patientModel.create(newPatient, function(err, patient) {
@@ -224,8 +224,7 @@ describe('DemS models', function() {
           expect(reminder.time).toBe(newReminder.time);
           expect(reminder.message).toBe(newReminder.message);
           expect(reminder.type).toBe(newReminder.type);
-          expect(reminder.patient_id).toBe(String(newPatient.id));
-            done();
+          done();
           });
         });
       });
