@@ -36,7 +36,8 @@
     "morgan": "~1.2.2",
     "passport": "~0.2.0",
     "passport-google-oauth": "~0.1.5",
-    "emailjs": "~0.3.11"
+    "emailjs": "~0.3.11",
+    "date-format": "0.0.2"
   },
   "devDependencies": {
     "codeclimate-test-reporter": "0.0.3",
