@@ -7,6 +7,7 @@
 
   exports.init = function(app, geolib, sendMail, models) {
 
+    var datefmts = require('date-format');
     var patientModel = models.patient;
     var reminderModel = models.reminder;
     var carerModel = models.carer;
@@ -148,7 +149,7 @@
                         var subject = "Fence Notification - " + data.name;
                         var message = data.name + " is outside the virtual fences set for them.\n" +
                                   "Location: " + req.body.latitude + ", " + req.body.longitude +
-                                  "\nTime: " + Date.now().toString();
+                                  "\nTime: " + datefmts.asString('dd/MM/yyyy hh:mm', new Date());
 
                         sendMail(recipient, subject, message);
                       }
@@ -316,6 +317,35 @@
       });
     });
 
-  };
+
+
+   // Set off the panic status of a patient
+    app.post('/api/patient/:id/panic', function(req, res) {
+     patientModel.find(req.params.id, function(err, data) {
+        if (data.carer_id) {
+          carerModel.find(data.carer_id, function(err, carer) {
+            if (carer) {
+              var recipient = carer.email;
+              var subject = "Panic! - " + data.name;
+              var message = data.name + " has pushed the panic button.\n" +
+                            "Location: " + req.body.latitude + ", " + req.body.longitude +
+                            "\nTime: " + datefmts.asString('dd/MM/yyyy hh:mm', new Date());
+
+              sendMail(recipient, subject, message);
+              res.status(200).end();
+            } else {
+              res.status(404).end();
+            }
+
+          });
+
+        } else {
+          res.status(404).end();
+        }
+      });
+
+  });
+
+ };
 
 })(exports);
