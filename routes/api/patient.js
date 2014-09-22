@@ -137,14 +137,14 @@
 
                 if(outsideAllInner) {
                   // Send push notification to phone as they are outside a fence
-                  console.log("OUTSIDE ALL INNER FENCES - ALERT THE PATIENT");
+                  //console.log("OUTSIDE ALL INNER FENCES - ALERT THE PATIENT");
                   //perhaps set a variable here, and attach it to the json returned
 
                   if(outsideAll) {
                     // Send an email to the carer as they are outside an outer (carer notify) fence
-                    console.log("OUTSIDE ALL - ALERT THE CARER");
+                    //console.log("OUTSIDE ALL - ALERT THE CARER");
                     carerModel.find(data.carer_id, function(err, carer) {
-                      if (carer) {
+                      if (carer && !data.last_outside) {
                         var recipient = carer.email;
                         var subject = "Fence Notification - " + data.name;
                         var message = data.name + " is outside the virtual fences set for them.\n" +
@@ -152,9 +152,15 @@
                                   "\nTime: " + datefmts.asString('dd/MM/yyyy hh:mm', new Date());
 
                         sendMail(recipient, subject, message);
+                        data.updateAttribute('last_outside', true);
                       }
                     });
+
                   }
+                }
+
+                if (!outsideAll || !outsideAllInner) {
+                  data.updateAttribute('last_outside', false);
                 }
               });
             }
