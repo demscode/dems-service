@@ -143,18 +143,20 @@
                   if(outsideAll) {
                     // Send an email to the carer as they are outside an outer (carer notify) fence
                     //console.log("OUTSIDE ALL - ALERT THE CARER");
-                    carerModel.find(data.carer_id, function(err, carer) {
-                      if (carer && !data.last_outside) {
-                        var recipient = carer.email;
-                        var subject = "Fence Notification - " + data.name;
-                        var message = data.name + " is outside the virtual fences set for them.\n" +
-                                  "Location: " + req.body.latitude + ", " + req.body.longitude +
-                                  "\nTime: " + datefmts.asString('dd/MM/yyyy hh:mm', new Date());
+                    if (!data.last_outside) {
+                      carerModel.find(data.carer_id, function(err, carer) {
+                        if (carer) {
+                          var recipient = carer.email;
+                          var subject = "Fence Notification - " + data.name;
+                          var message = data.name + " is outside the virtual fences set for them.\n" +
+                                    "Location: " + req.body.latitude + ", " + req.body.longitude +
+                                    "\nTime: " + datefmts.asString('dd/MM/yyyy hh:mm', new Date());
 
-                        sendMail(recipient, subject, message);
-                        data.updateAttribute('last_outside', true);
-                      }
-                    });
+                          sendMail(recipient, subject, message);
+                          data.updateAttribute('last_outside', true);
+                        }
+                      });
+                    }
 
                   }
                 }
