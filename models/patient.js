@@ -21,7 +21,8 @@
       token : { type: String },
       email : { type: String, limit: 150 },
       name: { type: String, limit: 50 },
-      carer_id: {type: String}
+      carer_id: {type: String},
+      last_outside: {type: Boolean, default: false}
     });
 
     var Location = schemaMongo.define('Location', {
