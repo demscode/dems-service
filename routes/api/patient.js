@@ -354,6 +354,28 @@
 
   });
 
+  // Get contact details of carer
+  app.get('/api/patient/:id/contact', function(req, res) {
+    patientModel.find(req.params.id, function(err, data) {
+      if (data.carer_id) {
+        carerModel.find(data.carer_id, function(err, carer) {
+          if (carer) {
+            var contact = { name: carer.name,
+                            email: carer.email,
+                            contact_number: carer.contact_number };
+
+            res.status(200).send(contact);
+          } else {
+            res.status(404).end();
+          }
+        });
+      } else {
+        res.status(404).end();
+      }
+    });
+
+  });
+
  };
 
 })(exports);
