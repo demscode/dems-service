@@ -1,5 +1,5 @@
 (function() {
-  angular.module('DemS').controller('MapsController', function(Location, Fence, $scope, Session) {
+  angular.module('DemS').controller('MapsController', function(Location, Fence, Heatmap, $scope, Session) {
     var self = this;
     var map, marker;
     var showTracking = false;
@@ -262,29 +262,43 @@
 
     self.revertFenceChanges = function(patientid) {
       self.clearPolygons();
+      self.clearHeatmap();
       self.addFences(patientid);
     };
 
     self.currentLocation = function(patientid) {
       self.clearPolylines();
       self.clearMarkers();
+      self.clearHeatmap();
       self.addMostRecentMarker(patientid);
       showTracking = false;
     };
 
     self.locationsBetweenDates = function(patientid, startdate, enddate) {
       self.clearMarkers();
+      self.clearHeatmap();
       self.addMarkersInRange(patientid, Date(startdate), Date(enddate));
     };
 
     self.showTracking = function(patientid) {
       self.clearMarkers();
+      self.clearHeatmap();
       Location.query({ id: patientid }, function(data) {
         self.createPolyline(data);
         self.addMostRecentMarker(patientid);
         self.map.setCenter(data[data.length-1].latitude, data[data.length-1].longitude);
       });
       showTracking = true;
+    };
+
+    self.showHeatmap = function(patientid) {
+      self.clearPolylines();
+      self.clearMarkers();
+      Heatmap.setHeatmap(patientid, self.map.map);
+    };
+
+    self.clearHeatmap = function() {
+      Heatmap.removeHeatmap();
     };
 
     self.moveToFence = function(index) {
