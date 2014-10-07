@@ -313,6 +313,72 @@
       });
     });
 
+    //Get Patients Activities API
+    app.get('/api/patient/:id/activity', function(req, res) {
+      patientModel.find((req.params.id), function(err, data) {
+        if (data) {
+          data.activities(function(err, activities) {
+            res.status(200).send(activities);
+          });
+        } else {
+          res.status(404).end();
+        }
+      });
+    });
+
+    //Activity CREATE API
+    app.post('/api/patient/:id/activity', function(req, res) {
+      patientModel.find((req.params.id), function(err, patient) {
+        if (patient) {
+          req.body.patient_id = patient._id;
+          patient.activities.create(req.body, function(err, activity) {
+            res.status(200).send(activity);
+          });
+        } else {
+          res.status(404).end();
+        }
+      });
+
+    });
+
+    //Activity UPDATE API
+    app.put('/api/patient/:id/activity/:activityId', function(req, res) {
+      patientModel.find((req.params.id), function(err, patient) {
+        if (patient) {
+          patient.activities.find(req.params.activityId, function(err, activity) {
+            if(activity) {
+              activity.updateAttributes(req.body, function(){
+                res.status(200).send(activity);
+              });
+            } else {
+              res.status(404).end();
+            }
+          });
+        } else {
+          res.status(404).end();
+        }
+      });
+
+    });
+
+    //Activity DELETE API
+    app.delete('/api/patient/:id/activity/:activityId', function(req, res) {
+      patientModel.find((req.params.id), function(err, patient) {
+        if (patient) {
+          patient.activities.find(req.params.activityId, function(err, activity) {
+            if(activity) {
+              activity.destroy();
+              res.status(200).end();
+            } else {
+              res.status(404).end();
+            }
+          });
+        } else {
+          res.status(404).end();
+        }
+      });
+    });
+
     // Get patient details by Google ID
     app.get('/api/patient/google/:googleID', function(req, res) {
       patientModel.all({where : {'gid' : req.params.googleID}}, function(err, data) {

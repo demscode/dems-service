@@ -1,26 +1,26 @@
 <div class="row">
   <div class="col-xs-12">
-    <div ng-show="patient.activities != null && patient.activities.length > 0">
+    <div ng-show="activities != null && activities.length > 0">
       <table class="table">
         <thread>
           <tr>
-            <th>Activity ID</th>
-            <th>Activity Info 1</th>
-            <th>Activity Info 2</th>
-            <th>Activity Info 3</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Type</th>
+            <th>Description</th>
           </tr>
         </thread>
         <tbody>
-          <tr ng-repeat="activity in patient.activities">
-            <td>{{activity.id}}</td>
-            <td>{{activity.activity_info1}}</td>
-            <td>{{activity.activity_info2}}</td>
-            <td>{{activity.activity_info3}}</td>
+          <tr ng-repeat="activity in activities">
+            <td>{{activitiesCtrl.showDate(activity.time)}}</td>
+            <td>{{activitiesCtrl.showTime(activity.time)}}</td>
+            <td>{{activity.type}}</td>
+            <td>{{activity.description}}</td>
           </tr>
         </tbody>
       </table>
     </div>
-    <div ng-hide="patient.activities != null && patient.activities.length > 0">
+    <div ng-hide="activities != null && activities.length > 0">
       No activities for the {{patient.name}}
     </div>
   </div>

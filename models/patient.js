@@ -13,6 +13,7 @@
    */
   exports.init = function(settings) {
     var Reminder = require('./reminder.js').init(settings);
+    var Activity = require('./activity.js').init(settings);
     var Schema = require('jugglingdb').Schema;
     var schemaMongo = new Schema('mongodb', settings);
 
@@ -46,6 +47,7 @@
     Patient.hasMany(Location, {as: 'locations', foreignKey: 'patient_id'});
     Patient.hasMany(Fence, {as: 'fences', foreignKey: 'patient_id'});
     Patient.hasMany(Reminder, {as: 'reminders', foreignKey: 'patient_id'});
+    Patient.hasMany(Activity, {as: 'activities', foreignKey: 'patient_id'});
 
     return Patient;
   };

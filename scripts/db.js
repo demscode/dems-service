@@ -38,6 +38,9 @@ function loadDB() {
       // Reference to the reminders table
       reminderTable = db.getCollection("Reminder"),
 
+      // Reference to the activities table
+      activityTable = db.getCollection("Activity"),
+
       // An arbitrary location to start with
       startingLocation = [-27.474911, 153.027188],
 
@@ -89,11 +92,20 @@ function loadDB() {
         "Ken Adams",
       ],
 
+      activity_descriptions = {
+        0: "Left an inner fence",
+        1: "Left an outer fence",
+        2: "Pressed the panic button",
+        3: "Accepted a reminder",
+      },
+
       numLocations = 100,
 
       numFences = 6,
 
       numReminders = 10,
+
+      numActivities = 4,
 
       patientIds = [];
 
@@ -214,6 +226,21 @@ function loadDB() {
 
       reminderTable.insert(reminder);
     }
+
+    /***********************/
+    /* Activity Creation   */
+    /***********************/
+
+    for(var n = 0; n < numActivities; n++) {
+      var activity = {
+        time: new Date(timeNow + n * daysPerInterval * 24 * 60 * 60000).setMinutes(0),
+        description: activity_descriptions[n],
+        type: n,
+        patient_id: patient._id
+      };
+
+      activityTable.insert(activity);
+    }
   }
 
   // set the carer patientIds
@@ -231,11 +258,13 @@ function dropDB() {
   var patientTable = db.getCollection("Patient"),
       locationTable = db.getCollection("Location"),
       fenceTable = db.getCollection("Fence"),
-      reminderTable = db.getCollection("Reminder");
+      reminderTable = db.getCollection("Reminder"),
+      activityTable = db.getCollection("Activity");
 
   // Drop the tables
   patientTable.drop();
   locationTable.drop();
   fenceTable.drop();
   reminderTable.drop();
+  activityTable.drop();
 }
