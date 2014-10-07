@@ -2,7 +2,7 @@
   angular.module('DemS').controller("RemindersController", ['$scope', 'Session','Reminder', function($scope, Session, Reminder){
     var self = this;
     var calendarOptions = {
-      theme: true,
+      theme: false,
       header: {
         left: 'prev,next today',
         center: 'title',
@@ -167,6 +167,9 @@
         self.calendar.fullCalendar('destroy');
         self.calendar = $("#calendar").fullCalendar(calendarOptions);
       }
+      $('.fc-toolbar .fc-button-group').removeClass().addClass('btn-group');
+      $('.fc-toolbar button').removeClass().addClass('btn btn-default');
+      $('.fc-toolbar .fc-left').prepend($('<button ng-click="remindersCtrl.openAddReminderModal()" class="hand-pointer btn btn-primary">Add Reminder</button>'));
       self.calendar.fullCalendar('addEventSource', $scope.reminderEvents);
     };
 
