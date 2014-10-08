@@ -21,7 +21,8 @@
       message: { type: String, limit: 200 },
       type: { type: String, limit: 50 },
       createdAt: { type: Number, default: Date.now },
-      patient_id: { type: Object }
+      patient_id: { type: Object },
+      acknowledgement: { type: String, default: "none" }
     });
 
     return Reminder;
