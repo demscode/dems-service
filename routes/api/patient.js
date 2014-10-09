@@ -327,9 +327,9 @@
 
     //Get level API
     app.get('/api/level/:id', function(req, res) {
-      levelModel.find((req.params.id), function(err, data) {
+      levelModel.all({where:{levelValue: req.params.id}}, function(err, data) {
         if (data) {
-          res.status(200).send(data);
+          res.status(200).send(data[0]);
         } else {
           res.status(404).end();
         }
