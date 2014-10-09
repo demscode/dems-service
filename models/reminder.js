@@ -22,7 +22,7 @@
       type: { type: String, limit: 50 },
       createdAt: { type: Number, default: Date.now },
       patient_id: { type: Object },
-      acknowledgement: { type: String, default: "none" }
+      status: { type: String, default: "unknown" }
     });
 
     return Reminder;
