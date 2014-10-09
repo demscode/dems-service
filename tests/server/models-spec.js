@@ -204,7 +204,6 @@ describe('DemS models', function() {
     });
 
     it('should create patient reminder', function(done) {
-
       var newPatient = {
         id: 11
       },
@@ -212,7 +211,7 @@ describe('DemS models', function() {
         name: "Pills",
         time: new Date("October 13, 2014 11:13:00").getTime(),
         message: "Remember to take your pills",
-        type: "Important",
+        type: "Important"
       };
 
       patientModel.create(newPatient, function(err, patient) {
@@ -225,9 +224,46 @@ describe('DemS models', function() {
           expect(reminder.message).toBe(newReminder.message);
           expect(reminder.type).toBe(newReminder.type);
           done();
+         });
+       });
+    });
+
+    it('should create patient reminder with Level', function(done) {
+      var levelModel = require('../../models/level.js').init(settings.db.mongoTest);
+
+      var newPatient = {
+        id: 11
+      },
+      newLevel = {
+        id: 1,
+        name: "Respond to Carer"
+      },
+      newReminder = {
+        name: "Pills",
+        time: new Date("October 13, 2014 11:13:00").getTime(),
+        message: "Remember to take your pills",
+        type: "Important",
+        level_id: 1
+      };
+
+      patientModel.create(newPatient, function(err, patient) {
+        expect(err).toBe(null);
+        patient.reminders.create(newReminder,
+        function(err, reminder) {
+          expect(err).toBe(null);
+          expect(reminder.level_id).toBe(newReminder.level_id);
+          levelModel.create(newLevel, function(err, level){
+            levelModel.find(reminder.level_id, function(err, level){
+              expect(err).toBe(null);
+              expect(level.id).toBe(newLevel.id);
+              expect(level.name).toBe(newLevel.name);
+              expect(level.id).toBe(reminder.level_id);
+            });
           });
+          done();
         });
       });
+    });
 
   });
 });

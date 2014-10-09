@@ -15,18 +15,12 @@
     var Schema = require('jugglingdb').Schema;
     var schemaMongo = new Schema('mongodb', settings);
 
-    var Reminder = schemaMongo.define('Reminder', {
-      name: { type: String },
-      time: { type: Number },
-      message: { type: String, limit: 200 },
-      type: { type: String, limit: 50 },
-      createdAt: { type: Number, default: Date.now },
-      patient_id: { type: Object },
-      acknowledgement: { type: String, default: "none" },
-      level_id: { type: Number, default: 0 }
+    var Level = schemaMongo.define('Level', {
+      id: { type: Number },
+      name: { type: String }
     });
 
-    return Reminder;
+    return Level;
   };
 
 })(exports);

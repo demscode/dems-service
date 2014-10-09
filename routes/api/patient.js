@@ -11,6 +11,7 @@
     var patientModel = models.patient;
     var reminderModel = models.reminder;
     var carerModel = models.carer;
+    var levelModel = models.level;
 
     // Patient GET API
     app.get('/api/allPatients', function(req, res) {
@@ -307,6 +308,28 @@
               res.status(404).end();
             }
           });
+        } else {
+          res.status(404).end();
+        }
+      });
+    });
+
+    //Get All Levels API
+    app.get('/api/allLevels', function(req, res) {
+      levelModel.all({},function(err, data) {
+        if (data) {
+          res.status(200).send(data);
+        } else {
+          res.status(404).end();
+        }
+      });
+    });
+
+    //Get level API
+    app.get('/api/level/:id', function(req, res) {
+      levelModel.find((req.params.id), function(err, data) {
+        if (data) {
+          res.status(200).send(data);
         } else {
           res.status(404).end();
         }
