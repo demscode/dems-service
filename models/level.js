@@ -16,7 +16,7 @@
     var schemaMongo = new Schema('mongodb', settings);
 
     var Level = schemaMongo.define('Level', {
-      id: { type: Number },
+      levelValue: { type: Number },
       name: { type: String }
     });
 

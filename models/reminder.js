@@ -23,7 +23,7 @@
       createdAt: { type: Number, default: Date.now },
       patient_id: { type: Object },
       acknowledgement: { type: String, default: "none" },
-      level_id: { type: Number, default: 0 }
+      levelValue: { type: Number, default: 0 }
     });
 
     return Reminder;

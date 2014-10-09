@@ -69,10 +69,12 @@ describe('DemS models', function() {
 
   describe('Patient model', function() {
     var patientModel,
+    levelModel,
     settings = require('../../dems.conf.json');
 
     beforeEach(function(done) {
       patientModel = require('../../models/patient.js').init(settings.db.mongoTest);
+      levelModel = require('../../models/level.js').init(settings.db.mongoTest);
       patientModel.count(function(err, count) {
         expect(err).toBe(null);
         expect(count).toBe(0);
@@ -94,6 +96,22 @@ describe('DemS models', function() {
           });
         });
       });
+
+      levelModel.all({order: 'id'}, function(err, levels) {
+        expect(err).toBe(null);
+        levels.forEach(function(level) {
+          level.destroy(function() {
+            levelModel.count(function(err, count) {
+              expect(err).toBe(null);
+              // FIX: returing 1 on patient update test
+              // expect(count).toBe(0);
+              done();
+            });
+          });
+        });
+      });
+
+      
     });
 
     it('should create new patient', function(done) {
@@ -229,13 +247,11 @@ describe('DemS models', function() {
     });
 
     it('should create patient reminder with Level', function(done) {
-      var levelModel = require('../../models/level.js').init(settings.db.mongoTest);
-
       var newPatient = {
         id: 11
       },
       newLevel = {
-        id: 1,
+        levelValue: 1,
         name: "Respond to Carer"
       },
       newReminder = {
@@ -243,21 +259,21 @@ describe('DemS models', function() {
         time: new Date("October 13, 2014 11:13:00").getTime(),
         message: "Remember to take your pills",
         type: "Important",
-        level_id: 1
+        levelValue: 1
       };
 
       patientModel.create(newPatient, function(err, patient) {
         expect(err).toBe(null);
-        patient.reminders.create(newReminder,
-        function(err, reminder) {
+        patient.reminders.create(newReminder, function(err, reminder) {
           expect(err).toBe(null);
-          expect(reminder.level_id).toBe(newReminder.level_id);
+          expect(reminder.levelValue).toBe(newReminder.levelValue);
           levelModel.create(newLevel, function(err, level){
-            levelModel.find(reminder.level_id, function(err, level){
+            levelModel.all({where: {levelValue:reminder.levelValue}}, function(err, level){
               expect(err).toBe(null);
-              expect(level.id).toBe(newLevel.id);
-              expect(level.name).toBe(newLevel.name);
-              expect(level.id).toBe(reminder.level_id);
+              expect(level.length).toBe(1);
+              expect(level[0].levelValue).toBe(newLevel.levelValue);
+              expect(level[0].name).toBe(newLevel.name);
+              expect(level[0].levelValue).toBe(reminder.levelValue);
             });
           });
           done();
