@@ -23,7 +23,8 @@
     "angular-resource": "~1.2.23",
     "fullcalendar": "~2.1.1",
     "jquery-ui": "~1.11.1",
-    "angular-bootstrap-datetimepicker": "latest"
+    "angular-bootstrap-datetimepicker": "latest",
+    "ng-table": "~0.3.3"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.22"

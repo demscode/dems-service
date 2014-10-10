@@ -3,6 +3,6 @@
  */
  (function() {
 
-  var app = angular.module('DemS', ['ngRoute', 'ngResource', 'ui.bootstrap.datetimepicker']);
+  var app = angular.module('DemS', ['ngRoute', 'ngResource', 'ui.bootstrap.datetimepicker', 'ngTable']);
 
 })();

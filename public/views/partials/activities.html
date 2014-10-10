@@ -1,26 +1,24 @@
 <div class="row">
   <div class="col-xs-12">
-    <div ng-show="activities != null && activities.length > 0">
-      <table class="table">
-        <thread>
-          <tr>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Type</th>
-            <th>Description</th>
-          </tr>
-        </thread>
-        <tbody>
-          <tr ng-repeat="activity in activities">
-            <td>{{activitiesCtrl.showDate(activity.time)}}</td>
-            <td>{{activitiesCtrl.showTime(activity.time)}}</td>
-            <td>{{activity.type}}</td>
-            <td>{{activity.description}}</td>
-          </tr>
-        </tbody>
+    <div ng-show="allActivities != null && allActivities.length > 0">
+      <table ng-table="tableParams" show-filter="true" class="table table-bordered table-hover table-condensed table-striped" id="activities_table">
+        <tr ng-repeat="activity in activities">
+          <td data-title="'Date'" sortable="'formattedDate'" filter="{ 'formattedDate': 'text' }">
+              {{activity.formattedDate}}
+          </td>
+          <td data-title="'Time'" sortable="'formattedTime'" filter="{ 'formattedTime': 'text' }">
+              {{activity.formattedTime}}
+          </td>
+          <td data-title="'Type'" sortable="'type'" filter="{ 'type': 'text' }">
+              {{activity.type}}
+          </td>
+          <td data-title="'Description'" sortable="'description'" filter="{ 'description': 'text' }">
+              {{activity.description}}
+          </td>
+        </tr>
       </table>
     </div>
-    <div ng-hide="activities != null && activities.length > 0">
+    <div ng-hide="allActivities != null && allActivities.length > 0">
       No activities for the {{patient.name}}
     </div>
   </div>
