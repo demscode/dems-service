@@ -68,8 +68,9 @@
     };
 
     self.addPatientToCarerRelationsship = function () {
+        console.log("Adding patient");
         Carer.updateRelation({carerId:$scope.carer.id, patientId:$scope.newPatient.id}, function(message){
-          updateCarerPatientsList();
+          refreshCarerPatientsList();
           $scope.newPatient.id = null;
         });
       };
@@ -94,6 +95,7 @@
     };
 
     var refreshCarerPatientsList = function(){
+      console.log("Refreshing patients");
       Patient.getCarersPatients({id:$scope.carer.id}, function(patients){
         $scope.arrayOfPatients = patients;
         $scope.patients = self.getPatientObject($scope.arrayOfPatients);
