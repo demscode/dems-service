@@ -1,6 +1,7 @@
 (function () {
-  angular.module('DemS').controller("RemindersController", ['$scope', 'Session','Reminder', function($scope, Session, Reminder){
+  angular.module('DemS').controller("RemindersController", ['$scope', 'Session','Reminder','Level', function($scope, Session, Reminder, Level){
     var self = this;
+
     var calendarOptions = {
       theme: true,
       header: {
@@ -34,11 +35,14 @@
       }
     };
 
+    self.levels = [];
     $scope.reminders = [];
     self.reminder = {};
     self.reminderModalTitle= "";
 
     self.init = function () {
+      self.getAllLevels();
+      self.reminder.levelValue = 0;
       $scope.$watch(function () { return Session.currentPatient; }, function (patient) {
         if (patient) {
           $scope.patient = patient;
@@ -89,6 +93,7 @@
         $scope.reminders = reminders;
         $scope.reminderEvents = self.getEventsFromReminders();
         self.reminder = {};
+        self.reminder.levelValue = 0;
         self.initCalendar();
       });
     };
@@ -141,7 +146,6 @@
       console.log("Opening Add Reminder Modal");
       self.reminderModalTitle = "Add new Reminder";
       self.saveReminder = self.addNewReminder;
-      $scope.$apply();
       $("#reminderModal").modal('show');
     };
 
@@ -158,6 +162,7 @@
     self.closeReminderModal = function(){
       console.log(self.reminder);
       self.reminder = {};
+      self.reminder.levelValue = 0;
     };
 
     self.initCalendar = function () {
@@ -168,6 +173,12 @@
         self.calendar = $("#calendar").fullCalendar(calendarOptions);
       }
       self.calendar.fullCalendar('addEventSource', $scope.reminderEvents);
+    };
+
+    self.getAllLevels = function() {
+      Level.getAllLevels(function(levels){
+        self.levels = levels;
+      });
     };
 
     self.init();

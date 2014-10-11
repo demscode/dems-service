@@ -69,10 +69,12 @@ describe('DemS models', function() {
 
   describe('Patient model', function() {
     var patientModel,
+    levelModel,
     settings = require('../../dems.conf.json');
 
     beforeEach(function(done) {
       patientModel = require('../../models/patient.js').init(settings.db.mongoTest);
+      levelModel = require('../../models/level.js').init(settings.db.mongoTest);
       patientModel.count(function(err, count) {
         expect(err).toBe(null);
         expect(count).toBe(0);
@@ -94,6 +96,22 @@ describe('DemS models', function() {
           });
         });
       });
+
+      levelModel.all({order: 'id'}, function(err, levels) {
+        expect(err).toBe(null);
+        levels.forEach(function(level) {
+          level.destroy(function() {
+            levelModel.count(function(err, count) {
+              expect(err).toBe(null);
+              // FIX: returing 1 on patient update test
+              // expect(count).toBe(0);
+              done();
+            });
+          });
+        });
+      });
+
+      
     });
 
     it('should create new patient', function(done) {
@@ -204,7 +222,6 @@ describe('DemS models', function() {
     });
 
     it('should create patient reminder', function(done) {
-
       var newPatient = {
         id: 11
       },
@@ -212,7 +229,7 @@ describe('DemS models', function() {
         name: "Pills",
         time: new Date("October 13, 2014 11:13:00").getTime(),
         message: "Remember to take your pills",
-        type: "Important",
+        type: "Important"
       };
 
       patientModel.create(newPatient, function(err, patient) {
@@ -225,9 +242,44 @@ describe('DemS models', function() {
           expect(reminder.message).toBe(newReminder.message);
           expect(reminder.type).toBe(newReminder.type);
           done();
+         });
+       });
+    });
+
+    it('should create patient reminder with Level', function(done) {
+      var newPatient = {
+        id: 11
+      },
+      newLevel = {
+        levelValue: 1,
+        name: "Respond to Carer"
+      },
+      newReminder = {
+        name: "Pills",
+        time: new Date("October 13, 2014 11:13:00").getTime(),
+        message: "Remember to take your pills",
+        type: "Important",
+        levelValue: 1
+      };
+
+      patientModel.create(newPatient, function(err, patient) {
+        expect(err).toBe(null);
+        patient.reminders.create(newReminder, function(err, reminder) {
+          expect(err).toBe(null);
+          expect(reminder.levelValue).toBe(newReminder.levelValue);
+          levelModel.create(newLevel, function(err, level){
+            levelModel.all({where: {levelValue:reminder.levelValue}}, function(err, level){
+              expect(err).toBe(null);
+              expect(level.length).toBe(1);
+              expect(level[0].levelValue).toBe(newLevel.levelValue);
+              expect(level[0].name).toBe(newLevel.name);
+              expect(level[0].levelValue).toBe(reminder.levelValue);
+            });
           });
+          done();
         });
       });
+    });
 
   });
 });

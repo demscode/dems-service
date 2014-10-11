@@ -38,6 +38,9 @@ function loadDB() {
       // Reference to the reminders table
       reminderTable = db.getCollection("Reminder"),
 
+      // Reference to the levels table
+      levelTable = db.getCollection("Level"),
+
       // An arbitrary location to start with
       startingLocation = [-27.474911, 153.027188],
 
@@ -225,17 +228,35 @@ function loadDB() {
       }
     }
   );
+
+    /***********************/
+    /* Level Creation   */
+    /***********************/
+
+    var levelZero = {
+      levelValue: 0,
+      name : "Low"
+    },
+    levelOne = {
+      levelValue: 1,
+      name : "High"
+    };
+    levelTable.insert(levelZero);
+    levelTable.insert(levelOne);
 }
+
 
 function dropDB() {
   var patientTable = db.getCollection("Patient"),
       locationTable = db.getCollection("Location"),
       fenceTable = db.getCollection("Fence"),
-      reminderTable = db.getCollection("Reminder");
+      reminderTable = db.getCollection("Reminder"),
+      levelTable = db.getCollection("Level");
 
   // Drop the tables
   patientTable.drop();
   locationTable.drop();
   fenceTable.drop();
   reminderTable.drop();
+  levelTable.drop();
 }
