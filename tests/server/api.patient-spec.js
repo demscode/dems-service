@@ -279,7 +279,6 @@ describe('Level API', function() {
 
   beforeEach(function(done) {
     model.create(level0);
-    model.create(level1);
     done();
   });
 
