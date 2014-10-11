@@ -4,10 +4,9 @@
 
     self.init = function () {
       $scope.$watch(function () { return Session.currentPatient; }, function (patient) {
-        Enum.get({enumName:"activity_types"}, function(theEnum){
+        Enum.get("activity_types", function(theEnum){
           $scope.activityTypes = theEnum;
           $scope.formattedActivityTypes = self.getFormattedActivityTypes();
-          console.log($scope.formattedActivityTypes);
         });
         if (patient) {
           $scope.patient = patient;
@@ -95,9 +94,7 @@
       var activity_types = [];
 
       for(var index in $scope.activityTypes) {
-        console.log($scope.activityTypes[index]);
-        console.log(index);
-        if($scope.activityTypes.hasOwnProperty(index) && !isNaN(parseInt(index))) {
+        if($scope.activityTypes.hasOwnProperty(index)) {
           activity_types.push({
             id: $scope.activityTypes[index],
             name: $scope.activityTypes[index]
