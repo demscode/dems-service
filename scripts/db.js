@@ -92,12 +92,13 @@ function loadDB() {
         "Ken Adams",
       ],
 
-      activity_descriptions = {
-        0: "Left an inner fence",
-        1: "Left an outer fence",
-        2: "Pressed the panic button",
-        3: "Accepted a reminder",
-      },
+      activity_descriptions = [
+        "Left an inner fence",
+        "Left an outer fence",
+        "Pressed the panic button",
+        "Accepted a reminder",
+        "Tried to call you",
+      ],
 
       numLocations = 100,
 
@@ -105,7 +106,7 @@ function loadDB() {
 
       numReminders = 10,
 
-      numActivities = 4,
+      numActivities = 7,
 
       patientIds = [];
 
@@ -232,10 +233,11 @@ function loadDB() {
     /***********************/
 
     for(var n = 0; n < numActivities; n++) {
+      var randomIndex = parseInt(Math.random()*activity_descriptions.length) % activity_descriptions.length;
       var activity = {
         time: new Date(timeNow + n * daysPerInterval * 24 * 60 * 60000).setMinutes(0),
-        description: activity_descriptions[n],
-        type: n,
+        description: activity_descriptions[randomIndex],
+        type: randomIndex,
         patient_id: patient._id
       };
 

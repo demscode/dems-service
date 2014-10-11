@@ -7,11 +7,6 @@
         if (patient) {
           $scope.patient = patient;
           self.refreshActivities();
-          if($scope.tableParams) {
-            $scope.tableParams.sorting({});
-            $scope.tableParams.filter({});
-            $("table#activities_table").find("input").removeClass("ng-dirty").addClass("ng-pristine");
-          }
         }
       });
 
@@ -30,7 +25,7 @@
           $scope.tableParams = new ngTableParams({
             count: $scope.allActivities.length,
             sorting: {
-                name: 'asc'     // initial sorting
+                formattedDate: 'asc'     // initial sorting
             }
           },
           {
@@ -58,17 +53,29 @@
             }
           }
           );
+        } else {
+          $scope.tableParams.sorting({formattedDate: 'asc'});
+          $scope.tableParams.filter({});
+          $scope.tableParams.reload();
+          $("table#activities_table").find("input").removeClass("ng-dirty").addClass("ng-pristine");
         }
 
       });
     };
 
-    self.showDate = function (date) {
-      return new Date(date).toDateString();
+    self.showDate = function (dateNum) {
+      date = new Date(dateNum);
+      var yyyy = date.getFullYear().toString();
+      var mm = (date.getMonth()+1).toString();
+      var dd  = date.getDate().toString();
+      return yyyy + "/" + (mm[1] ? mm : "0" + mm[0]) + "/" + (dd[1] ? dd : "0" + dd[0]);
     };
 
-    self.showTime = function (date) {
-      return new Date(date).toTimeString();
+    self.showTime = function (dateNum) {
+      date = new Date(dateNum);
+      var hh = date.getHours().toString();
+      var mm = date.getMinutes();
+      return hh + ":" + (mm > 9 ? mm : "0" + mm);
     };
 
     self.init();
