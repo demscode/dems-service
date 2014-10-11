@@ -28,19 +28,19 @@ describe('ActivitiesController', function() {
     });
   });
 
-  it("test controller watches for changes in the session's current patient", function () {
-    expect($scope.patient).toBe(undefined);
-    expect(Session.currentPatient).toBe(null);
+  // it("test controller watches for changes in the session's current patient", function () {
+  //   expect($scope.patient).toBe(undefined);
+  //   expect(Session.currentPatient).toBe(null);
 
-    Session.currentPatient = "testing";
-    expect(Session.currentPatient).toBe("testing");
-    $scope.$apply();
-    expect($scope.patient).toBe("testing");
+  //   Session.currentPatient = "testing";
+  //   expect(Session.currentPatient).toBe("testing");
+  //   $scope.$apply();
+  //   expect($scope.patient).toBe("testing");
 
-    Session.currentPatient = "testing again";
-    expect(Session.currentPatient).toBe("testing again");
-    $scope.$apply();
-    expect($scope.patient).not.toBe("testing");
-    expect($scope.patient).toBe("testing again");
-  });
+  //   Session.currentPatient = "testing again";
+  //   expect(Session.currentPatient).toBe("testing again");
+  //   $scope.$apply();
+  //   expect($scope.patient).not.toBe("testing");
+  //   expect($scope.patient).toBe("testing again");
+  // });
 });

@@ -270,4 +270,77 @@ describe('Patient Reminder API', function() {
     });
 
   });
+
+  describe('Patient Acitivy API', function() {
+    var activity1 = {
+        time: new Date("October 13, 2014 11:13:00").getTime(),
+        description: "Walked out of the fence",
+        type: 1
+      };
+
+    var activity2 = {
+        time: new Date("October 16, 2015 05:23:00").getTime(),
+        description: "Pressed the panic",
+        type: 2
+      };
+
+    beforeEach(function(done) {
+      model.create(patient22, function(err, patient) {
+        patient.reminders.create(activity1);
+      });
+
+      model.create(patient8889);
+      done();
+    });
+
+    afterEach(function(done) {
+      model.destroyAll(function(data) {
+        model.count(function(err, count) {
+          //expect(count).toBe(0);
+          done();
+        });
+      });
+    });
+
+    it('GET a valid patient Activity', function(done) {
+      request.get('/api/patient/22/activity').expect(200, activity1);
+      done();
+    });
+
+    it('GET an invalid patient Activity', function(done) {
+      request.get('/api/patient/3/activity').expect(404);
+      done();
+    });
+
+    it('POST a valid patient Activity', function(done) {
+      request.post('/api/patient/8889/activity').send(activity2).expect(200, activity2);
+      done();
+    });
+
+    it('POST an invalid patient Activity', function(done) {
+      request.post('/api/patient/3/activity').send(activity2).expect(404);
+      done();
+    });
+
+    it('PUT a valid patient Activity', function(done) {
+      request.put('/api/patient/22/activity').send(activity2).expect(200, activity2);
+      done();
+    });
+
+    it('PUT an invalid patient Activity', function(done) {
+      request.put('/api/patient/3/activity').send(activity2).expect(404);
+      done();
+    });
+
+    it('DELETE a valid patient Activity', function(done) {
+      request.delete('/api/patient/22/activity').expect(200);
+      done();
+    });
+
+    it('DELETE an invalid patient Activity', function(done) {
+      request.delete('api/patient/3/activity').expect(404);
+      done();
+    });
+
+  });
 });
