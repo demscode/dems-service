@@ -1,15 +1,19 @@
 (function () {
-	angular.module('DemS').controller("ActivitiesController", ['$scope', '$filter', 'ngTableParams', 'Session', 'Activity', function($scope, $filter, ngTableParams, Session, Activity){
+	angular.module('DemS').controller("ActivitiesController", ['$scope', '$filter', '$q', 'ngTableParams', 'Session', 'Activity', 'Enum', function($scope, $filter, $q, ngTableParams, Session, Activity, Enum){
     var self = this;
 
     self.init = function () {
       $scope.$watch(function () { return Session.currentPatient; }, function (patient) {
+        Enum.get({enumName:"activity_types"}, function(theEnum){
+          $scope.activityTypes = theEnum;
+          $scope.formattedActivityTypes = self.getFormattedActivityTypes();
+          console.log($scope.formattedActivityTypes);
+        });
         if (patient) {
           $scope.patient = patient;
           self.refreshActivities();
         }
       });
-
     };
 
     self.refreshActivities = function () {
@@ -18,8 +22,9 @@
         $scope.allActivities = activities;
 
         for (var i = 0, length = $scope.activities.length; i < length; i++) {
-          $scope.activities[i].formattedDate = self.showDate($scope.activities[i].time);
-          $scope.activities[i].formattedTime = self.showTime($scope.activities[i].time);
+          $scope.activities[i].formattedDate = self.getFormattedDate($scope.activities[i].time);
+          $scope.activities[i].formattedTime = self.getFormattedTime($scope.activities[i].time);
+          $scope.activities[i].formattedType = self.getFormattedType($scope.activities[i].type);
         }
         if(!$scope.tableParams) {
           $scope.tableParams = new ngTableParams({
@@ -58,12 +63,13 @@
           $scope.tableParams.filter({});
           $scope.tableParams.reload();
           $("table#activities_table").find("input").removeClass("ng-dirty").addClass("ng-pristine");
+          $("table#activities_table").find("select").removeClass("ng-dirty").addClass("ng-pristine");
         }
 
       });
     };
 
-    self.showDate = function (dateNum) {
+    self.getFormattedDate = function (dateNum) {
       date = new Date(dateNum);
       var yyyy = date.getFullYear().toString();
       var mm = (date.getMonth()+1).toString();
@@ -71,11 +77,46 @@
       return yyyy + "/" + (mm[1] ? mm : "0" + mm[0]) + "/" + (dd[1] ? dd : "0" + dd[0]);
     };
 
-    self.showTime = function (dateNum) {
+    self.getFormattedTime = function (dateNum) {
       date = new Date(dateNum);
       var hh = date.getHours().toString();
       var mm = date.getMinutes();
       return hh + ":" + (mm > 9 ? mm : "0" + mm);
+    };
+
+    self.getFormattedType = function (type) {
+      if(!$scope.activityTypes) {
+        return type;
+      }
+      return $scope.activityTypes[type];
+    };
+
+    self.getFormattedActivityTypes = function () {
+      var activity_types = [];
+
+      for(var index in $scope.activityTypes) {
+        console.log($scope.activityTypes[index]);
+        console.log(index);
+        if($scope.activityTypes.hasOwnProperty(index) && !isNaN(parseInt(index))) {
+          activity_types.push({
+            id: $scope.activityTypes[index],
+            name: $scope.activityTypes[index]
+          });
+        }
+      }
+      return activity_types;
+    };
+
+    self.resetSorting = function () {
+      $scope.tableParams.sorting({formattedDate: 'asc'});
+      $scope.tableParams.reload();
+    };
+
+    self.resetFilters = function () {
+      $("table#activities_table").find("input").removeClass("ng-dirty").addClass("ng-pristine");
+      $("table#activities_table").find("select").removeClass("ng-dirty").addClass("ng-pristine");
+      $scope.tableParams.filter({});
+      $scope.tableParams.reload();
     };
 
     self.init();

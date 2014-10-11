@@ -1,6 +1,11 @@
 <div class="row">
   <div class="col-xs-12">
     <div ng-show="allActivities != null && allActivities.length > 0">
+      <div class="padding-top-bottom pull-right">
+        <button ng-click="activitiesCtrl.resetSorting()" class="btn btn-info">Reset sorting</button> &nbsp;
+        <button ng-click="activitiesCtrl.resetFilters()" class="btn btn-primary">Reset filters</button>
+      </div>
+
       <table ng-table="tableParams" show-filter="true" class="table table-bordered table-hover table-condensed table-striped" id="activities_table">
         <tr ng-repeat="activity in activities">
           <td data-title="'Date'" sortable="'formattedDate'" filter="{ 'formattedDate': 'text' }">
@@ -9,8 +14,8 @@
           <td data-title="'Time'" sortable="'formattedTime'" filter="{ 'formattedTime': 'text' }">
               {{activity.formattedTime}}
           </td>
-          <td data-title="'Type'" sortable="'type'" filter="{ 'type': 'text' }">
-              {{activity.type}}
+          <td data-title="'Type'" sortable="'formattedType'" filter="{ 'type': 'type' }">
+              {{activity.formattedType}}
           </td>
           <td data-title="'Description'" sortable="'description'" filter="{ 'description': 'text' }">
               {{activity.description}}
@@ -23,4 +28,11 @@
     </div>
   </div>
 </div>
+
+<script type="text/ng-template" id="ng-table/filters/type.html">
+  <select id="filterTest" class="form-control"
+    ng-model="tableParams.filter()['formattedType']"
+    ng-options="formattedActivityType.id as formattedActivityType.name for formattedActivityType in formattedActivityTypes">
+  </select>
+</script>
 

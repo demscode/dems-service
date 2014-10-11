@@ -93,11 +93,10 @@ function loadDB() {
       ],
 
       activity_descriptions = [
-        "Left an inner fence",
-        "Left an outer fence",
-        "Pressed the panic button",
-        "Accepted a reminder",
-        "Tried to call you",
+        " left the fence",
+        " pressed the panic button",
+        " accepted a reminder",
+        " tried to call you",
       ],
 
       numLocations = 100,
@@ -138,6 +137,9 @@ function loadDB() {
       patientIds.push(patient._id.valueOf());
     }
 
+    var names = patient.name.split(' ');
+    var initials = names[0] && names[1] ? names[0].charAt(0) + " " + names[1].charAt(0) : "Test";
+
     /***********************/
     /* Location Creation   */
     /***********************/
@@ -175,8 +177,7 @@ function loadDB() {
     var innerPolygon = startingInnerFence.concat();
 
     for(var k = 0; k < numFences; k++) {
-      var names = patient.name.split(' ');
-      var initials = names[0] && names[1] ? names[0].charAt(0) + " " + names[1].charAt(0) : "Test";
+
       var outerFence = {
         polygon    : outerPolygon,
         name       : initials  + " Outer Fence " + (k+1),
@@ -236,7 +237,7 @@ function loadDB() {
       var randomIndex = parseInt(Math.random()*activity_descriptions.length) % activity_descriptions.length;
       var activity = {
         time: new Date(timeNow + n * daysPerInterval * 24 * 60 * 60000).setMinutes(0),
-        description: activity_descriptions[randomIndex],
+        description: patient_names[i] + " " + activity_descriptions[randomIndex],
         type: randomIndex,
         patient_id: patient._id
       };

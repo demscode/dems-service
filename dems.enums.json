@@ -1,0 +1,8 @@
+{
+  "activity_types": {
+    "0": "Fence",
+    "1": "Panic",
+    "2": "Reminders",
+    "3": "Call"
+  }
+}
