@@ -74,17 +74,7 @@
         if (patient) {
           if(patient.carer_id != req.params.carerId){
             patient.updateAttributes({carer_id : (req.params.carerId)}, function(err, updatedPatientData) {
-              carerModel.find((req.params.carerId), function(err, carer) {
-                if(carer){
-                  var patients = carer.patientsIds;
-                  patients.push((req.query.patientId));
-                  carer.updateAttributes({patientsIds:patients}, function(err, updatedCarerData) {
-                    res.status(200).send(updatedCarerData);
-                  });
-                }else {
-                  res.status(404).end();
-                }
-              });
+              res.status(200).send(updatedPatientData);
             });
           } else{
             console.log("Patient already added");
