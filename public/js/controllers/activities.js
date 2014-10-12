@@ -3,20 +3,31 @@
     var self = this;
 
     self.init = function () {
+      Enum.get("activity_types", function(theEnum){
+        $scope.activityTypes = theEnum;
+        $scope.formattedActivityTypes = self.getFormattedActivityTypes();
+      });
+
+      setInterval(function(){
+        self.refreshActivities(false);
+        console.log("Refresh");
+      }, 5000);
+
       $scope.$watch(function () { return Session.currentPatient; }, function (patient) {
-        Enum.get("activity_types", function(theEnum){
-          $scope.activityTypes = theEnum;
-          $scope.formattedActivityTypes = self.getFormattedActivityTypes();
-        });
         if (patient) {
           $scope.patient = patient;
-          self.refreshActivities();
+          self.refreshActivities(true);
         }
       });
     };
 
-    self.refreshActivities = function () {
+    self.refreshActivities = function (patientChanged) {
+      if(!$scope.patient) return;
+
       Activity.getPatientsActivities({id:$scope.patient.id}, function(activities){
+        if(!patientChanged && $scope.allActivities.length === activities.length) {
+          return;
+        }
         $scope.activities = activities;
         $scope.allActivities = activities;
 
@@ -58,11 +69,14 @@
           }
           );
         } else {
-          $scope.tableParams.sorting({time: 'desc'});
-          $scope.tableParams.filter({});
+          if (patientChanged) {
+            $scope.tableParams.sorting({time: 'desc'});
+            $scope.tableParams.filter({});
+            $("table#activities_table").find("input").removeClass("ng-dirty").addClass("ng-pristine");
+            $("select#filterType").removeClass("ng-dirty").addClass("ng-pristine");
+          }
+
           $scope.tableParams.reload();
-          $("table#activities_table").find("input").removeClass("ng-dirty").addClass("ng-pristine");
-          $("select#filterType").removeClass("ng-dirty").addClass("ng-pristine");
         }
 
       });
