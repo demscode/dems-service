@@ -103,15 +103,15 @@
 
     self.getEventsFromReminders = function () {
       var reminderEvents = [];
-
-
+      
+      for (var i = 0, length = $scope.reminders.length; i < length; i++) {
       /*
          * The default turns the events purple for
          * debugging purposes.
       */
       var statusColor = "pink";
       switch($scope.reminders[i].acknowledgement){
-          case "none":
+        case "none":
           statusColor = "orange";
           break;
         case "OK":
@@ -125,15 +125,13 @@
           statusColor = "purple";
           break;
       };
-
-      for (var i = 0, length = $scope.reminders.length; i < length; i++) {
         var reminderEvent = {
           id: $scope.reminders[i].id,
           title: $scope.reminders[i].name + " - " + $scope.reminders[i].message,
           start: new Date($scope.reminders[i].time),
           end: new Date($scope.reminders[i].time + 60 * 60000),
           durationEditable: false,
-          color: statusColor,
+          color: statusColor
         };
         reminderEvents.push(reminderEvent);
       }
