@@ -45,6 +45,9 @@
       $(".tab-content > .tab-pane.active").removeClass("active");
       $(tab).addClass("active");
       Session.currentTab =  tab.replace("#", "");
+      if(tab === "#activities") {
+        $(tab + "_tab").html("Activities");
+      }
     };
 
     self.toggleSideBar = function (animation) {
