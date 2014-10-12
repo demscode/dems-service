@@ -3,20 +3,31 @@
     var self = this;
 
     self.init = function () {
+      Enum.get("activity_types", function(theEnum){
+        $scope.activityTypes = theEnum;
+        $scope.formattedActivityTypes = self.getFormattedActivityTypes();
+      });
+
+      setInterval(function(){
+        self.refreshActivities(false);
+        console.log("Refresh");
+      }, 5000);
+
       $scope.$watch(function () { return Session.currentPatient; }, function (patient) {
-        Enum.get("activity_types", function(theEnum){
-          $scope.activityTypes = theEnum;
-          $scope.formattedActivityTypes = self.getFormattedActivityTypes();
-        });
         if (patient) {
           $scope.patient = patient;
-          self.refreshActivities();
+          self.refreshActivities(true);
         }
       });
     };
 
-    self.refreshActivities = function () {
+    self.refreshActivities = function (patientChanged) {
+      if(!$scope.patient) return;
+
       Activity.getPatientsActivities({id:$scope.patient.id}, function(activities){
+        if(!patientChanged && $scope.allActivities.length === activities.length) {
+          return;
+        }
         $scope.activities = activities;
         $scope.allActivities = activities;
 
@@ -29,7 +40,7 @@
           $scope.tableParams = new ngTableParams({
             count: $scope.allActivities.length,
             sorting: {
-                formattedDate: 'asc'     // initial sorting
+                time: 'desc'     // initial sorting
             }
           },
           {
@@ -46,7 +57,7 @@
 
               orderedData = params.filter() ? $filter('filter')(orderedData, params.filter()) : orderedData;
 
-              orderedData = $filter('orderBy')(orderedData, params.orderBy()[0], true);
+              orderedData = $filter('orderBy')(orderedData, params.orderBy()[0], false);
 
               if(desc) {
                 $scope.activities = orderedData;
@@ -58,11 +69,14 @@
           }
           );
         } else {
-          $scope.tableParams.sorting({formattedDate: 'asc'});
-          $scope.tableParams.filter({});
+          if (patientChanged) {
+            $scope.tableParams.sorting({time: 'desc'});
+            $scope.tableParams.filter({});
+            $("table#activities_table").find("input").removeClass("ng-dirty").addClass("ng-pristine");
+            $("select#filterType").removeClass("ng-dirty").addClass("ng-pristine");
+          }
+
           $scope.tableParams.reload();
-          $("table#activities_table").find("input").removeClass("ng-dirty").addClass("ng-pristine");
-          $("table#activities_table").find("select").removeClass("ng-dirty").addClass("ng-pristine");
         }
 
       });
@@ -73,7 +87,7 @@
       var yyyy = date.getFullYear().toString();
       var mm = (date.getMonth()+1).toString();
       var dd  = date.getDate().toString();
-      return yyyy + "/" + (mm[1] ? mm : "0" + mm[0]) + "/" + (dd[1] ? dd : "0" + dd[0]);
+      return (dd[1] ? dd : "0" + dd[0]) + "/" + (mm[1] ? mm : "0" + mm[0]) + "/" + yyyy;
     };
 
     self.getFormattedTime = function (dateNum) {
@@ -105,13 +119,13 @@
     };
 
     self.resetSorting = function () {
-      $scope.tableParams.sorting({formattedDate: 'asc'});
+      $scope.tableParams.sorting({time: 'desc'});
       $scope.tableParams.reload();
     };
 
     self.resetFilters = function () {
       $("table#activities_table").find("input").removeClass("ng-dirty").addClass("ng-pristine");
-      $("table#activities_table").find("select").removeClass("ng-dirty").addClass("ng-pristine");
+      $("select#filterType").removeClass("ng-dirty").addClass("ng-pristine");
       $scope.tableParams.filter({});
       $scope.tableParams.reload();
     };

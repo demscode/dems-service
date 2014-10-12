@@ -236,7 +236,7 @@ function loadDB() {
     for(var n = 0; n < numActivities; n++) {
       var randomIndex = parseInt(Math.random()*activity_descriptions.length) % activity_descriptions.length;
       var activity = {
-        time: new Date(timeNow + n * daysPerInterval * 24 * 60 * 60000).setMinutes(0),
+        time: new Date(timeNow - n * daysPerInterval * 24 * 60 * 60000).getTime(),
         description: patient_names[i] + " " + activity_descriptions[randomIndex],
         type: randomIndex,
         patient_id: patient._id

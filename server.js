@@ -24,6 +24,7 @@ var passportConfig = require('./controllers/passport.js');
 passportConfig.init(passport);
 var emailConfig = require('./controllers/email.js');
 var sendMail = emailConfig.init(email);
+var enums = require('./controllers/enums.js');
 
 app.use(express.static(path.join(__dirname + '/public')));
 app.use(morgan('dev'));
@@ -53,7 +54,7 @@ if (env === 'production') {
 /*
  * Routes
  */
-routes.init(app, passport, geolib, sendMail);
+routes.init(app, passport, geolib, sendMail, enums);
 
 /**
  * Server Start

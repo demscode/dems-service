@@ -5,7 +5,7 @@
 (function(exports) {
   'use strict';
 
-  exports.init = function(app, geolib, sendMail, models) {
+  exports.init = function(app, geolib, sendMail, models, enums) {
 
     var datefmts = require('date-format');
     var patientModel = models.patient;
@@ -156,6 +156,13 @@
                           data.updateAttribute('last_outside', true);
                         }
                       });
+
+                      // create the activity
+                      var activity = {
+                        type: parseInt(enums.getReverseEnum("activity_types").Fence),
+                        description: data.name + " left the fence",
+                      };
+                      data.activities.create(activity);
                     }
 
                   }
@@ -396,6 +403,13 @@
    // Set off the panic status of a patient
     app.post('/api/patient/:id/panic', function(req, res) {
      patientModel.find(req.params.id, function(err, data) {
+        // create the activity
+        var activity = {
+          type: parseInt(enums.getReverseEnum("activity_types").Panic),
+          description: data.name + " pressed the panic button",
+        };
+        data.activities.create(activity);
+
         if (data.carer_id) {
           carerModel.find(data.carer_id, function(err, carer) {
             if (carer) {
