@@ -28,6 +28,11 @@
         if(!patientChanged && $scope.allActivities.length === activities.length) {
           return;
         }
+
+        if(!patientChanged && $scope.allActivities.length !== activities.length && Session.currentTab !== "activities") {
+          $("#activities_tab").html("Activities *");
+        }
+
         $scope.activities = activities;
         $scope.allActivities = activities;
 
