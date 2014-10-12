@@ -124,7 +124,7 @@
         default:
           statusColor = "purple";
           break;
-      };
+      }
         var reminderEvent = {
           id: $scope.reminders[i].id,
           title: $scope.reminders[i].name + " - " + $scope.reminders[i].message,
