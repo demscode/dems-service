@@ -1,5 +1,5 @@
 (function () {
-  angular.module('DemS').controller("RemindersController", ['$scope', 'Session','Reminder', function($scope, Session, Reminder){
+  angular.module('DemS').controller("RemindersController", ['$scope', 'Session','Reminder','Enum', function($scope, Session, Reminder,Enum){
     var self = this;
     var calendarOptions = {
       theme: true,
@@ -36,9 +36,12 @@
 
     $scope.reminders = [];
     self.reminder = {};
+    self.levels = [];
     self.reminderModalTitle= "";
 
     self.init = function () {
+      self.setLevels();
+
       $scope.$watch(function () { return Session.currentPatient; }, function (patient) {
         if (patient) {
           $scope.patient = patient;
@@ -50,6 +53,17 @@
         if (tab == "reminders") {
           self.refreshReminders();
         }
+      });
+
+      
+    };
+
+    self.setLevels = function(){
+      Enum.get("level_types",function(data){
+        for(var index in data) {
+          self.levels.push({id:parseInt(index), name:data[index]});
+         }
+         self.reminder.level = 0;
       });
     };
 
@@ -64,7 +78,15 @@
     self.editReminder = function () {
       console.log("Edit event", self.reminder.id);
       self.reminder.time = self.reminder.timeAsDate.getTime();
-      Reminder.update({id:$scope.patient.id, reminderId:self.reminder.id},self.reminder,function(message){
+      console.log(self.reminder);
+      var updatedReminder = {
+        level:self.reminder.level,
+        time:self.reminder.time,
+        name:self.reminder.name,
+        type:self.reminder.type,
+        message:self.reminder.message
+      };
+      Reminder.update({id:$scope.patient.id, reminderId:self.reminder.id},updatedReminder,function(message){
         self.refreshReminders();
       });
     };
@@ -90,6 +112,7 @@
         $scope.reminderEvents = self.getEventsFromReminders();
         self.reminder = {};
         self.initCalendar();
+        self.reminder.level=0;
       });
     };
 
@@ -163,7 +186,6 @@
       console.log("Opening Add Reminder Modal");
       self.reminderModalTitle = "Add new Reminder";
       self.saveReminder = self.addNewReminder;
-      $scope.$apply();
       $("#reminderModal").modal('show');
     };
 
@@ -171,6 +193,7 @@
       console.log("Opening Edit Reminder Modal");
       self.reminderModalTitle = "Edit Reminder";
       self.reminder = self.getReminder(reminderId);
+      console.log(self.reminder);
       self.reminder.timeAsDate = new Date (self.reminder.time);
       self.saveReminder = self.editReminder;
       $scope.$apply();
@@ -180,6 +203,7 @@
     self.closeReminderModal = function(){
       console.log(self.reminder);
       self.reminder = {};
+      self.reminder.level=0;
     };
 
     self.initCalendar = function () {

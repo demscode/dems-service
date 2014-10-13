@@ -4,5 +4,10 @@
     "1": "Panic",
     "2": "Reminders",
     "3": "Call"
+  },
+    "level_types": {
+    "0": "OK",
+    "1": "Yes/No",
+    "2": "I've done this/I haven't done this"
   }
 }
