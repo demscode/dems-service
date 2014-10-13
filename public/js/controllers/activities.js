@@ -30,7 +30,7 @@
         }
 
         if(!patientChanged && $scope.allActivities.length !== activities.length && Session.currentTab !== "activities") {
-          $("#activities_tab").html("Activities *");
+          $("#activities_flag").removeClass("hide");
         }
 
         $scope.activities = activities;

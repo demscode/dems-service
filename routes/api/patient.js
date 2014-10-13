@@ -168,8 +168,15 @@
                   }
                 }
 
-                if (!outsideAll || !outsideAllInner) {
+                if ((!outsideAll || !outsideAllInner) && data.last_outside) {
                   data.updateAttribute('last_outside', false);
+
+                  // create the activity
+                  var activity = {
+                    type: parseInt(enums.getReverseEnum("activity_types").Fence),
+                    description: data.name + " returned to the fence",
+                  };
+                  data.activities.create(activity);
                 }
               });
             }
