@@ -35,6 +35,7 @@
       Session.currentPatient = $scope.patient;
       $('li[data-area="side-bar-link"] a').removeClass("active");
       $('li[data-area="side-bar-link"][data-patient-id="' + patientId + '"] a').addClass("active");
+      $("#activities_flag").addClass("hide");
 		};
 
     self.addPatient = function () {
@@ -46,7 +47,7 @@
       $(tab).addClass("active");
       Session.currentTab =  tab.replace("#", "");
       if(tab === "#activities") {
-        $(tab + "_tab").html("Activities");
+        $(tab + "_flag").addClass("hide");
       }
     };
 
