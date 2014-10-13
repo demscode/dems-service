@@ -122,8 +122,7 @@ function loadDB() {
       gid      : String(i + 1),
       token    :"token" + patient_names[i].replace(/ /g, ''),
       email    : patient_names[i].toLowerCase().replace(/ /g, '_')  + "@fake.com",
-      name     : patient_names[i],
-      level    : Math.floor(Math.random() * 3)
+      name     : patient_names[i]
     };
 
     // don't add every third one to the carer
@@ -224,7 +223,8 @@ function loadDB() {
         message: "Remember to take your medicine",
         type: "Medicine Reminder",
         createdAt: timeNow,
-        patient_id: patient._id
+        patient_id: patient._id,
+        level    : Math.floor(Math.random() * 3)
       };
 
       reminderTable.insert(reminder);
