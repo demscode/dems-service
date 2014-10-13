@@ -55,7 +55,7 @@
         }
       });
 
-      
+
     };
 
     self.setLevels = function(){
@@ -126,7 +126,7 @@
 
     self.getEventsFromReminders = function () {
       var reminderEvents = [];
-      
+
       for (var i = 0, length = $scope.reminders.length; i < length; i++) {
       /*
          * The default turns the events purple for
@@ -139,6 +139,18 @@
           break;
         case "OK":
           statusColor = "green";
+          break;
+        case "Yes":
+          statusColor = "green";
+          break;
+        case "No":
+          statusColor = "red";
+          break;
+        case "Done":
+          statusColor = "green";
+          break;
+        case "Not Done":
+          statusColor = "red";
           break;
         /*
          * The default turns the events purple for
