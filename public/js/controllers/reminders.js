@@ -65,7 +65,7 @@
          }
          self.reminder.level = 0;
       });
-    }
+    };
 
     self.saveReminder = function(){};
     self.addNewReminder = function(){
