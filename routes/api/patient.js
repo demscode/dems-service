@@ -172,11 +172,11 @@
                   data.updateAttribute('last_outside', false);
 
                   // create the activity
-                  var activity = {
+                  var returnedActivity = {
                     type: parseInt(enums.getReverseEnum("activity_types").Fence),
                     description: data.name + " returned to the fence",
                   };
-                  data.activities.create(activity);
+                  data.activities.create(returnedActivity);
                 }
               });
             }
