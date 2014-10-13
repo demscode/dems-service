@@ -123,6 +123,7 @@ function loadDB() {
       token    :"token" + patient_names[i].replace(/ /g, ''),
       email    : patient_names[i].toLowerCase().replace(/ /g, '_')  + "@fake.com",
       name     : patient_names[i],
+      level    : Math.floor(Math.random() * 3)
     };
 
     // don't add every third one to the carer

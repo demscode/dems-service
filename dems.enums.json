@@ -6,7 +6,8 @@
     "3": "Call"
   },
     "level_types": {
-    "0": "No Response",
-    "1": "Response"
+    "0": "OK",
+    "1": "Yes/No",
+    "2": "I've done this/I haven't done this"
   }
 }
