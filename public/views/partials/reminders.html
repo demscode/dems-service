@@ -45,6 +45,10 @@
             <td><input type="text" ng-model="remindersCtrl.reminder.type"></td>
           </tr>
           <tr>
+            <td>Level:</td>
+            <td><select ng-model="remindersCtrl.reminder.level" ng-options="level.id as level.name for level in remindersCtrl.levels"></select></td>
+          </tr>
+          <tr>
             <td>Message:</td>
             <td><textarea rows="3"; type="text" ng-model="remindersCtrl.reminder.message"></textarea></td>
           </tr>

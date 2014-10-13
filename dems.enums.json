@@ -4,5 +4,9 @@
     "1": "Panic",
     "2": "Reminders",
     "3": "Call"
+  },
+    "level_types": {
+    "0": "No Response",
+    "1": "Response"
   }
 }

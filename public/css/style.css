@@ -67,7 +67,7 @@ div.padding {
     color: #000;
 }
 
-.table input, textarea {
+.table input, textarea, select {
   width: 100%;
   resize:none;
 }
